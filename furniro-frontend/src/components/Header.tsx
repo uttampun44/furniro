@@ -1,32 +1,52 @@
 import { Link } from "react-router-dom";
 import Logo from '../assets/images/logo.png'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import SearchIcon from '@mui/icons-material/Search';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-function Header() {
+// interface linType {
+//   links:[]
+// }
+
+function Header({links}) {
   return (
     <div>
       <header>
-        <div className="header-row container-lg mx-auto row justify-space-between align-items-center">
-          <div className="header-logo d-flex col-lg-3">
-            <img src={Logo}  alt="logo" style={{width:'50px', height: '50px', objectFit: 'contain'}} /><h1>Furniro</h1>
+        <div className="header-row max-w-[1440px]  mx-auto flex justify-between my-4 items-center">
+          <div className="header-logo flex w-[33.3%]">
+            <img src={Logo}  alt="logo" style={{width:'30px', height: '30px'}} /><h1 className="text-2xl font-bold">Furniro</h1>
           </div>
-          <div className="header-login-row col-lg-3">
+          <div className="header-login-row w-[33.3%]">
             <nav>
-              <ul className="d-flex list-none">
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/about">About</Link>
-                </li>
-                <li>
-                  <Link to="/signup">Signup</Link>
-                </li>
+              <ul className="flex list-unstyled gap-x-4">
+                {
+                  links.map((link, index) => (
+                    <li key={index}>
+                         <Link to={link.path} className="text-xl font-medium text-decoration-none text-dark">
+                      {link.name}
+                    </Link>
+                    </li>
+                  ))
+                }
+             
               </ul>
             </nav>
           </div>
 
-          <div className="header-login-signup col-lg-6">
-            cart
+          <div className="header-login-signup w-[33.3%] flex justify-end gap-x-4">
+            <div className="account-circle">
+               <AccountCircleIcon />
+            </div>
+            <div className="search">
+               <SearchIcon />
+            </div>
+             <div className="favourite">
+               <FavoriteIcon />
+             </div>
+             <div className="cart">
+                <ShoppingCartIcon />
+             </div>
           </div>
         </div>
       </header>
