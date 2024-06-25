@@ -5,23 +5,28 @@ import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-// interface linType {
-//   links:[]
-// }
+interface linkType {
+  links:{
+    name: string,
+    path: string
+  }[]
+}
 
-function Header({links}) {
+
+
+function Header(props : linkType) {
   return (
     <div>
       <header>
         <div className="header-row max-w-[1440px]  mx-auto flex justify-between my-4 items-center">
           <div className="header-logo flex w-[33.3%]">
-            <img src={Logo}  alt="logo" style={{width:'30px', height: '30px'}} /><h1 className="text-2xl font-bold">Furniro</h1>
+            <img src={Logo}  alt="logo" style={{width:'30px', height: '30px'}} /><Link to='/'><h1 className="text-2xl font-bold">Furniro</h1></Link>
           </div>
           <div className="header-login-row w-[33.3%]">
             <nav>
               <ul className="flex list-unstyled gap-x-4">
                 {
-                  links.map((link, index) => (
+                  props.links.map((link, index) => (
                     <li key={index}>
                          <Link to={link.path} className="text-xl font-medium text-decoration-none text-dark">
                       {link.name}
