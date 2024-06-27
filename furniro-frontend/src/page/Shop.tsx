@@ -1,6 +1,6 @@
+import Backgroundpic from '../components/Backgroundpic'
 import Header from '../components/Header'
 
-function Home() {
 
 const header = [
     {name : 'Home', path : '/'},
@@ -9,11 +9,15 @@ const header = [
     {name : 'Contact', path: '/contact'},
     {name : 'Login', path: '/login'}
 ]
+
+
+function Shop() {
   return (
     <div>
-        <Header links={header} />
+          <Header links={header}/>
+          <Backgroundpic />
     </div>
   )
 }
 
-export default Home
+export default Shop
