@@ -3,7 +3,7 @@ import Home from './page/Home'
 import About from './page/About'
 import Shop from './page/Shop'
 import Contact from './page/Contact'
-import { Login } from '@mui/icons-material'
+import Login from './page/Login'
 
 function App() {
 

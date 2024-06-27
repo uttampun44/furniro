@@ -6,7 +6,8 @@ const header = [
     {name : 'Home', path : '/'},
     {name: 'Shop', path: '/shop'},
     {name : 'About', path: '/about' },
-    {name : 'Contact', path: '/contact'}
+    {name : 'Contact', path: '/contact'},
+    {name : 'Login', path: '/login'}
 ]
   return (
     <div>
