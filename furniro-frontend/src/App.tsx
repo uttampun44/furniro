@@ -4,6 +4,7 @@ import About from './page/About'
 import Shop from './page/Shop'
 import Contact from './page/Contact'
 import Login from './page/Login'
+import Singup from './page/Signup'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
                  <Route  path='/shop' Component={Shop}></Route>
                  <Route  path='/contact' Component={Contact}></Route>
                  <Route  path='/login' Component={Login}></Route>
+                 <Route  path='/signup' Component={Singup}></Route>
              </Routes>
         </BrowserRouter>
     </>
