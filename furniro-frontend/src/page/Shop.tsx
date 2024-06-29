@@ -1,23 +1,17 @@
-import Backgroundpic from '../components/Backgroundpic'
-import Header from '../components/Header'
-
-
-const header = [
-    {name : 'Home', path : '/'},
-    {name: 'Shop', path: '/shop'},
-    {name : 'About', path: '/about' },
-    {name : 'Contact', path: '/contact'},
-    {name : 'Login', path: '/login'}
-]
-
+import Backgroundpic from "../components/Backgroundpic";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 function Shop() {
   return (
     <div>
-          <Header links={header}/>
-          <Backgroundpic />
+      <Header />
+      <main>
+        <Backgroundpic />
+      </main>
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default Shop
+export default Shop;

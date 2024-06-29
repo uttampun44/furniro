@@ -1,14 +1,7 @@
 import { Link } from "react-router-dom"
+import Links from './Navlink'
 
-
-interface footerLinks {
-  links: {
-    name: string,
-    path: string
-  }[]
-}
-
-function Footer(props: footerLinks) {
+function Footer() {
   return (
     <div className="border-t-slate-400 border-2">
       <footer>
@@ -34,7 +27,7 @@ function Footer(props: footerLinks) {
             <div className="links">
               <ul className="grid gap-y-6 my-4">
                 {
-                  props.links.map((link, index) => (
+                  Links.map((link, index) => (
                     <li key={index}>
                       <Link to={link.path} className="text-xl font-medium text-decoration-none text-dark">
                         {link.name}
