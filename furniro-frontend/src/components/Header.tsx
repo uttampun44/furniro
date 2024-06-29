@@ -4,17 +4,10 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-
-interface linkType {
-  links:{
-    name: string,
-    path: string
-  }[]
-}
+import Links from './Navlink'
 
 
-
-function Header(props : linkType) {
+function Header() {
   return (
     <div>
       <header>
@@ -26,7 +19,7 @@ function Header(props : linkType) {
             <nav>
               <ul className="flex list-unstyled gap-x-10">
                 {
-                  props.links.map((link, index) => (
+                  Links.map((link, index) => (
                     <li key={index}>
                          <Link to={link.path} className="text-xl font-medium text-decoration-none text-dark">
                       {link.name}
