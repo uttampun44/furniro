@@ -1,8 +1,72 @@
+import { useState } from "react";
 import Backgroundpic from "../components/Backgroundpic";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import axios from "axios";
+import {useNavigate } from "react-router-dom";
 
-function Singup() {
+
+interface formSignup{
+  fullname:string,
+  email:string,
+  date_of_birth:string,
+  phone_details:string,
+  gender:string,
+  password:string  
+}
+
+function Signup() {
+
+  const dashboard = useNavigate();
+
+  const [signup, setSignup] = useState<formSignup>({
+    'fullname': '',
+    'email' : '',
+    'date_of_birth' : '',
+    'phone_details': '',
+    'gender': '',
+    'password': ''
+  });
+
+  const signupValue = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const {name, value} = e.target;
+
+      setSignup({
+        ...signup, [name] : value
+      })
+  }
+
+  const signUp = async(event: React.FormEvent<HTMLFormElement>) =>{
+     event.preventDefault()
+     try {
+        const response = await axios.post('/api/signup', {
+          fullname: signup.fullname,
+          email: signup.email,
+          date_of_birth:  signup.date_of_birth,
+          phone_details: signup.phone_details,
+          gender: signup.password,
+          password: signup.password
+        })
+
+        if(response.status === 201)
+          {
+            dashboard('/login')
+          }
+
+     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Check for specific error response
+        if (error.response && error.response.status === 422) {
+          alert("Email already exists");
+        } else {
+          alert("An error occurred: " + error.message);
+        }
+      } else {
+        throw new Error("An unexpected error occurred");
+      }
+     }
+  }
+  
   return (
     <div>
       <Header />
@@ -12,7 +76,7 @@ function Singup() {
 
         <div className="signup_form my-20 max-w-[1080px] mx-auto">
           <div className="form_content">
-            <form className="max-w-sm mx-auto" method="POST">
+            <form className="max-w-sm mx-auto" method="POST" onSubmit={signUp}>
               <div className="mb-5">
                 <label
                   htmlFor="fullname"
@@ -21,12 +85,12 @@ function Singup() {
                   Full name
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   id="fullname"
                   name="fullname"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400"
                   required
-                />
+                onChange={signupValue} value={signup.fullname}/>
               </div>
               <div className="mb-5">
                 <label
@@ -36,12 +100,12 @@ function Singup() {
                   Email
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   id="email"
                   name="email"
                   className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
                   required
-                />
+               onChange={signupValue} value={signup.email} />
               </div>
 
               <div className="mb-5">
@@ -57,7 +121,7 @@ function Singup() {
                   name="date_of_birth"
                   className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
                   required
-                />
+               onChange={signupValue} value={signup.date_of_birth} />
               </div>
 
               <div className="mb-5">
@@ -73,7 +137,7 @@ function Singup() {
                   name="phone_details"
                   className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
                   required
-                />
+                onChange={signupValue} value={signup.phone_details}/>
               </div>
 
               <div className="mb-5">
@@ -85,7 +149,8 @@ function Singup() {
                 </label>
                 <select
                   name="gender"
-                  className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
+                onChange={signupValue}  className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
+                value={signup.gender}
                 >
                   <option>Male</option>
                   <option>Female</option>
@@ -101,11 +166,11 @@ function Singup() {
                 </label>
                 <input
                   type="password"
-                  id="phone_details"
+                  id="password"
                   name="password"
                   className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
                   required
-                />
+              onChange={signupValue} value={signup.password} />
               </div>
 
               <div className="flex items-start mb-5">
@@ -141,4 +206,4 @@ function Singup() {
   );
 }
 
-export default Singup;
+export default Signup;
