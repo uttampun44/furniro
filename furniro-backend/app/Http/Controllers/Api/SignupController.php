@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserAddress;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class SignupController extends Controller
 {
@@ -16,8 +19,8 @@ class SignupController extends Controller
     public function __invoke(Request $request)
     {
         try {
-            $request->validate([
-                'fullname' => 'required|string|max:255',
+           $validate =  Validator::make($request->all(),[
+                'full_name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8',
                 'date_of_birth' => 'required|date',
@@ -25,12 +28,19 @@ class SignupController extends Controller
                 'gender' => 'required|string|in:Male,Female'
              ]);
      
+            if($validate->fails())
+            {
+                return response()->json(['errors' => $validate->errors()], 422);
+            }
+
             $user =  User::create([
-                'name' => $request->input('fullname'),
+                'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password'))
              ]);
      
+            //  $token = $user->createToken('authToke')->plainTextToken();
+
             $userAddress =  UserAddress::create([
                 'full_name' => $user->name,
                 'email' => $user->email,
@@ -40,15 +50,17 @@ class SignupController extends Controller
                 'user_id' => $user->id
              ]);
      
-             response()->json([
+            return response()->json([
                 'success' => true,
                 'message' => 'User registered successfully',
                 'user' => $user,
                 'user_address' => $userAddress
+                // 'token' => $token
              ], 201);
              
         } catch (\Throwable $th) {
-            $th->getMessage();
+            Log::error('Error creating user: ' . $th->getMessage());
+            return response()->json(['error' => 'Failed to register user'], 500);
         }
         
     }

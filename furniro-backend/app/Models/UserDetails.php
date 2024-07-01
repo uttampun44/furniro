@@ -12,7 +12,6 @@ class UserAddress extends Model
     protected $fillable = [
       'full_name',
       'email',
-      'date',
       'date_of_birth',
       'phone_details',
       'gender', 

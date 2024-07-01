@@ -54,16 +54,16 @@ function Signup() {
           }
 
      } catch (error) {
-      if (axios.isAxiosError(error)) {
-        // Check for specific error response
-        if (error.response && error.response.status === 422) {
-          alert("Email already exists");
-        } else {
-          alert("An error occurred: " + error.message);
-        }
-      } else {
-        throw new Error("An unexpected error occurred");
-      }
+      // if (axios.isAxiosError(error)) {
+       
+      //   if (error.response && error.response.status === 422) {
+      //     alert("Email already exists");
+      //   } else {
+      //     alert("An error occurred: " + error.message);
+      //   }
+      // } else {
+      //   throw new Error("An unexpected error occurred");
+      // }
      }
   }
   
