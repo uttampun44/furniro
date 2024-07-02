@@ -7,7 +7,7 @@ import {useNavigate } from "react-router-dom";
 
 
 interface formSignup{
-  fullname:string,
+  full_name:string,
   email:string,
   date_of_birth:string,
   phone_details:string,
@@ -20,7 +20,7 @@ function Signup() {
   const dashboard = useNavigate();
 
   const [signup, setSignup] = useState<formSignup>({
-    'fullname': '',
+    'full_name': '',
     'email' : '',
     'date_of_birth' : '',
     'phone_details': '',
@@ -40,30 +40,32 @@ function Signup() {
      event.preventDefault()
      try {
         const response = await axios.post('/api/signup', {
-          fullname: signup.fullname,
+          full_name: signup.full_name,
           email: signup.email,
           date_of_birth:  signup.date_of_birth,
           phone_details: signup.phone_details,
-          gender: signup.password,
+          gender: signup.gender,
           password: signup.password
         })
 
+        console.log(response.data)
+        
         if(response.status === 201)
           {
             dashboard('/login')
           }
 
      } catch (error) {
-      // if (axios.isAxiosError(error)) {
+      if (axios.isAxiosError(error)) {
        
-      //   if (error.response && error.response.status === 422) {
-      //     alert("Email already exists");
-      //   } else {
-      //     alert("An error occurred: " + error.message);
-      //   }
-      // } else {
-      //   throw new Error("An unexpected error occurred");
-      // }
+        if (error.response && error.response.status === 422) {
+          alert("Email already exists");
+        } else {
+          alert("An error occurred: " + error.message);
+        }
+      } else {
+        throw new Error("An unexpected error occurred");
+      }
      }
   }
   
@@ -87,10 +89,10 @@ function Signup() {
                 <input
                   type="text"
                   id="fullname"
-                  name="fullname"
+                  name="full_name"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400"
                   required
-                onChange={signupValue} value={signup.fullname}/>
+                onChange={signupValue} value={signup.full_name}/>
               </div>
               <div className="mb-5">
                 <label
@@ -150,10 +152,11 @@ function Signup() {
                 <select
                   name="gender"
                 onChange={signupValue}  className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
-                value={signup.gender}
+                value={signup.gender || "" }
                 >
-                  <option>Male</option>
-                  <option>Female</option>
+                  <option value="" disabled>Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </select>
               </div>
 

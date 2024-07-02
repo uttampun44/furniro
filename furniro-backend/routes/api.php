@@ -13,9 +13,12 @@ Route::get('/user', function (Request $request) {
 Route::middleware(['api'])->group(function() {
     // Route::get('/user-dashboard', UserController::class);
     // Route::get('/dashboard', DashboardController::class);
+    Route::get('users', [UserController::class, 'index']);
+   
 });
+Route::post('signup', [SignupController::class, 'store']);
+// Route::get('signup', SignupController::class);
 
-Route::post('signup', SignupController::class);
-Route::get('users', [UserController::class, 'index']);
+
 
 

@@ -5,8 +5,8 @@ import Shop from './page/Shop'
 import Contact from './page/Contact'
 import Login from './page/Login'
 import Singup from './page/Signup'
-import UserDashboard from './page/UserDashboard'
 import Dashboard from './page/Dashboard'
+import User from './page/User'
 
 function App() {
 
@@ -21,8 +21,8 @@ function App() {
                  <Route  path='/contact' Component={Contact}></Route>
                  <Route  path='/login' Component={Login}></Route>
                  <Route  path='/signup' Component={Singup}></Route>
-                 <Route  path='/user' Component={UserDashboard}></Route>
                  <Route  path='/dashboard' Component={Dashboard}></Route>
+                 <Route path='/users' Component={User}></Route>
              </Routes>
         </BrowserRouter>
     </>
