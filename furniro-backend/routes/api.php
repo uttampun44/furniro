@@ -11,8 +11,14 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware(['api'])->group(function() {
-    Route::post('/signup', SignupController::class);
+    // Route::get('/user-dashboard', UserController::class);
+    // Route::get('/dashboard', DashboardController::class);
+    Route::get('users', [UserController::class, 'index']);
+   
 });
+Route::post('signup', [SignupController::class, 'store']);
+// Route::get('signup', SignupController::class);
 
-Route::get('/user-dashboard', UserController::class)->name('user_dashboard');
-Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+
+

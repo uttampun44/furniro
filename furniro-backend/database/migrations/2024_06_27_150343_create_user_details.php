@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('date_of_birth');
             $table->string('phone_details');
             $table->longText('image')->nullable();
-            $table->enum('gender', ['Male', 'Female'])->nullable();
+            $table->string('gender')->nullable();
             $table->foreignId('user_id')->constrained()
                   ->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
