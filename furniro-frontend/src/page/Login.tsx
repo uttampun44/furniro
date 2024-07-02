@@ -1,9 +1,53 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Backgroundpic from "../components/Backgroundpic";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import {  useState } from "react";
+import axios from "axios";
+
+interface formLogin{
+  email:string,
+  password:string  
+}
 
 function Login() {
+ 
+  const dashboard = useNavigate();
+
+  const [login, setLogin] = useState<formLogin>({
+    'email': '',
+    'password': ''
+  });
+  const [error, setError] = useState<string | null>(null);
+    
+  const loginVal = (e: React.ChangeEvent<HTMLInputElement>) =>{
+
+     const {name, value} = e.target
+     setLogin({
+      ...login, [name]: value
+     })
+  }
+
+  const loginForm = async(e: React.FormEvent<HTMLFormElement>) => {
+     e.preventDefault()
+    try {
+      const response = await axios.post('/api/login', login);
+
+      if(response.status === 200)
+        {
+          console.log("login success")
+
+          dashboard('/dashboard');
+        }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setError("Email or Password not matched");
+      } else {
+        setError("An unexpected error occurred");
+      }
+    }
+  }
+
   return (
     <div>
       <Header />
@@ -11,7 +55,7 @@ function Login() {
         <Backgroundpic />
         <div className="login-content my-20 max-w-[1080px] mx-auto">
           <div className="form-content">
-            <form className="max-w-sm mx-auto" method="POST">
+            <form className="max-w-sm mx-auto" method="POST" onSubmit={loginForm}>
               <div className="mb-5">
                 <label
                   htmlFor="email"
@@ -24,7 +68,7 @@ function Login() {
                   id="email"
                   name="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400"
-                  required
+                  required onChange={loginVal} value={login.email}
                 />
               </div>
               <div className="mb-5">
@@ -39,7 +83,7 @@ function Login() {
                   id="password"
                   name="password"
                   className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
-                  required
+                  required onChange={loginVal} value={login.password}
                 />
               </div>
               <div className="flex items-start mb-5">

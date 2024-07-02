@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\SignupController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
@@ -13,10 +15,11 @@ Route::get('/user', function (Request $request) {
 Route::middleware(['api'])->group(function() {
     // Route::get('/user-dashboard', UserController::class);
     // Route::get('/dashboard', DashboardController::class);
-    Route::get('users', [UserController::class, 'index']);
-   
+ 
 });
-Route::post('signup', [SignupController::class, 'store']);
+
+Route::post('signup', [AuthController::class, 'signup']);
+Route::post('login', [AuthController::class, 'login']);
 // Route::get('signup', SignupController::class);
 
 
