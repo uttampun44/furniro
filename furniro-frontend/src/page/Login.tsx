@@ -35,12 +35,19 @@ function Login({setLogins}:LoginProps) {
   const loginForm = async(e: React.FormEvent<HTMLFormElement>) => {
      e.preventDefault()
     try {
-      const response = await axios.post('/api/login', login);
+      const response = await axios.post('/api/login', login,{
+        
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          }
+        });
 
       if(response.status === 200)
         {
-          console.log("login success")
-
+          console.log("login success", response.data.token)
+            localStorage.setItem("Token",response.data.token)
+            window.localStorage.setItem("isLogin", "true");
           users('/users');
           setLogins(true)
         }else{

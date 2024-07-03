@@ -1,5 +1,5 @@
 import axios from "axios"
-import React from "react"
+import React, { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 
@@ -13,20 +13,29 @@ const UserDashboard: React.FC = () =>{
         try {
             const response = await axios.post('/api/logout', {}, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("Login Token")}`
+                  'Authorization': `Bearer ${localStorage.getItem('Token')}`
                 }
-            });
+              });
+        
 
-             if(response.status == 200)
+             if(response.status === 200)
                 {
                     console.log("logout successfully")
-                      localStorage.removeItem("Login Token");
+                      localStorage.removeItem("Token");
+                      window.localStorage.removeItem("isLogin");
                     login('/login')
                 }
         } catch (error) {
             
         }
     }
+
+    useEffect(() =>{
+      const token = localStorage.getItem("Token");
+      if (token) {
+        axios.defaults.headers.common["Authorization"] = `Bearer `;
+      }
+    }, [])
 
     return(
         <>
