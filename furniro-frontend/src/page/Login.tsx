@@ -9,10 +9,14 @@ interface formLogin{
   email:string,
   password:string  
 }
+interface LoginProps {
+  setLogins: (value: boolean) => void;
+}
 
-function Login() {
+
+function Login({setLogins}:LoginProps) {
  
-  const dashboard = useNavigate();
+  const users = useNavigate();
 
   const [login, setLogin] = useState<formLogin>({
     'email': '',
@@ -37,7 +41,10 @@ function Login() {
         {
           console.log("login success")
 
-          dashboard('/dashboard');
+          users('/users');
+          setLogins(true)
+        }else{
+           setLogins(false)
         }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

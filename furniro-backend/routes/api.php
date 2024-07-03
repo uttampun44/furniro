@@ -12,15 +12,10 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::middleware(['api'])->group(function() {
-    // Route::get('/user-dashboard', UserController::class);
-    // Route::get('/dashboard', DashboardController::class);
- 
-});
-
 Route::post('signup', [AuthController::class, 'signup']);
 Route::post('login', [AuthController::class, 'login']);
-// Route::get('signup', SignupController::class);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
 
 
 
