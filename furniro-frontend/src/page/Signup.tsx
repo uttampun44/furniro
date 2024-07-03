@@ -7,7 +7,7 @@ import {useNavigate } from "react-router-dom";
 
 
 interface formSignup{
-  full_name:string,
+  name:string,
   email:string,
   date_of_birth:string,
   phone_details:string,
@@ -17,10 +17,10 @@ interface formSignup{
 
 function Signup() {
 
-  const dashboard = useNavigate();
+  const login = useNavigate();
 
   const [signup, setSignup] = useState<formSignup>({
-    'full_name': '',
+    'name': '',
     'email' : '',
     'date_of_birth' : '',
     'phone_details': '',
@@ -39,20 +39,13 @@ function Signup() {
   const signUp = async(event: React.FormEvent<HTMLFormElement>) =>{
      event.preventDefault()
      try {
-        const response = await axios.post('/api/signup', {
-          full_name: signup.full_name,
-          email: signup.email,
-          date_of_birth:  signup.date_of_birth,
-          phone_details: signup.phone_details,
-          gender: signup.gender,
-          password: signup.password
-        })
+        const response = await axios.post('/api/signup', signup)
 
         console.log(response.data)
         
         if(response.status === 201)
           {
-            dashboard('/login')
+            login('/login')
           }
 
      } catch (error) {
@@ -89,10 +82,10 @@ function Signup() {
                 <input
                   type="text"
                   id="fullname"
-                  name="full_name"
+                  name="name"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400"
                   required
-                onChange={signupValue} value={signup.full_name}/>
+                onChange={signupValue} value={signup.name}/>
               </div>
               <div className="mb-5">
                 <label
