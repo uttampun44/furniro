@@ -1,10 +1,14 @@
 import axios from "axios"
-import React, { useEffect } from "react"
+import React, { useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { Context } from "../../context/ContextProvider"
 
 
 const UserDashboard: React.FC = () =>{
 
+  const context  = useContext(Context);
+
+ 
     const login = useNavigate();
 
     const logout = async(event: React.FormEvent) => {
@@ -17,6 +21,7 @@ const UserDashboard: React.FC = () =>{
                 }
               });
         
+              console.log(context)
 
              if(response.status === 200)
                 {
@@ -39,6 +44,7 @@ const UserDashboard: React.FC = () =>{
 
     return(
         <>
+        <h1>{context?.user}</h1>
           <form method="POST" onSubmit={logout}>
                  <button>Logout</button>
           </form>

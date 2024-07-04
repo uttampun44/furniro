@@ -2,57 +2,53 @@ import { Link, useNavigate } from "react-router-dom";
 import Backgroundpic from "../components/Backgroundpic";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import {  useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import { Context } from "../../context/ContextProvider";
 
-interface formLogin{
-  email:string,
-  password:string  
-}
-interface LoginProps {
-  setLogins: (value: boolean) => void;
+interface formLogin {
+  email: string;
+  password: string;
 }
 
-
-function Login({setLogins}:LoginProps) {
- 
+function Login() {
   const users = useNavigate();
 
+  const context = useContext(Context);
+
   const [login, setLogin] = useState<formLogin>({
-    'email': '',
-    'password': ''
+    email: "",
+    password: "",
   });
   const [error, setError] = useState<string | null>(null);
-    
-  const loginVal = (e: React.ChangeEvent<HTMLInputElement>) =>{
 
-     const {name, value} = e.target
-     setLogin({
-      ...login, [name]: value
-     })
-  }
+  const loginVal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLogin({
+      ...login,
+      [name]: value,
+    });
+  };
 
-  const loginForm = async(e: React.FormEvent<HTMLFormElement>) => {
-     e.preventDefault()
+  const loginForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      const response = await axios.post('/api/login', login,{
-        
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          }
-        });
+      const response = await axios.post("/api/login", login, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
 
-      if(response.status === 200)
-        {
-          console.log("login success", response.data.token)
-            localStorage.setItem("Token",response.data.token)
-            window.localStorage.setItem("isLogin", "true");
-          users('/users');
-          setLogins(true)
-        }else{
-           setLogins(false)
-        }
+      if (response.status === 200) {
+
+        // console.log(response.data)
+        localStorage.setItem("Token", response.data.token);
+
+        context?.setToken(response.data.token);
+        context?.setUser(JSON.stringify(response.data.user_details));
+        users("/users");
+      }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         setError("Email or Password not matched");
@@ -60,7 +56,7 @@ function Login({setLogins}:LoginProps) {
         setError("An unexpected error occurred");
       }
     }
-  }
+  };
 
   return (
     <div>
@@ -69,7 +65,11 @@ function Login({setLogins}:LoginProps) {
         <Backgroundpic />
         <div className="login-content my-20 max-w-[1080px] mx-auto">
           <div className="form-content">
-            <form className="max-w-sm mx-auto" method="POST" onSubmit={loginForm}>
+            <form
+              className="max-w-sm mx-auto"
+              method="POST"
+              onSubmit={loginForm}
+            >
               <div className="mb-5">
                 <label
                   htmlFor="email"
@@ -82,7 +82,9 @@ function Login({setLogins}:LoginProps) {
                   id="email"
                   name="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400"
-                  required onChange={loginVal} value={login.email}
+                  required
+                  onChange={loginVal}
+                  value={login.email}
                 />
               </div>
               <div className="mb-5">
@@ -97,7 +99,9 @@ function Login({setLogins}:LoginProps) {
                   id="password"
                   name="password"
                   className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
-                  required onChange={loginVal} value={login.password}
+                  required
+                  onChange={loginVal}
+                  value={login.password}
                 />
               </div>
               <div className="flex items-start mb-5">
