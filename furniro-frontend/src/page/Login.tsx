@@ -46,8 +46,8 @@ function Login() {
         localStorage.setItem("Token", response.data.token);
 
         context?.setToken(response.data.token);
-        context?.setUser(JSON.stringify(response.data.user_details));
-        users("/users");
+       
+        users("/user");
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

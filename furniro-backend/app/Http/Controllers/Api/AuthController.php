@@ -66,14 +66,16 @@ class AuthController extends Controller
         if(Auth::attempt($credentials))
         {
             $user = Auth::user();
-        
-            return response()->json([
-                'status' => true,
-                'message' => 'Successfully Logged In',
-                'token' => $user->createToken("Login Token")->plainTextToken,
-                'token_type' => 'bearer',
-                'user_details' => $user
-            ], 200);
+
+            if($user instanceof \App\Models\User)
+            {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Successfully Logged In',
+                    'token' => $user->createToken("Login Token")->plainTextToken,
+                    'token_type' => 'bearer',
+                ], 200);
+            }
         }else{
 
             response()->json([

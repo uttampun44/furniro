@@ -17,13 +17,11 @@ const TopNavigation: React.FC = () => {
                 }
               });
 
-              console.log(response.data)
       
-
              if(response.status === 200)
                 {
-                    console.log("logout successfully")
                       localStorage.removeItem("Token");
+                      localStorage.removeItem("User")
                       window.localStorage.removeItem("isLogin");
                     login('/login')
                 }
@@ -56,13 +54,13 @@ const TopNavigation: React.FC = () => {
                     viewBox="0 0 20 20"
                   >
                   
-                    <path
+                    {/* <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    />
+                    /> */}
                   </svg>
                 </div>
                 <input
@@ -74,49 +72,8 @@ const TopNavigation: React.FC = () => {
                 />
               </div>
 
-              <button
-                type="button"
-                className="hidden sm:inline-flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="mr-1 -ml-1 w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>{" "}
-                New Widget
-              </button>
-              <button
-                id="toggleSidebarMobileSearch"
-                type="button"
-                className="p-2 text-gray-500 rounded-lg lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                <span className="sr-only">Search</span>
-
-                <svg
-                  className="w-4 h-4"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </button>
-
+             
+              
               <button
                 type="button"
                 data-dropdown-toggle="notification-dropdown"

@@ -1,4 +1,4 @@
-import {Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./page/Home";
 import About from "./page/About";
 import Shop from "./page/Shop";
@@ -9,6 +9,8 @@ import UserDashboard from "./page/UserDashboard";
 import { useContext } from "react";
 import { Context } from "../context/ContextProvider";
 import Profile from "./page/Profile";
+import Userupdateprofile from "./page/UserUpdateProfile";
+import Userorder from "./page/UserOrder";
 
 const AppRoutes = () => {
   const context = useContext(Context);
@@ -22,10 +24,14 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route
-        path="/users"
+        path="/user"
         element={context?.token ? <UserDashboard /> : <Navigate to="/login" />}
       />
-      <Route path="/profile" element={<Profile />}></Route>
+      <Route path="/profile" element={<Profile />}>
+        {" "}
+      </Route>
+      <Route path="/update-profile" element={<Userupdateprofile />}></Route>
+      <Route path="/orders" element={<Userorder />}></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
