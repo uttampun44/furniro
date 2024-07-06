@@ -8,6 +8,7 @@ import Signup from "./page/Signup";
 import UserDashboard from "./page/UserDashboard";
 import { useContext } from "react";
 import { Context } from "../context/ContextProvider";
+import Profile from "./page/Profile";
 
 const AppRoutes = () => {
   const context = useContext(Context);
@@ -24,6 +25,7 @@ const AppRoutes = () => {
         path="/users"
         element={context?.token ? <UserDashboard /> : <Navigate to="/login" />}
       />
+      <Route path="/profile" element={<Profile />}></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

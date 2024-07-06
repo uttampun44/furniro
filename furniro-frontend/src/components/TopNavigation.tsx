@@ -1,13 +1,10 @@
-import React, { useContext, useEffect } from "react";
-import { Context } from "../../context/ContextProvider";
+import React, {useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const TopNavigation: React.FC = () => {
 
-    const context = useContext(Context)
 
-console.log(context?.user) 
     const login = useNavigate();
 
     const logout = async(event: React.FormEvent) => {
@@ -47,8 +44,7 @@ console.log(context?.user)
     <div>
       <header className="antialiased">
         <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
-          <div className="flex flex-wrap justify-between items-center">
-            <div className="flex justify-start items-center"></div>
+          <div className="flex flex-wrap justify-end items-center">
             <div className="flex items-center lg:order-2">
               <div className="relative mt-1 ">
                 <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -155,13 +151,8 @@ console.log(context?.user)
                   alt="user photo"
                 />
 
-                {
-                    context && 
-                    <div>
-                        <span>{context?.user}</span>
-                    </div>
-                }
               </button>
+          
             </div>
           </div>
         </nav>
