@@ -15,7 +15,9 @@ function Home() {
           style={{
             backgroundImage: `url(${Homebg})`,
             backgroundRepeat: "no-repeat",
-            backgroundSize: "100% 100%",
+            backgroundSize: "100% auto",
+            backgroundPosition: "center",
+            minHeight: "718px"
           }}
         >
           <div className="bg-home relative">

@@ -4,7 +4,7 @@ type ContextProviderProps = {
     children?: ReactNode
 }
 type ContextValueType = {
-   user:string | null
+   user?:string | null
    token:string | null,
    setToken:React.Dispatch<React.SetStateAction<string | null>>
    setUser:React.Dispatch<React.SetStateAction<string | null>>
@@ -19,7 +19,9 @@ const ContextProvider = ({children}:ContextProviderProps) =>{
    const [token, setToken] = useState<string | null>(() => {
       return localStorage.getItem("Token");
   });
-  const [user, setUser] =  useState<string | null>(localStorage.getItem("User"));
+  const [user, setUser] =  useState<string | null>(() =>{
+   return localStorage.getItem("User")
+  });
 
  
     useEffect(() => {

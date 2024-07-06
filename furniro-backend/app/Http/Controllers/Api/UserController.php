@@ -6,17 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $user = User::all();
-        // $user_details = UserDetail::all();
+        if (Auth::check()) {
+            $user = Auth::user();
 
+            $user_profile = UserDetail::with('user')->where('user_id', $user->id)->get();
+        } else {
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 401);
+        }
         return response()->json([
-            'user' => $user,
-            // 'user_details' => $user_details
+            'user_profile' => $user_profile,
         ]);
     }
 }
