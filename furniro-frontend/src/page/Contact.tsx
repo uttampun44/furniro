@@ -1,4 +1,5 @@
 import Backgroundpic from "../components/Backgroundpic";
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 function Contact() {
@@ -8,6 +9,7 @@ function Contact() {
       <main>
         <Backgroundpic />
       </main>
+      <Footer />
     </div>
   );
 }
