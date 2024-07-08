@@ -36,6 +36,9 @@ const Userupdateprofile: React.FC = () => {
       ]
 
       const [country, setCountry] = useState<Country []>([]);
+      const [update, setUpdate] = useState({
+
+      })
 
       console.log(country)
       const {register,handleSubmit, formState: {errors}} = useForm<Inputs>();
@@ -54,8 +57,19 @@ const Userupdateprofile: React.FC = () => {
         
         
       }
+
+      const Updateprofile =  async() =>{
+          await axios.post('/api/update-profile/{id}')
+           
+      };
+
+      const updateProfile = () =>{
+        
+      }
+
       useEffect(() => {
         fetcthCountries()
+        Updateprofile()
       }, [])
 
      
@@ -74,7 +88,7 @@ const Userupdateprofile: React.FC = () => {
             
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
-             
+             onChange={updateProfile}
             />
             {errors.addressOne && <span className="text-red-700">This Field is required</span>}
             <label
@@ -90,7 +104,7 @@ const Userupdateprofile: React.FC = () => {
               {...register("addressTwo", {required:true})}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
-             
+              onChange={updateProfile}
             />
                {errors.addressTwo && <span className="text-red-700">This Field is required</span>}
             <label
@@ -106,7 +120,7 @@ const Userupdateprofile: React.FC = () => {
               {...register('postalcode', {required: true})}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
-            
+              onChange={updateProfile}
             />
              {errors.postalcode && <span className="text-red-700">This Field is required</span>}
             <label
@@ -123,7 +137,7 @@ const Userupdateprofile: React.FC = () => {
                {...register('image', {required:true})}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
-              
+              onChange={updateProfile}
             />
              {errors.image && <span className="text-red-700">This Field is required</span>}
             <label
@@ -162,7 +176,7 @@ const Userupdateprofile: React.FC = () => {
                 {...register('telephone', {required:true})}
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-              
+                onChange={updateProfile}
               />
                {errors.telephone && <span className="text-red-700">This Field is required</span>}
               <label

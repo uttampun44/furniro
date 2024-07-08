@@ -31,16 +31,7 @@ class UserController extends Controller
     
     public function updateProfile(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-
-        ]);
-
-        if($validator->fails())
-        {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 422);
-        }
+       
 
         $user_details = UserDetail::findOrFail($id);
         $user_address = UserAddress::findOrFail($id);
@@ -51,13 +42,14 @@ class UserController extends Controller
          {
             if($image)
             {
-                Session::delete();
+                Session::delete($image);
             }
-            $imageName = time().'.'.$image->extension();
-            $request->image->move(public_path('uploads/images'), $imageName);
+            $image = $request->file('image')->store('uploads');
          }
 
          $user_details->image = $image;
+         $user_details->save();
+
          $user_address->address_line_one = $request->address_line_one;
          $user_address->address_line_two = $request->address_line_two;
          $user_address->city = $request->city;
@@ -66,6 +58,8 @@ class UserController extends Controller
          $user_address->telephone = $request->telephone;
          $user_address->mobile = $request->mobile;
          $user_address->user_id = Auth::user()->id;
+
+         $user_address->save();
 
         return response()->json([
            'success' => true,
