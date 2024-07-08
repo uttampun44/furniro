@@ -28,9 +28,9 @@ const AppRoutes = () => {
         element={context?.token ? <UserDashboard /> : <Navigate to="/login" />}
       />
       <Route path="/profile" element={<Profile />}>
-        {" "}
+    
       </Route>
-      <Route path="/update-profile" element={<Userupdateprofile />}></Route>
+      <Route path="/update-profile/" element={<Userupdateprofile />}></Route>
       <Route path="/orders" element={<Userorder />}></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
