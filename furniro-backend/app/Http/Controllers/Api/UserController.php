@@ -33,8 +33,9 @@ class UserController extends Controller
     {
        
 
+       try {
         $user_details = UserDetail::findOrFail($id);
-        $user_address = UserAddress::findOrFail($id);
+        $user_address = UserAddress::where('user_id', $id)->first();
 
         $image = $user_details->image;
 
@@ -64,7 +65,13 @@ class UserController extends Controller
         return response()->json([
            'success' => true,
            'user_details_image' => $user_details,
-           'user_address_details' => $user_address 
+           'user_address_details' => $user_address,
+           'message' => 'Profile Updated Successfully' 
         ], 200);
+       
+
+       } catch (\Throwable $th) {
+           $th->getMessage();
+       }
     }
 }
