@@ -3,6 +3,7 @@ import React, { useState, ReactNode, createContext, useEffect } from 'react';
 type ContextProviderProps = {
     children?: ReactNode
 }
+
 type ContextValueType = {
    user?:string | null
    token:string | null,
@@ -20,10 +21,9 @@ const ContextProvider = ({children}:ContextProviderProps) =>{
       return localStorage.getItem("Token");
   });
   const [user, setUser] =  useState<string | null>(() =>{
-   return localStorage.getItem("User")
+ return localStorage.getItem("User")
   });
 
- 
     useEffect(() => {
       try {
       

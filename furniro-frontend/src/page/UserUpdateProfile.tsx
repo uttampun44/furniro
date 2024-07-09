@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TopNavigation from "../components/TopNavigation";
 import Sidebaruser from "../components/Sidebar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
+import { Context } from "../../context/ContextProvider";
 
 
 interface Country {
@@ -20,6 +21,13 @@ type Inputs = {
   }
 
 const Userupdateprofile: React.FC = () => {
+
+  const context = useContext(Context);
+
+  const token = context?.token;
+  const user_id = context?.user;
+
+
     const link =[
         {
             name: 'Dashboard', path: "/user"
@@ -36,13 +44,30 @@ const Userupdateprofile: React.FC = () => {
       ]
 
       const [country, setCountry] = useState<Country []>([]);
-      const [update, setUpdate] = useState({
+    
 
-      })
-
-      console.log(country)
       const {register,handleSubmit, formState: {errors}} = useForm<Inputs>();
-      const onSubmit:SubmitHandler<Inputs> = (data) => console.log(data)
+
+      const onSubmit:SubmitHandler<Inputs> = (data) => {
+
+        const formData = new FormData();
+          formData.append('address_line_one', data.addressOne);
+          formData.append('address_line_two', data.addressTwo);
+          formData.append('postal_code', data.postalcode);
+          formData.append('image', data.image[0]); 
+          formData.append('country', data.country);
+          formData.append('telephone', data.telephone);
+          formData.append('mobile', data.mobile);
+
+              axios.put(`/api/update-profile/${user_id}`, formData, {
+                headers: {
+                   'Content-Type': 'application/json',
+                   'Authorization': `Bearer ${token}`
+                  }
+              })
+
+              console.log()
+      }
 
       const fetcthCountries = async() =>{
         await axios.get('https://countriesnow.space/api/v0.1/countries/')
@@ -54,22 +79,11 @@ const Userupdateprofile: React.FC = () => {
         .catch( function(error){
             console.log(error)
         })
-        
-        
-      }
-
-      const Updateprofile =  async() =>{
-          await axios.post('/api/update-profile/{id}')
-           
-      };
-
-      const updateProfile = () =>{
-        
       }
 
       useEffect(() => {
         fetcthCountries()
-        Updateprofile()
+      
       }, [])
 
      
@@ -80,7 +94,7 @@ const Userupdateprofile: React.FC = () => {
 
       <div className="update-profile bg-white max-w-2xl py-8 mx-auto my-8 shadow overflow-hidden sm:rounded-lg">
         <h1 className="text-2xl font-bold text-center my-2">Update Profile</h1>
-        <form className="max-w-md mx-auto" onSubmit={handleSubmit(onSubmit)} method="POST">
+        <form className="max-w-md mx-auto" onSubmit={handleSubmit(onSubmit)} method="POST" encType="multipart/form-data">
           <div className="relative z-0 w-full mb-5 group">
             <input
               type="text"
@@ -88,7 +102,7 @@ const Userupdateprofile: React.FC = () => {
             
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
-             onChange={updateProfile}
+           
             />
             {errors.addressOne && <span className="text-red-700">This Field is required</span>}
             <label
@@ -104,7 +118,7 @@ const Userupdateprofile: React.FC = () => {
               {...register("addressTwo", {required:true})}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
-              onChange={updateProfile}
+             
             />
                {errors.addressTwo && <span className="text-red-700">This Field is required</span>}
             <label
@@ -120,7 +134,7 @@ const Userupdateprofile: React.FC = () => {
               {...register('postalcode', {required: true})}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
-              onChange={updateProfile}
+            
             />
              {errors.postalcode && <span className="text-red-700">This Field is required</span>}
             <label
@@ -137,7 +151,7 @@ const Userupdateprofile: React.FC = () => {
                {...register('image', {required:true})}
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
-              onChange={updateProfile}
+           
             />
              {errors.image && <span className="text-red-700">This Field is required</span>}
             <label
@@ -176,7 +190,7 @@ const Userupdateprofile: React.FC = () => {
                 {...register('telephone', {required:true})}
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
-                onChange={updateProfile}
+               
               />
                {errors.telephone && <span className="text-red-700">This Field is required</span>}
               <label

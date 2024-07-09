@@ -7,7 +7,10 @@ use App\Models\UserAddress;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -32,9 +35,10 @@ class UserController extends Controller
     public function updateProfile(Request $request, $id)
     {
        
-
+      DB::beginTransaction();
+       try {
         $user_details = UserDetail::findOrFail($id);
-        $user_address = UserAddress::findOrFail($id);
+        $user_address = UserAddress::where('user_id', $id)->first();
 
         $image = $user_details->image;
 
@@ -42,7 +46,7 @@ class UserController extends Controller
          {
             if($image)
             {
-                Session::delete($image);
+                Storage::delete($image);
             }
             $image = $request->file('image')->store('uploads');
          }
@@ -64,7 +68,19 @@ class UserController extends Controller
         return response()->json([
            'success' => true,
            'user_details_image' => $user_details,
-           'user_address_details' => $user_address 
+           'user_address_details' => $user_address,
+           'message' => 'Profile Updated Successfully' 
         ], 200);
+       
+        DB::commit();
+       } catch (\Throwable $th) {
+        Log::error($th->getMessage());
+           DB::rollBack();
+
+           return response()->json([
+            'success' => false,
+            'message' => 'Profile Update Failed'
+        ], 500);
+       }
     }
 }
