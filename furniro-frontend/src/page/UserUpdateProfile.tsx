@@ -10,9 +10,14 @@ interface Country {
   country: string;
 }
 
+type City = {
+  city:string
+}
+
 type Inputs = {
     addressOne:string,
     addressTwo:string,
+    city:string
     postalcode:string,
     image:string,
     country:string,
@@ -44,6 +49,7 @@ const Userupdateprofile: React.FC = () => {
       ]
 
       const [country, setCountry] = useState<Country []>([]);
+      const [city, setCity] = useState<City []>([]);
     
 
       const {register,handleSubmit, formState: {errors}} = useForm<Inputs>();
@@ -53,6 +59,7 @@ const Userupdateprofile: React.FC = () => {
         const formData = new FormData();
           formData.append('address_line_one', data.addressOne);
           formData.append('address_line_two', data.addressTwo);
+          formData.append('city', data.city);
           formData.append('postal_code', data.postalcode);
           formData.append('image', data.image[0]); 
           formData.append('country', data.country);
@@ -70,10 +77,11 @@ const Userupdateprofile: React.FC = () => {
       }
 
       const fetcthCountries = async() =>{
-        await axios.get('https://countriesnow.space/api/v0.1/countries/')
+        await axios.get('https://countriesnow.space/api/v0.1/countries/population/cities')
         .then((response) =>{
           if(response.status === 200){
              setCountry(response.data.data)
+             setCity(response.data.data)
           }
         })
         .catch( function(error){
@@ -81,9 +89,10 @@ const Userupdateprofile: React.FC = () => {
         })
       }
 
+      
       useEffect(() => {
         fetcthCountries()
-      
+         
       }, [])
 
      
@@ -163,6 +172,29 @@ const Userupdateprofile: React.FC = () => {
           </div>
           <div className="grid  md:gap-6">
             <div className="relative z-0 w-full mb-5 group">
+                <select {...register('city', {required:true})}  className="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  font-medium dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                      <option className="text-lg">Select City</option>
+                      {
+                        city.map((city, index) => {
+                          return(
+                            <option key={index} className="font-medium text-lg p-2">{city.city}</option>
+                          )
+                        })
+                      }
+                </select>
+                {errors.country && <span className="text-red-700">This Field is required</span>}
+              <label
+                htmlFor="floating_first_name"
+                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              >
+                City
+              </label>
+            </div>
+           
+          </div>
+
+          <div className="grid  md:gap-6">
+            <div className="relative z-0 w-full mb-5 group">
                 <select {...register('country', {required:true})}  className="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  font-medium dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
                       <option className="text-lg">Select Country</option>
                       {
@@ -183,6 +215,7 @@ const Userupdateprofile: React.FC = () => {
             </div>
            
           </div>
+
           <div className="grid md:grid-cols-2 md:gap-6">
             <div className="relative z-0 w-full mb-5 group">
               <input
