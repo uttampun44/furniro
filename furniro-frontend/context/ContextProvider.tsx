@@ -24,8 +24,6 @@ const ContextProvider = ({children}:ContextProviderProps) =>{
  return localStorage.getItem("User")
   });
 
-  console.log(user)
- 
     useEffect(() => {
       try {
       
