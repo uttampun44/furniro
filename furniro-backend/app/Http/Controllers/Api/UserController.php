@@ -37,8 +37,38 @@ class UserController extends Controller
        
       DB::beginTransaction();
        try {
-        $user_details = UserDetail::findOrFail($id);
+
+    
+        $user_details = UserDetail::where('user_id', $id)->firstOrFail();
         $user_address = UserAddress::where('user_id', $id)->first();
+
+      
+
+        if (!$user_address) {
+            $user_address = new UserAddress();
+      
+            $user_address->address_line_one = $request->address_line_one;
+            $user_address->address_line_two = $request->address_line_two;
+            $user_address->city = $request->city;
+            $user_address->postal_code = $request->postal_code;
+            $user_address->country = $request->country;
+            $user_address->telephone = $request->telephone;
+            $user_address->mobile = $request->mobile;
+            $user_address->user_id = Auth::user()->id;
+   
+            $user_address->save();
+        }else{
+            $user_address->address_line_one = $request->address_line_one;
+            $user_address->address_line_two = $request->address_line_two;
+            $user_address->city = $request->city;
+            $user_address->postal_code = $request->postal_code;
+            $user_address->country = $request->country;
+            $user_address->telephone = $request->telephone;
+            $user_address->mobile = $request->mobile;
+
+           
+            $user_address->save();
+        }
 
         $image = $user_details->image;
 
@@ -54,16 +84,7 @@ class UserController extends Controller
          $user_details->image = $image;
          $user_details->save();
 
-         $user_address->address_line_one = $request->address_line_one;
-         $user_address->address_line_two = $request->address_line_two;
-         $user_address->city = $request->city;
-         $user_address->postal_code = $request->postal_code;
-         $user_address->country = $request->country;
-         $user_address->telephone = $request->telephone;
-         $user_address->mobile = $request->mobile;
-         $user_address->user_id = Auth::user()->id;
-
-         $user_address->save();
+        
 
         return response()->json([
            'success' => true,
