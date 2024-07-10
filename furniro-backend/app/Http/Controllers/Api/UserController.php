@@ -31,77 +31,73 @@ class UserController extends Controller
             'user_profile' => $user_profile,
         ]);
     }
-    
+
     public function updateProfile(Request $request, $id)
     {
-       
-      DB::beginTransaction();
-       try {
 
+        DB::beginTransaction();
+        try {
+                $user_details = UserDetail::findOrFail($id);
+
+                $image = $user_details->image;
+
+                if ($request->hasFile('image')) {
+                    if ($image) {
+                        Storage::delete($image);
+                    }
+                    $image = $request->file('image')->store('uploads');
+                }
+
+                $user_details->image = $image;
+                $user_details->save();
+              
+                $user_address = UserAddress::where('user_id', $id)->first();
     
-        $user_details = UserDetail::where('user_id', $id)->firstOrFail();
-        $user_address = UserAddress::where('user_id', $id)->first();
 
-      
+               if(!$user_address)
+               {
+                UserAddress::Create([
+                    "address_line_one" => $request->address_line_one,
+                    "address_line_two" => $request->address_line_two,
+                    "city" => $request->city,
+                    "postal_code" => $request->postal_code,
+                    "country" => $request->country,
+                    "telephone" => $request->telephone,
+                    "mobile" => $request->mobile,
+                    "user_id" => Auth::user()->id,
+                ]);
+               }else
+               {
 
-        if (!$user_address) {
-            $user_address = new UserAddress();
-      
-            $user_address->address_line_one = $request->address_line_one;
-            $user_address->address_line_two = $request->address_line_two;
-            $user_address->city = $request->city;
-            $user_address->postal_code = $request->postal_code;
-            $user_address->country = $request->country;
-            $user_address->telephone = $request->telephone;
-            $user_address->mobile = $request->mobile;
-            $user_address->user_id = Auth::user()->id;
-   
-            $user_address->save();
-        }else{
-            $user_address->address_line_one = $request->address_line_one;
-            $user_address->address_line_two = $request->address_line_two;
-            $user_address->city = $request->city;
-            $user_address->postal_code = $request->postal_code;
-            $user_address->country = $request->country;
-            $user_address->telephone = $request->telephone;
-            $user_address->mobile = $request->mobile;
+                $user_address = new UserAddress();
+                $user_address->address_line_one = $request->address_line_one;
+                $user_address->address_line_two = $request->address_line_two;
+                $user_address->city = $request->city;
+                $user_address->postal_code = $request->postal_code;
+                $user_address->country = $request->country;
+                $user_address->telephone = $request->telephone;
+                $user_address->mobile = $request->mobile;
+                $user_address->user_id = Auth::user()->id;
 
-           
-            $user_address->save();
+                $user_address->save();
+               }
+
+            return response()->json([
+                'success' => true,
+                'user_details_image' => $user_details,
+                'user_address_details' => $user_address,
+                'message' => 'Profile Updated Successfully'
+            ], 200);
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Profile Update Failed'
+            ], 500);
         }
-
-        $image = $user_details->image;
-
-         if($request->hasFile('image'))
-         {
-            if($image)
-            {
-                Storage::delete($image);
-            }
-            $image = $request->file('image')->store('uploads');
-         }
-
-         $user_details->image = $image;
-         $user_details->save();
-
-        
-
-        return response()->json([
-           'success' => true,
-           'user_details_image' => $user_details,
-           'user_address_details' => $user_address,
-           'message' => 'Profile Updated Successfully' 
-        ], 200);
-       
-        DB::commit();
-       } catch (\Throwable $th) {
-        Log::error($th->getMessage());
-           DB::rollBack();
-
-           return response()->json([
-            'success' => false,
-            'message' => 'Profile Update Failed'
-        ], 500);
-       }
     }
 }
