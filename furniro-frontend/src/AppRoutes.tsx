@@ -11,6 +11,8 @@ import { Context } from "../context/ContextProvider";
 import Profile from "./page/Profile";
 import Userupdateprofile from "./page/UserUpdateProfile";
 import Userorder from "./page/UserOrder";
+import BackendLogin from "./page/backend/BackendLogin";
+import Dashboard from "./page/backend/Dashboard";
 
 const AppRoutes = () => {
   const context = useContext(Context);
@@ -32,6 +34,8 @@ const AppRoutes = () => {
       </Route>
       <Route path="/update-profile/" element={<Userupdateprofile />}></Route>
       <Route path="/orders" element={<Userorder />}></Route>
+      <Route path="/furniro-login" element={<BackendLogin />}></Route>
+      <Route path="/furniro/dashboard" element={<Dashboard />}></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
