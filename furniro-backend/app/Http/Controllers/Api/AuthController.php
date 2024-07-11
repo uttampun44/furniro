@@ -108,4 +108,9 @@ class AuthController extends Controller
         }
 
     }
+
+    public function backendLogin(Request $request)
+    {
+
+    }
 }
