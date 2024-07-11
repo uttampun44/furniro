@@ -13,6 +13,7 @@ import Userupdateprofile from "./page/UserUpdateProfile";
 import Userorder from "./page/UserOrder";
 import BackendLogin from "./page/backend/BackendLogin";
 import Dashboard from "./page/backend/Dashboard";
+import ProductCategories from "./page/backend/ProductCateogries";
 
 const AppRoutes = () => {
   const context = useContext(Context);
@@ -35,7 +36,8 @@ const AppRoutes = () => {
       <Route path="/update-profile/" element={<Userupdateprofile />}></Route>
       <Route path="/orders" element={<Userorder />}></Route>
       <Route path="/furniro-login" element={<BackendLogin />}></Route>
-      <Route path="/furniro/dashboard" element={<Dashboard />}></Route>
+      <Route path="/product-categories" element={<ProductCategories />}></Route>
+      <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
