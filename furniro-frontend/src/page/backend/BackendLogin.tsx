@@ -1,8 +1,9 @@
 import Logo from "../../assets/images/logo.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext} from "react";
 import { Context } from "../../../context/ContextProvider";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 type LoginInputs = {
   email: string;
@@ -13,41 +14,28 @@ const BackendLogin: React.FC = () => {
 
   const context = useContext(Context);
 
-  const [login, setLogin] = useState<LoginInputs>({
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState<string | null>(null);
+  const {register, handleSubmit, formState: {errors}} = useForm<LoginInputs>()
 
-  const loginVal = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setLogin({
-      ...login,
-      [name]: value,
-    });
-  };
+  const onSubmit:SubmitHandler<LoginInputs> = async(data) => {
+   const response = await axios.post('/api/backendlogin', data, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+   })
+   console.log(response)
+   if(response.status === 200)
+    {
 
-  const loginSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    try {
-        const response = await axios.post("api/login", {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
-  
-        if (response.status === 200) {
-          localStorage.setItem("Token", response.data.token);
-          context?.setToken(response.data.token);
-          context?.setUser(JSON.stringify(response.data.user_profile.id));
-  
-          users("/furniro-login");
-        }
-      } catch (error) {
-        throw new Error();
-      }
-  };
+      localStorage.setItem("Token", response.data.token);
+      context?.setToken(response.data.token);
+      // context?.setUser(JSON.stringify(response.data.user_profile.id))
+      users('/furniro/dashboard')
+    }else{
+      users('/backend-login')
+    }
+  console.log(data)
+  }
 
   return (
     <>
@@ -67,7 +55,7 @@ const BackendLogin: React.FC = () => {
               </h1>
               <form
                 className="space-y-4 md:space-y-6"
-                onSubmit={loginSubmit}
+                onSubmit={handleSubmit(onSubmit)}
                 method="POST"
               >
                 <div>
@@ -78,13 +66,15 @@ const BackendLogin: React.FC = () => {
                     Your email
                   </label>
                   <input
-                    name="email"
+                   
                     type="email"
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  onChange={loginVal}
-                  value={login.email}
+                  {...register('email', {
+                      required: true
+                  })}
                   />
+                {errors.email && <span className="text-lg font-bold text-red-700">This field is required</span>}
                 </div>
                 <div>
                   <label
@@ -94,13 +84,15 @@ const BackendLogin: React.FC = () => {
                     Password
                   </label>
                   <input
-                    name="password"
+                  
                     type="password"
                     id="password"
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    onChange={loginVal}
-                    value={login.password}
+                    {...register('password', {
+                      required: true
+                  })}
                   />
+                   {errors.password && <span className="text-lg font-bold text-red-700">This field is required</span>}
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-start">
@@ -110,6 +102,7 @@ const BackendLogin: React.FC = () => {
                         aria-describedby="remember"
                         type="checkbox"
                         className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                      
                       />
                     </div>
                     <div className="ml-3 text-sm">
