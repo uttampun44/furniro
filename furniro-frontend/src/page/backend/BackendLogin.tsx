@@ -23,7 +23,7 @@ const BackendLogin: React.FC = () => {
       "Content-Type": "application/json",
     },
    })
-   console.log(response)
+ 
    if(response.status === 200)
     {
 
@@ -34,7 +34,7 @@ const BackendLogin: React.FC = () => {
     }else{
       users('/backend-login')
     }
-  console.log(data)
+
   }
 
   return (

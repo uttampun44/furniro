@@ -1,16 +1,11 @@
 import Backgroundpic from "../components/Backgroundpic";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import Layout from "../layout/Layout";
 
 function Shop() {
   return (
-    <div>
-      <Header />
-      <main>
-        <Backgroundpic />
-      </main>
-      <Footer />
-    </div>
+    <Layout>
+      <Backgroundpic />
+    </Layout>
   );
 }
 

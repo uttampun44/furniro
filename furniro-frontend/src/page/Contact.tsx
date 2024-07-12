@@ -1,16 +1,13 @@
 import Backgroundpic from "../components/Backgroundpic";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import Layout from "../layout/Layout";
 
 function Contact() {
   return (
-    <div>
-      <Header />
-      <main>
+    
+      <Layout>
         <Backgroundpic />
-      </main>
-      <Footer />
-    </div>
+      </Layout>
+    
   );
 }
 
