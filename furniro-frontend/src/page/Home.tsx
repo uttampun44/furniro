@@ -1,15 +1,14 @@
-import Header from "../components/Header";
 import Homebg from "../assets/images/home_bg.png";
 import { Link } from "react-router-dom";
 import Imageone from "../assets/images/image_one.png";
 import Imagetwo from "../assets/images/image_two.png";
 import Imagethree from "../assets/images/image_three.png";
+import Layout from "../layout/Layout";
 
 function Home() {
   return (
-    <div>
-      <Header />
-      <main>
+  
+      <Layout >
         <section
          
           style={{
@@ -95,8 +94,9 @@ function Home() {
             </div>
           </div>
         </section>
-      </main>
-    </div>
+    
+      </Layout >
+    
   );
 }
 

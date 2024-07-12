@@ -1,14 +1,14 @@
 import axios from "axios";
-import { FormEventHandler, useState } from "react";
+import {useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const BackendSidebar: React.FC= () => {
 
   const navigate = useNavigate()
 
   const [toggle, setToggle] = useState(false);
-  const {handleSubmit, formState:{errors}} = useForm();
+  const {handleSubmit} = useForm();
 
   const toggleBtn = (e: React.MouseEvent<HTMLSpanElement>) =>{
     setToggle(!toggle)
@@ -16,7 +16,7 @@ const BackendSidebar: React.FC= () => {
 
   const onSubmit = async() =>{
     try {
-        const response = await axios.post('/api/backendlogout', {}, {
+      await axios.post('/api/backendlogout', {}, {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -26,7 +26,6 @@ const BackendSidebar: React.FC= () => {
         })
         localStorage.removeItem("Token");
         navigate('/furniro-login')
-        console.log(response);
 
     } catch (error) {
       throw new Error
@@ -139,14 +138,44 @@ const BackendSidebar: React.FC= () => {
                   <span className="flex-1 ms-3 whitespace-nowrap">Customers</span>
                 </a>
               </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                    >
-                      Products
-                    </a>
-                  </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                >
+                  <svg
+                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 18 20"
+                  >
+                    <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
+                  </svg>
+                  <span className="flex-1 ms-3 whitespace-nowrap">
+                    Products
+                  </span>
+                </a>
+              </li>
+              <li>
+                <Link to='/product-categories'
+                 
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                >
+                  <svg
+                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 18 20"
+                  >
+                    <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
+                  </svg>
+                  <span className="flex-1 ms-3 whitespace-nowrap">
+                    Products Categories
+                  </span>
+                </Link>
+              </li>
                   <li>
                     <a
                       href="#"
@@ -222,28 +251,7 @@ const BackendSidebar: React.FC= () => {
                   <span className="flex-1 ms-3 whitespace-nowrap">Users</span>
                 </a>
               </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 18 20"
-                  >
-                    <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
-                  </svg>
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Products
-                  </span>
-                </a>
-              </li>
-             
-
-            
+                      
               <li>
                 <a
                   href="#"
