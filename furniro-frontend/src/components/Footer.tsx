@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
-import Links from './Navlink'
+import Links from '../types/Navlink'
 
-function Footer() {
+const Footer:React.FC = () => {
   return (
     <div className="border-t-slate-400 border-2">
       <footer>
