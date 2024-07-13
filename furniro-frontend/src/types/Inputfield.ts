@@ -9,6 +9,7 @@ type Input = {
     required?:boolean
     value?:string | number
     type?: 'file' | 'text' | 'email' | 'password' | 'checkbox'
+    accept?:string
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
