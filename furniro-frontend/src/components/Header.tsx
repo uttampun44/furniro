@@ -4,7 +4,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Links from './Navlink'
+import Links from '../types/Navlink'
 import React from "react";
 
 
