@@ -1,6 +1,6 @@
 import Input from "../types/Inputfield";
 
-const InputField: React.FC<Input> = (props) => {
+const InputField: React.FC<Input> = ({register, ...props}) => {
   return (
     <>
       {props.label && (
@@ -14,7 +14,7 @@ const InputField: React.FC<Input> = (props) => {
         required={props.required}
         value={props.value}
         name={props.name}
-      onChange={props.onChange}
+        {...register}
       />
     </>
   );

@@ -3,10 +3,12 @@ import BackendSidebar from "../../components/BackendSidebar";
 import Button from "../../components/Button";
 import InputField from "../../components/InputField";
 import axios from "axios";
+import { useContext } from "react";
+import { Context } from "../../../context/ContextProvider";
 
 type ProductAdd = {
-  product_name: string;
-  product_image: FileList;
+  name: string;
+  image: FileList;
 };
 
 const ProductCategoryAdd: React.FC = () => {
@@ -16,14 +18,24 @@ const ProductCategoryAdd: React.FC = () => {
     formState: { errors },
   } = useForm<ProductAdd>();
 
+  const context = useContext(Context);
+  const token = context?.token;
+
   const onSubmit: SubmitHandler<ProductAdd> = async (data) => {
-console.log(data)
+    console.log(data);
+
+    const formData = new FormData();
+    formData.append("name", data.name);
+    if (data.image && data.image.length > 0) {
+      formData.append("image", data.image[0]);
+    }
 
     try {
-      const response = await axios.post("/api/product-categories", data, {
+      const response = await axios.post("/api/product-categories", formData, {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -41,7 +53,9 @@ console.log(data)
       <div className="product_categories_container pl-20 h-[100vh] max-h-full">
         <div className="product_categories pl-10 pr-4 py-12 my-20 bg-gray-700 ml-48 mr-8">
           <div className="product_categories_title">
-            <h1 className="text-white text-2xl font-bold">Product Categories</h1>
+            <h1 className="text-white text-2xl font-bold">
+              Product Categories
+            </h1>
           </div>
 
           <div className="relative overflow-x-auto sm:rounded-lg my-2">
@@ -50,7 +64,7 @@ console.log(data)
                 <div className="mb-5">
                   <InputField
                     type="text"
-                    {...register("product_name")}
+                    {...register("name")}
                     className={{
                       label: "block mb-2 text-sm font-medium text-white",
                       input:
@@ -58,7 +72,7 @@ console.log(data)
                     }}
                     label="Product Name"
                   />
-                  {errors.product_name && (
+                  {errors.name && (
                     <span className="text-red my-2 font-bold text-lg">
                       This Field is required
                     </span>
@@ -68,7 +82,7 @@ console.log(data)
                 <div className="mb-5">
                   <InputField
                     type="file"
-                    {...register("product_image")}
+                    {...register("image")}
                     className={{
                       label: "block mb-2 text-sm font-medium text-white",
                       input:
@@ -77,7 +91,7 @@ console.log(data)
                     label="Product Image"
                     accept="image/*"
                   />
-                  {errors.product_image && (
+                  {errors.image && (
                     <span className="text-red my-2 font-bold text-lg">
                       This Field is required
                     </span>
