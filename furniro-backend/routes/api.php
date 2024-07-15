@@ -19,7 +19,9 @@ Route::put('update-profile/{id}', [UserController::class, 'updateProfile']);
 Route::post('signup', [AuthController::class, 'signup']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('backendlogin', [AuthController::class, 'backendLogin']);
+Route::get('product-category-list', [ProductCategoryController::class, 'index']);
 Route::post('product-categories', [ProductCategoryController::class, 'store']);
+
 
 
 
