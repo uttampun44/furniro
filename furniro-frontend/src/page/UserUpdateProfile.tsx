@@ -73,8 +73,6 @@ const Userupdateprofile: React.FC = () => {
                    'Authorization': `Bearer ${token}`
                   }
               })
-
-              console.log()
       }
 
       const fetcthCountries = async() =>{
@@ -86,7 +84,7 @@ const Userupdateprofile: React.FC = () => {
           }
         })
         .catch( function(error){
-            console.log(error)
+           throw new Error
         })
       }
 

@@ -10,7 +10,7 @@ type Input = {
     value?:string | number
     type?: 'file' | 'text' | 'email' | 'password' | 'checkbox'
     accept?:string
-    register?:any
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default Input

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductCategory;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -13,6 +12,19 @@ class ProductCategoryController extends Controller
 {
     public function index()
     {
+        try {
+            $productCategory = ProductCategory::all();
+
+            // dd($productCategory);
+
+            return response()->json([
+                'status' => true,
+                'product_category' => $productCategory,
+            ], 200);
+
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
     }
 
     public function store(Request $request)
@@ -30,9 +42,19 @@ class ProductCategoryController extends Controller
             // }
             $imagePath = null;
 
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->storeAs('uploads', $request->file('image')
-                ->getClientOriginalName());
+
+             if ($request->hasFile('image')) {
+            
+                $imagePath = $request->file('image');
+        
+               
+                $extension = $imagePath->getClientOriginalExtension();
+        
+                $filename = time() . '.' . $extension;
+        
+                $imagePath->move('uploads', $filename);
+
+                $imagePath = 'uploads/' .$filename;
             }
 
             $products = ProductCategory::create([

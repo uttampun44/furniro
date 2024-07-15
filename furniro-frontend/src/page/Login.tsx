@@ -7,31 +7,30 @@ import Layout from "../layout/Layout";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
 
-interface formLogin {
+interface FormLogin {
   email: string;
   password: string;
 }
 
 function Login() {
-  const users = useNavigate();
-
+  const navigate = useNavigate();
   const context = useContext(Context);
 
-  const [login, setLogin] = useState<formLogin>({
+  const [login, setLogin] = useState<FormLogin>({
     email: "",
     password: "",
   });
   const [error, setError] = useState<string | null>(null);
 
-  const loginVal = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setLogin({
-      ...login,
+    setLogin((prevLogin) => ({
+      ...prevLogin,
       [name]: value,
-    });
+    }));
   };
 
-  const loginForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await axios.post("/api/login", login, {
@@ -45,8 +44,7 @@ function Login() {
         localStorage.setItem("Token", response.data.token);
         context?.setToken(response.data.token);
         context?.setUser(JSON.stringify(response.data.user_profile.id));
-
-        users("/user");
+        navigate("/user");
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -62,25 +60,56 @@ function Login() {
       <Backgroundpic />
       <div className="login-content my-20 max-w-[1080px] mx-auto">
         <div className="form-content">
-          <form className="max-w-sm mx-auto" method="POST" onSubmit={loginForm}>
+          <form className="max-w-sm mx-auto" method="POST" onSubmit={handleSubmit}>
             <div className="mb-5">
-            
-              <InputField  type="email" onChange={loginVal} value={login.email} required={true} label="Your Email" className={{label: 'block mb-2 text-sm font-medium text-gray-900', input: 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400'}} name="email" />
+              <InputField
+                type="email"
+                onChange={handleInputChange}
+                value={login.email}
+                required={true}
+                label="Your Email"
+                className={{
+                  label: 'block mb-2 text-sm font-medium text-gray-900',
+                  input: 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400',
+                }}
+                name="email"
+              />
             </div>
             <div className="mb-5">
-             
-            <InputField  type="password" onChange={loginVal} value={login.password} required={true} label="Your Email" className={{label: 'block mb-2 text-sm font-medium text-gray-900', input: 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400'}} name="password" />
+              <InputField
+                type="password"
+                onChange={handleInputChange}
+                value={login.password}
+                required={true}
+                label="Your Password"
+                className={{
+                  label: 'block mb-2 text-sm font-medium text-gray-900',
+                  input: 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400',
+                }}
+                name="password"
+              />
             </div>
             <div className="flex items-start mb-5">
               <div className="flex items-center h-5">
-              
-                <InputField label="Remember Me" name="Remember Me" type="checkbox" className={{input: 'w-4 h-4 border rounded bg-gray-100  focus:ring-blue-600 ', label:'block'}} required={true} />
+                <InputField
+                  label="Remember Me"
+                  name="rememberMe"
+                  type="checkbox"
+                  className={{
+                    input: 'w-4 h-4 border rounded bg-gray-100 focus:ring-blue-600',
+                    label: 'block',
+                  }}
+                  onChange={() => {}}
+                  required={false}
+                />
               </div>
-             
             </div>
             <div className="flex-button flex gap-x-4">
-            
-              <Button type="submit" value="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" />
+              <Button
+                type="submit"
+                value="Submit"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              />
               <Link
                 to="/signup"
                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -88,6 +117,7 @@ function Login() {
                 Signup
               </Link>
             </div>
+            {error && <div className="text-red-500 mt-2">{error}</div>}
           </form>
         </div>
       </div>

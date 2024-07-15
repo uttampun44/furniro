@@ -10,7 +10,7 @@ function User() {
       try {
         const response = await axios.get('/api/users');
         setUser(response.data);
-     console.log(response)
+     
       } catch (err) {
        
       }
