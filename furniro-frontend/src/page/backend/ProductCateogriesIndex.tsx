@@ -57,7 +57,7 @@ const ProductCategories: React.FC = () => {
   useEffect(() => {
     fetchProductCategory();
   
-  }, [deleteProductCategory]);
+  }, []);
   return (
     <>
       <BackendSidebar />
@@ -124,7 +124,7 @@ const ProductCategories: React.FC = () => {
                       </td>
                       <td className="px-6 py-4">
                         <Link
-                          to="/product-categories/add"
+                         to={`/product-categories/edit/${product.id}`}
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
                           Edit

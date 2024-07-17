@@ -21,7 +21,7 @@ function Home() {
     });
 
     if (data.status === 200) {
-      console.log(data.data.product_category);
+    
       setProduct(data.data.product_category);
     }
   };

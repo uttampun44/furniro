@@ -15,6 +15,7 @@ import BackendLogin from "./page/backend/BackendLogin";
 import Dashboard from "./page/backend/Dashboard";
 import ProductCategories from "./page/backend/ProductCateogriesIndex";
 import ProductCategoriesAdd from "./page/backend/ProductCategoriesAdd";
+import ProductCategoryEdit from "./page/backend/ProductCategoryEdit";
 
 const AppRoutes = () => {
   const context = useContext(Context);
@@ -39,6 +40,7 @@ const AppRoutes = () => {
       <Route path="/furniro-login" element={<BackendLogin />}></Route>
       <Route path="/product-categories" element={<ProductCategories />}></Route>
       <Route path="/product-categories/add" element={<ProductCategoriesAdd />}></Route>
+      <Route path="/product-categories/edit/:id" element={<ProductCategoryEdit />}></Route>
       <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

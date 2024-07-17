@@ -70,6 +70,53 @@ class ProductCategoryController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        try {
+            $productCategoryEdit = ProductCategory::findOrFail($id);
+
+        return response()->json([
+           'status' => true,
+           'productCategory' => $productCategoryEdit
+        ], 200);
+
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+
+            return response()->json([
+                'status' => false,
+                'productCategory' => 'Product category not found'
+            ], 500);
+        }
+    }
+   public function update(Request $request, $id)
+   {
+
+      try {
+        $productCategoryUpdate = ProductCategory::findOrFail($id);
+
+        $image  = $productCategoryUpdate->image;
+  
+        if($image)
+        {
+  
+        }
+  
+        $productCategoryUpdate->name = $request->name;
+        $productCategoryUpdate->image = $image;
+        $productCategoryUpdate->slug = Str::slug($request->name);
+
+        $productCategoryUpdate->save();
+
+        return response()->json([
+           'status' => true,
+           'message' => 'Product Categor Successfully Update'
+        ], 200);
+      } catch (\Throwable $th) {
+        Log::error($th->getMessage());
+      }
+   }
+
     public function destroy($id)
     {
 
