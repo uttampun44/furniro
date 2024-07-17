@@ -15,8 +15,6 @@ class ProductCategoryController extends Controller
         try {
             $productCategory = ProductCategory::all();
 
-            // dd($productCategory);
-
             return response()->json([
                 'status' => true,
                 'product_category' => $productCategory,
@@ -70,5 +68,31 @@ class ProductCategoryController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
         }
+    }
+
+    public function destroy($id)
+    {
+
+       try {
+        $productCategory = ProductCategory::findOrFail($id);
+
+        if($productCategory)
+        {
+            $productCategory->delete();
+
+            return response()->json([
+                  "status" =>  true,
+                  'message' => "Product Deleted"
+            ], 200);
+        }
+       } catch (\Throwable $th) {
+         Log::error($th->getMessage());
+
+         return response()->json([
+                  "status" => false,
+                  "message" => "Product not Deleted"
+         ], 500);
+       }
+
     }
 }

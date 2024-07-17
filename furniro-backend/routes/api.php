@@ -21,6 +21,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('backendlogin', [AuthController::class, 'backendLogin']);
 Route::get('product-category-list', [ProductCategoryController::class, 'index']);
 Route::post('product-categories', [ProductCategoryController::class, 'store']);
+Route::delete('product-categies/{id}', [ProductCategoryController::class, 'destroy']);
 
 
 
