@@ -1,70 +1,86 @@
-import BackendSidebar from "../../components/BackendSidebar";
+import React, {useEffect, useState } from "react";
 import Button from "../../components/Button";
 import InputField from "../../components/InputField";
+import BackendSidebar from "../../components/BackendSidebar";
 import axios from "axios";
-import { useContext, useState } from "react";
-import { Context } from "../../../context/ContextProvider";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-type ProductAdd = {
-  name: string;
-  image: File | null;
-};
+type inputValue ={
+    name:string,
+    file: File | null
+    slug?: string
+}
+type Product = {
+    id: number,
+    name: string,
+    image: File | null
+}
 
-const ProductCategoryAdd: React.FC = () => {
-  const context = useContext(Context);
+const ProductCategoryEdit: React.FC = () => {
 
-  const navigate = useNavigate();
 
-  const [product, setProduct] = useState<ProductAdd>({
-    name: "",
-    image: null,
-  });
+    const {id} = useParams<{ id: string }>();
 
-  const [imagePreview, setPreview] = useState<string | null>(null);
+    const [productVal, setProductVal] = useState<inputValue>({
+        name: '',
+        file: null
+    })
 
-  const token = context?.token;
+    const [imagePreview, setPreview] = useState<string | null>();
+    const [product, setProduct] = useState<Product>();
 
-  const productOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, type, files, value } = e.target;
 
-    if (type == "file" && files) {
-      setProduct((prevProduct) => ({
-        ...prevProduct,
-        [name]: files[0],
-      }));
-      setPreview(URL.createObjectURL(files[0]));
-    } else {
-      setProduct((prevProduct) => ({
-        ...prevProduct,
-        [name]: value,
-      }));
-    }
-  };
+  const fectProductCategory = async() => {
 
-  const productSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("/api/product-categories", product, {
+    const response = await axios.get(`/api/product-categories/edit/${id}` , {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+            'Accept' : 'application/json',
+            'Content-Type': 'mutlipart/form-data',
+           
+        }
+    })
 
-      if (response.status === 200) {
-        window.alert("Product Created Successfully");
-        navigate("/product-categories");
-      }
-    } catch (error) {
-      console.error("There was an error adding the product category:", error);
+    if(response.status === 200){
+        const fetchedProduct = response.data.productCategory;
+        setProduct(fetchedProduct);
+        setProductVal({
+          name: fetchedProduct.name,
+          file: null,
+        });
+        setPreview(fetchedProduct.image ? `http://localhost:8000/${fetchedProduct.image}` : null);
     }
   };
 
-  const removeImage = (e: React.MouseEvent<HTMLSpanElement>) =>{
-   setPreview(null)
+  const productOnChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
+
+    const {name, type, files, value} = e.target;
+
+    if(type == "file" && files){
+       setProductVal((productProduct) => ({
+         ...productProduct, [name] : files[0]
+       }))
+     setPreview(URL.createObjectURL(files[0]))
+    }else{
+        setProductVal((previousProduct) => ({
+            ...previousProduct, [name] : value
+        }))
+    }
   }
+
+  const productSubmit = async() => {
+
+    await axios.post(`product-categories/edit/${id}`, {
+        headers: {
+            headers: {
+                'Accept' : 'application/json',
+                'Content-Type': 'mutlipart/form-data',  
+            }
+        }
+    })
+  }
+  useEffect(() => {
+    fectProductCategory();
+  }, [id]);
 
   return (
     <>
@@ -91,7 +107,7 @@ const ProductCategoryAdd: React.FC = () => {
                     }}
                     label="Product Name"
                     onChange={productOnChange}
-                    value={product.name}
+                    value={product?.name}
                   />
                 </div>
 
@@ -111,10 +127,7 @@ const ProductCategoryAdd: React.FC = () => {
 
                   <div className="img_preview my-10">
                     {imagePreview && (
-                      <div className="preview">
-                        <span className="text-white font-bold text-lg cursor-pointer text-end" onClick={removeImage}>X</span>
-                        <img src={imagePreview} className="w-40 h-auto " />
-                      </div>
+                      <img  src={imagePreview} className="w-40 h-auto " />
                     )}
                   </div>
                 </div>
@@ -124,7 +137,7 @@ const ProductCategoryAdd: React.FC = () => {
                 <Button
                   type="submit"
                   className="bg-blue-700 text-white p-2 rounded-sm"
-                  value="Add Products"
+                  value="Update Products"
                 />
               </div>
             </form>
@@ -135,4 +148,4 @@ const ProductCategoryAdd: React.FC = () => {
   );
 };
 
-export default ProductCategoryAdd;
+export default ProductCategoryEdit;
