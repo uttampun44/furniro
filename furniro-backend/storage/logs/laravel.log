@@ -1,11 +1,2 @@
-[2024-07-18 03:19:41] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null (Connection: mysql, SQL: update `product_categories` set `name` = ?, `slug` = , `product_categories`.`updated_at` = 2024-07-18 03:19:41 where `id` = 40)  
-[2024-07-18 03:21:08] local.INFO: Request Data:  
-[2024-07-18 03:21:26] local.INFO: Request Data:  
-[2024-07-18 03:21:45] local.INFO: Request Data:  
-[2024-07-18 03:22:10] local.INFO: Request Data:  
-[2024-07-18 03:22:38] local.INFO: Request Data:  
-[2024-07-18 03:24:38] local.INFO: Request Data:  
-[2024-07-18 03:25:20] local.INFO: Request Data:  
-[2024-07-18 03:30:13] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null (Connection: mysql, SQL: update `product_categories` set `name` = ?, `slug` = , `product_categories`.`updated_at` = 2024-07-18 03:30:13 where `id` = 40)  
-[2024-07-18 03:32:14] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null (Connection: mysql, SQL: update `product_categories` set `name` = ?, `slug` = , `product_categories`.`updated_at` = 2024-07-18 03:32:14 where `id` = 40)  
-[2024-07-18 03:32:21] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null (Connection: mysql, SQL: update `product_categories` set `name` = ?, `slug` = , `product_categories`.`updated_at` = 2024-07-18 03:32:21 where `id` = 40)  
+[2024-07-18 13:47:53] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null (Connection: mysql, SQL: update `product_categories` set `name` = ?, `slug` = , `product_categories`.`updated_at` = 2024-07-18 13:47:53 where `id` = 40)  
+[2024-07-18 13:48:00] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null (Connection: mysql, SQL: update `product_categories` set `name` = ?, `slug` = , `product_categories`.`updated_at` = 2024-07-18 13:48:00 where `id` = 40)  

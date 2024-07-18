@@ -125,7 +125,7 @@ const ProductCategories: React.FC = () => {
                       <td className="px-6 py-4">
                         <Link
                          to={`/product-categories/edit/${product.id}`}
-                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                          className="font-medium text-blue-600 dark:text-blue-500 no-underline"
                         >
                           Edit
                         </Link>
@@ -135,13 +135,13 @@ const ProductCategories: React.FC = () => {
                           type="submit"
                           onClick={(e) => deleteProductCategory(e, product.id)}
                           value="Delete"
-                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline no-underline"
+                          className="font-medium text-blue-600 dark:text-blue-500 no-underline"
                         ></Button>
                       </td>
                       <td className="px-6 py-4">
                         <Link
                           to="/product-categories/add"
-                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                          className="font-medium text-blue-600 dark:text-blue-500  no-underline"
                         >
                           Add
                         </Link>
