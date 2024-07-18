@@ -26,7 +26,7 @@ const ProductCategories: React.FC = () => {
       },
     });
 
-    if (data.status === 200) {
+    if (data.status == 200) {
       setProductCategory(data.data.product_category);
     }
   };
@@ -41,7 +41,7 @@ const ProductCategories: React.FC = () => {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status == 200) {
         setProductCategory((previousCategory) =>
           previousCategory.filter((category) => category.id !== category.id)
         );

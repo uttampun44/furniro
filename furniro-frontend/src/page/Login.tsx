@@ -40,7 +40,7 @@ function Login() {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status == 200) {
         localStorage.setItem("Token", response.data.token);
         context?.setToken(response.data.token);
         context?.setUser(JSON.stringify(response.data.user_profile.id));

@@ -78,7 +78,7 @@ const Userupdateprofile: React.FC = () => {
       const fetcthCountries = async() =>{
         await axios.get('https://countriesnow.space/api/v0.1/countries/population/cities')
         .then((response) =>{
-          if(response.status === 200){
+          if(response.status == 200){
              setCountry(response.data.data)
              setCity(response.data.data)
           }

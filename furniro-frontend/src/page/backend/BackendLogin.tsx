@@ -24,7 +24,7 @@ const BackendLogin: React.FC = () => {
     },
    })
  
-   if(response.status === 200)
+   if(response.status == 200)
     {
 
       localStorage.setItem("Token", response.data.token);
