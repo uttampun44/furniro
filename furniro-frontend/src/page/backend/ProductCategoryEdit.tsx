@@ -42,7 +42,7 @@ const ProductCategoryEdit: React.FC = () => {
 
     if(response.status === 200){
         const fetchedProduct = response.data.productCategory;
-        setProduct(fetchedProduct);
+      
         setProductVal({
           name: fetchedProduct.name,
           file: null,
@@ -50,6 +50,7 @@ const ProductCategoryEdit: React.FC = () => {
         setPreview(fetchedProduct.image ? `http://localhost:8000/${fetchedProduct.image}` : null);
     }
   };
+
 
   const productOnChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
 
@@ -67,9 +68,9 @@ const ProductCategoryEdit: React.FC = () => {
     }
   }
 
-  const productSubmit = async() => {
-
-    await axios.post(`product-categories/edit/${id}`, {
+  const productSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const response = await axios.post(`product-categories/edit/${id}`, {
         headers: {
             headers: {
                 'Accept' : 'application/json',
@@ -77,6 +78,10 @@ const ProductCategoryEdit: React.FC = () => {
             }
         }
     })
+
+    if(response.status == 200){
+       console.log(response)
+    }
   }
   useEffect(() => {
     fectProductCategory();
@@ -107,7 +112,7 @@ const ProductCategoryEdit: React.FC = () => {
                     }}
                     label="Product Name"
                     onChange={productOnChange}
-                    value={product?.name}
+                    value={productVal.name}
                   />
                 </div>
 

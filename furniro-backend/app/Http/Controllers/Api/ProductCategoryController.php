@@ -89,33 +89,57 @@ class ProductCategoryController extends Controller
             ], 500);
         }
     }
-   public function update(Request $request, $id)
-   {
 
-      try {
-        $productCategoryUpdate = ProductCategory::findOrFail($id);
-
-        $image  = $productCategoryUpdate->image;
-  
-        if($image)
-        {
-  
+    public function update(Request $request, $id)
+    {
+        try {
+            
+            // dd($request->all);
+    
+           
+    
+            $productCategoryUpdate = ProductCategory::findOrFail($id);
+    
+            $image = $productCategoryUpdate->image;
+    
+            
+            if ($request->hasFile('image')) {
+                if ($image) {
+                    // Remove the old image if exists
+                    if (file_exists(public_path($image))) {
+                        unlink(public_path($image));
+                    }
+                }
+    
+                // Upload the new image
+                $imagePath = $request->file('image');
+                $extension = $imagePath->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $imagePath->move('uploads', $filename);
+                $image = 'uploads/' . $filename;
+            }
+    
+            // Update the product category
+            $productCategoryUpdate->name = $request->name;
+            $productCategoryUpdate->image = $image;
+            $productCategoryUpdate->slug = Str::slug($request->name);
+    
+            $productCategoryUpdate->save();
+    
+            return response()->json([
+                'status' => true,
+                'message' => 'Product Category Successfully Updated'
+            ], 200);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+    
+            return response()->json([
+                'status' => false,
+                'message' => 'Product Category Cant Update'
+            ], 500);
         }
-  
-        $productCategoryUpdate->name = $request->name;
-        $productCategoryUpdate->image = $image;
-        $productCategoryUpdate->slug = Str::slug($request->name);
-
-        $productCategoryUpdate->save();
-
-        return response()->json([
-           'status' => true,
-           'message' => 'Product Categor Successfully Update'
-        ], 200);
-      } catch (\Throwable $th) {
-        Log::error($th->getMessage());
-      }
-   }
+    }
+    
 
     public function destroy($id)
     {

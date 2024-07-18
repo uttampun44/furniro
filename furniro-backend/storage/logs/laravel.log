@@ -1,2 +1,11 @@
-[2024-07-17 03:17:48] local.ERROR: Too few arguments to function Illuminate\Database\Eloquent\Builder::findOrFail(), 0 passed in /home/uttam/Desktop/projects/furniro/furniro-backend/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php on line 23 and at least 1 expected  
-[2024-07-17 03:17:55] local.ERROR: Too few arguments to function Illuminate\Database\Eloquent\Builder::findOrFail(), 0 passed in /home/uttam/Desktop/projects/furniro/furniro-backend/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php on line 23 and at least 1 expected  
+[2024-07-18 03:19:41] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null (Connection: mysql, SQL: update `product_categories` set `name` = ?, `slug` = , `product_categories`.`updated_at` = 2024-07-18 03:19:41 where `id` = 40)  
+[2024-07-18 03:21:08] local.INFO: Request Data:  
+[2024-07-18 03:21:26] local.INFO: Request Data:  
+[2024-07-18 03:21:45] local.INFO: Request Data:  
+[2024-07-18 03:22:10] local.INFO: Request Data:  
+[2024-07-18 03:22:38] local.INFO: Request Data:  
+[2024-07-18 03:24:38] local.INFO: Request Data:  
+[2024-07-18 03:25:20] local.INFO: Request Data:  
+[2024-07-18 03:30:13] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null (Connection: mysql, SQL: update `product_categories` set `name` = ?, `slug` = , `product_categories`.`updated_at` = 2024-07-18 03:30:13 where `id` = 40)  
+[2024-07-18 03:32:14] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null (Connection: mysql, SQL: update `product_categories` set `name` = ?, `slug` = , `product_categories`.`updated_at` = 2024-07-18 03:32:14 where `id` = 40)  
+[2024-07-18 03:32:21] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'name' cannot be null (Connection: mysql, SQL: update `product_categories` set `name` = ?, `slug` = , `product_categories`.`updated_at` = 2024-07-18 03:32:21 where `id` = 40)  
