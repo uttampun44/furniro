@@ -23,7 +23,7 @@ Route::post('backendlogin', [AuthController::class, 'backendLogin']);
 Route::get('product-category-list', [ProductCategoryController::class, 'index']);
 Route::post('product-categories', [ProductCategoryController::class, 'store']);
 Route::get('product-categories/edit/{id}', [ProductCategoryController::class, 'edit']);
-Route::put('product-categories/edit/{id}', [ProductCategoryController::class, 'update']);
+Route::put('product-categories/update/{id}', [ProductCategoryController::class, 'update']);
 Route::delete('product-categies/{id}', [ProductCategoryController::class, 'destroy']);
 
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ProductCategoryController extends Controller
@@ -89,20 +90,13 @@ class ProductCategoryController extends Controller
             ], 500);
         }
     }
-
     public function update(Request $request, $id)
     {
         try {
-            
-            // dd($request->all);
-    
-           
-    
             $productCategoryUpdate = ProductCategory::findOrFail($id);
     
             $image = $productCategoryUpdate->image;
     
-            
             if ($request->hasFile('image')) {
                 if ($image) {
                     // Remove the old image if exists
@@ -120,9 +114,9 @@ class ProductCategoryController extends Controller
             }
     
             // Update the product category
-            $productCategoryUpdate->name = $request->name;
+            $productCategoryUpdate->name = $request->input('name');
             $productCategoryUpdate->image = $image;
-            $productCategoryUpdate->slug = Str::slug($request->name);
+            $productCategoryUpdate->slug = Str::slug($request->input('name'));
     
             $productCategoryUpdate->save();
     
@@ -135,7 +129,7 @@ class ProductCategoryController extends Controller
     
             return response()->json([
                 'status' => false,
-                'message' => 'Product Category Cant Update'
+                'message' => 'Product Category Cannot Update'
             ], 500);
         }
     }

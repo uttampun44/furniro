@@ -18,7 +18,7 @@ const TopNavigation: React.FC = () => {
               });
 
       
-             if(response.status === 200)
+             if(response.status == 200)
                 {
                       localStorage.removeItem("Token");
                       localStorage.removeItem("User")

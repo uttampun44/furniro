@@ -3,31 +3,28 @@ import Button from "../../components/Button";
 import InputField from "../../components/InputField";
 import BackendSidebar from "../../components/BackendSidebar";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type inputValue ={
     name:string,
-    file: File | null
+    image: File | null
     slug?: string
 }
-type Product = {
-    id: number,
-    name: string,
-    image: File | null
-}
+
 
 const ProductCategoryEdit: React.FC = () => {
 
 
     const {id} = useParams<{ id: string }>();
+    const navigate = useNavigate();
 
     const [productVal, setProductVal] = useState<inputValue>({
         name: '',
-        file: null
+        image: null
     })
 
     const [imagePreview, setPreview] = useState<string | null>();
-    const [product, setProduct] = useState<Product>();
+
 
 
   const fectProductCategory = async() => {
@@ -40,12 +37,12 @@ const ProductCategoryEdit: React.FC = () => {
         }
     })
 
-    if(response.status === 200){
+    if(response.status == 200){
         const fetchedProduct = response.data.productCategory;
       
         setProductVal({
           name: fetchedProduct.name,
-          file: null,
+          image: null,
         });
         setPreview(fetchedProduct.image ? `http://localhost:8000/${fetchedProduct.image}` : null);
     }
@@ -70,17 +67,24 @@ const ProductCategoryEdit: React.FC = () => {
 
   const productSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const response = await axios.post(`product-categories/edit/${id}`, {
-        headers: {
+    const formData = new FormData();
+    formData.append("_method", "PUT");
+    formData.append('name', productVal.name);
+    if (productVal.image) {
+      formData.append('image', productVal.image);
+    }
+    const response = await axios.post(`/api/product-categories/update/${id}`, formData, {
+      
             headers: {
                 'Accept' : 'application/json',
                 'Content-Type': 'mutlipart/form-data',  
             }
-        }
+    
     })
 
     if(response.status == 200){
-       console.log(response)
+       window.alert("Product Update Successfully")
+       navigate('/product-categories')
     }
   }
   useEffect(() => {

@@ -53,7 +53,7 @@ const ProductCategoryAdd: React.FC = () => {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status == 200) {
         window.alert("Product Created Successfully");
         navigate("/product-categories");
       }

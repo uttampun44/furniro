@@ -26,7 +26,7 @@ const ProductCategories: React.FC = () => {
       },
     });
 
-    if (data.status === 200) {
+    if (data.status == 200) {
       setProductCategory(data.data.product_category);
     }
   };
@@ -41,7 +41,7 @@ const ProductCategories: React.FC = () => {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status == 200) {
         setProductCategory((previousCategory) =>
           previousCategory.filter((category) => category.id !== category.id)
         );
@@ -125,7 +125,7 @@ const ProductCategories: React.FC = () => {
                       <td className="px-6 py-4">
                         <Link
                          to={`/product-categories/edit/${product.id}`}
-                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                          className="font-medium text-blue-600 dark:text-blue-500 no-underline"
                         >
                           Edit
                         </Link>
@@ -135,13 +135,13 @@ const ProductCategories: React.FC = () => {
                           type="submit"
                           onClick={(e) => deleteProductCategory(e, product.id)}
                           value="Delete"
-                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline no-underline"
+                          className="font-medium text-blue-600 dark:text-blue-500 no-underline"
                         ></Button>
                       </td>
                       <td className="px-6 py-4">
                         <Link
                           to="/product-categories/add"
-                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                          className="font-medium text-blue-600 dark:text-blue-500  no-underline"
                         >
                           Add
                         </Link>

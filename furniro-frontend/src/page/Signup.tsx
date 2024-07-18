@@ -41,12 +41,12 @@ function Signup() {
     try {
       const response = await axios.post("/api/signup", signup);
 
-      if (response.status === 201) {
+      if (response.status == 201) {
         login("/login");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response && error.response.status === 422) {
+        if (error.response && error.response.status == 422) {
           alert("Email already exists");
         } else {
           alert("An error occurred: " + error.message);
