@@ -30,15 +30,15 @@ class ProductCategoryController extends Controller
     {
         try {
 
-            // $validator = Validator::make($request->all(), [
-            //     'name' => 'required|string|max:255',
-            //     'image' => 'required'
-            // ]);
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'image' => 'required'
+            ]);
 
-            // if($validator->fails())
-            // {
-            //     return response()->json(['errors' => $validator->errors()], 422);
-            // }
+            if($validator->fails())
+            {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
             $imagePath = null;
 
 
@@ -64,7 +64,8 @@ class ProductCategoryController extends Controller
 
             response()->json([
                 'status' => true,
-                'message' => $products
+                'message' => $products,
+               
             ], 200);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());

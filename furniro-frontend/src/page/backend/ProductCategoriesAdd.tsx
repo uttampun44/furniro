@@ -4,7 +4,7 @@ import InputField from "../../components/InputField";
 import axios from "axios";
 import { useContext, useState } from "react";
 import { Context } from "../../../context/ContextProvider";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type ProductAdd = {
   name: string;
@@ -20,6 +20,9 @@ const ProductCategoryAdd: React.FC = () => {
     name: "",
     image: null,
   });
+
+  const [errors, setError] = useState<{ [key: string]: string[]  }>({})
+
 
   const [imagePreview, setPreview] = useState<string | null>(null);
 
@@ -56,15 +59,16 @@ const ProductCategoryAdd: React.FC = () => {
       if (response.status == 200) {
         window.alert("Product Created Successfully");
         navigate("/product-categories");
-      }
-    } catch (error) {
-      console.error("There was an error adding the product category:", error);
+      } 
+    } catch (error: any) {
+      
+      setError(error.response.data.errors);
     }
   };
 
-  const removeImage = (e: React.MouseEvent<HTMLSpanElement>) =>{
-   setPreview(null)
-  }
+  const removeImage = (e: React.MouseEvent<HTMLSpanElement>) => {
+    setPreview(null);
+  };
 
   return (
     <>
@@ -93,6 +97,11 @@ const ProductCategoryAdd: React.FC = () => {
                     onChange={productOnChange}
                     value={product.name}
                   />
+                {errors.name &&  (
+                  <div  className="my-1">
+                    <span className="text-red-700 font-medium text-lg">{errors.name}</span>
+                  </div>
+                )}
                 </div>
 
                 <div className="mb-5">
@@ -108,11 +117,20 @@ const ProductCategoryAdd: React.FC = () => {
                     accept="image/*"
                     onChange={productOnChange}
                   />
-
+               {errors.image && (
+                  <div  className="my-1">
+                     <span className="text-red-700 font-medium text-lg">{errors.image}</span>
+                  </div>
+                )}
                   <div className="img_preview my-10">
                     {imagePreview && (
                       <div className="preview">
-                        <span className="text-white font-bold text-lg cursor-pointer text-end" onClick={removeImage}>X</span>
+                        <span
+                          className="text-white font-bold text-lg cursor-pointer text-end"
+                          onClick={removeImage}
+                        >
+                          X
+                        </span>
                         <img src={imagePreview} className="w-40 h-auto " />
                       </div>
                     )}
@@ -120,12 +138,13 @@ const ProductCategoryAdd: React.FC = () => {
                 </div>
               </div>
 
-              <div className="submit_button">
+              <div className="submit_button flex gap-x-4 ml-4">
                 <Button
                   type="submit"
                   className="bg-blue-700 text-white p-2 rounded-sm"
                   value="Add Products"
                 />
+                <Link to="/product-categories" className="bg-blue-700 text-white p-2 rounded-sm " >Cancel</Link>
               </div>
             </form>
           </div>
