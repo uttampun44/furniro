@@ -25,6 +25,8 @@ function Signup() {
     password: "",
   });
 
+  const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
+
   const signupValue = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -44,16 +46,9 @@ function Signup() {
       if (response.status == 201) {
         login("/login");
       }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response && error.response.status == 422) {
-          alert("Email already exists");
-        } else {
-          alert("An error occurred: " + error.message);
-        }
-      } else {
-        throw new Error("An unexpected error occurred");
-      }
+    } catch (error: any) {
+      setErrors(error.response.data.errors);
+      
     }
   };
 
@@ -76,10 +71,15 @@ function Signup() {
                 id="fullname"
                 name="name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400"
-                required
+              
                 onChange={signupValue}
                 value={signup.name}
               />
+              {errors.name && (
+                <label className="block text-red-700 font-normal text-lg">
+                  {errors.name}
+                </label>
+              )}
             </div>
             <div className="mb-5">
               <label
@@ -93,10 +93,15 @@ function Signup() {
                 id="email"
                 name="email"
                 className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
-                required
+             
                 onChange={signupValue}
                 value={signup.email}
               />
+              {errors.email && (
+                <label className="block text-red-700 font-normal text-lg">
+                  {errors.email}
+                </label>
+              )}
             </div>
 
             <div className="mb-5">
@@ -111,10 +116,16 @@ function Signup() {
                 id="date_of_birth"
                 name="date_of_birth"
                 className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
-                required
+            
                 onChange={signupValue}
                 value={signup.date_of_birth}
               />
+
+              {errors.date_of_birth && (
+                <label className="block text-red-700 font-normal text-lg">
+                  {errors.date_of_birth}
+                </label>
+              )}
             </div>
 
             <div className="mb-5">
@@ -129,10 +140,15 @@ function Signup() {
                 id="phone_details"
                 name="phone_details"
                 className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
-                required
+               
                 onChange={signupValue}
                 value={signup.phone_details}
               />
+               {errors.phone_details && (
+                <label className="block text-red-700 font-normal text-lg">
+                  {errors.phone_details}
+                </label>
+              )}
             </div>
 
             <div className="mb-5">
@@ -154,6 +170,12 @@ function Signup() {
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
+
+              {errors.gender && (
+                <label className="block text-red-700 font-normal text-lg">
+                  {errors.gender}
+                </label>
+              )}
             </div>
 
             <div className="mb-5">
@@ -168,10 +190,15 @@ function Signup() {
                 id="password"
                 name="password"
                 className="bg-gray-100 border  border-gray-300 outline-none  text-gray-900 text-sm rounded-lg  block w-full p-2.5 placeholder-gray-400"
-                required
+               
                 onChange={signupValue}
                 value={signup.password}
               />
+               {errors.password && (
+                <label className="block text-red-700 font-normal text-lg">
+                  {errors.password}
+                </label>
+              )}
             </div>
 
             <div className="flex items-start mb-5">
@@ -181,7 +208,7 @@ function Signup() {
                   type="checkbox"
                   value=""
                   className="w-4 h-4 border rounded bg-gray-100  focus:ring-blue-600 "
-                  required
+                
                 />
               </div>
               <label
@@ -198,7 +225,6 @@ function Signup() {
             >
               Submit
             </button>
-           
           </form>
         </div>
       </div>

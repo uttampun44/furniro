@@ -20,7 +20,8 @@ function Login() {
     email: "",
     password: "",
   });
-  const [error, setError] = useState<string | null>(null);
+
+  const [errors, setError] = useState<{ [key: string]: string[] }>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -46,12 +47,8 @@ function Login() {
         context?.setUser(JSON.stringify(response.data.user_profile.id));
         navigate("/user");
       }
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        setError("Email or Password not matched");
-      } else {
-        setError("An unexpected error occurred");
-      }
+    } catch (error: any) {
+      setError(error.response.data.errors);
     }
   };
 
@@ -60,34 +57,49 @@ function Login() {
       <Backgroundpic />
       <div className="login-content my-20 max-w-[1080px] mx-auto">
         <div className="form-content">
-          <form className="max-w-sm mx-auto" method="POST" onSubmit={handleSubmit}>
+          <form
+            className="max-w-sm mx-auto"
+            method="POST"
+            onSubmit={handleSubmit}
+          >
             <div className="mb-5">
               <InputField
                 type="email"
                 onChange={handleInputChange}
                 value={login.email}
-                required={true}
                 label="Your Email"
                 className={{
-                  label: 'block mb-2 text-sm font-medium text-gray-900',
-                  input: 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400',
+                  label: "block mb-2 text-sm font-medium text-gray-900",
+                  input:
+                    "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400",
                 }}
                 name="email"
               />
+
+              {errors.email && (
+                <label className="block text-red-700 font-normal text-lg">
+                  {errors.email}
+                </label>
+              )}
             </div>
             <div className="mb-5">
               <InputField
                 type="password"
                 onChange={handleInputChange}
                 value={login.password}
-                required={true}
                 label="Your Password"
                 className={{
-                  label: 'block mb-2 text-sm font-medium text-gray-900',
-                  input: 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400',
+                  label: "block mb-2 text-sm font-medium text-gray-900",
+                  input:
+                    "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400",
                 }}
                 name="password"
               />
+                  {errors.password && (
+                  <label className="block text-red-700 font-normal text-lg">
+                    {errors.password}
+                  </label>
+                )}
             </div>
             <div className="flex items-start mb-5">
               <div className="flex items-center h-5">
@@ -96,12 +108,15 @@ function Login() {
                   name="rememberMe"
                   type="checkbox"
                   className={{
-                    input: 'w-4 h-4 border rounded bg-gray-100 focus:ring-blue-600',
-                    label: 'block',
+                    input:
+                      "w-4 h-4 border rounded bg-gray-100 focus:ring-blue-600",
+                    label: "block",
                   }}
                   onChange={() => {}}
-                  required={false}
+                 
                 />
+
+            
               </div>
             </div>
             <div className="flex-button flex gap-x-4">
@@ -117,7 +132,6 @@ function Login() {
                 Signup
               </Link>
             </div>
-            {error && <div className="text-red-500 mt-2">{error}</div>}
           </form>
         </div>
       </div>
