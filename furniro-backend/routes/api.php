@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProductCategoryController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,9 @@ Route::put('product-categories/update/{id}', [ProductCategoryController::class, 
 Route::delete('product-categies/{id}', [ProductCategoryController::class, 'destroy']);
 
 
+/***************** Roles *************************/ 
+Route::get('roles', [RoleController::class, 'index']);
+Route::post('roles/store', [RoleController::class, 'store']);
 
 
 

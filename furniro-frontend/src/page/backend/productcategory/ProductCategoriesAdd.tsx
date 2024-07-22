@@ -1,9 +1,9 @@
-import BackendSidebar from "../../components/BackendSidebar";
-import Button from "../../components/Button";
-import InputField from "../../components/InputField";
+import BackendSidebar from "../../../components/BackendSidebar";
+import Button from "../../../components/Button";
+import InputField from "../../../components/InputField";
 import axios from "axios";
 import { useContext, useState } from "react";
-import { Context } from "../../../context/ContextProvider";
+import { Context } from "../../../../context/ContextProvider";
 import { Link, useNavigate } from "react-router-dom";
 
 type ProductAdd = {

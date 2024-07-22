@@ -13,9 +13,12 @@ import Userupdateprofile from "./page/UserUpdateProfile";
 import Userorder from "./page/UserOrder";
 import BackendLogin from "./page/backend/BackendLogin";
 import Dashboard from "./page/backend/Dashboard";
-import ProductCategories from "./page/backend/ProductCateogriesIndex";
-import ProductCategoriesAdd from "./page/backend/ProductCategoriesAdd";
-import ProductCategoryEdit from "./page/backend/ProductCategoryEdit";
+import ProductCategories from "./page/backend/productcategory/ProductCateogriesIndex";
+import ProductCategoriesAdd from "./page/backend/productcategory/ProductCategoriesAdd";
+import ProductCategoryEdit from "./page/backend/productcategory/ProductCategoryEdit";
+import Roleindex from "./page/backend/role/RoleIndex";
+import Rolestore from "./page/backend/role/RoleStore";
+
 
 const AppRoutes = () => {
   const context = useContext(Context);
@@ -38,9 +41,16 @@ const AppRoutes = () => {
       <Route path="/update-profile/" element={<Userupdateprofile />}></Route>
       <Route path="/orders" element={<Userorder />}></Route>
       <Route path="/furniro-login" element={<BackendLogin />}></Route>
+      {/* Product categories */}
       <Route path="/product-categories" element={<ProductCategories />}></Route>
       <Route path="/product-categories/add" element={<ProductCategoriesAdd />}></Route>
       <Route path="/product-categories/edit/:id" element={<ProductCategoryEdit />}></Route>
+
+      {/* roles */}
+      <Route path="/roles" element={<Roleindex />}></Route>
+      <Route path="/roles/add" element={<Rolestore />}></Route>
+
+      
       <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
