@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('user', function (Request $request) {
-        return $request->user();
-    });
+  
     Route::get('profile', [UserController::class, 'index']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('backendlogout', [AuthController::class, 'backendLogout']);
@@ -29,8 +27,12 @@ Route::delete('product-categies/{id}', [ProductCategoryController::class, 'destr
 
 
 /***************** Roles *************************/ 
-Route::get('roles', [RoleController::class, 'index']);
-Route::post('roles/store', [RoleController::class, 'store']);
+Route::prefix('roles')->group( function(){
+    Route::get('index', [RoleController::class, 'index']);
+    Route::post('store', [RoleController::class, 'store']);
+    Route::get('edit/{id}', [RoleController::class, 'edit']);
+});
+
 
 
 

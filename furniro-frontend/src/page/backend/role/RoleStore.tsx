@@ -1,23 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BackendSidebar from "../../../components/BackendSidebar";
 import Button from "../../../components/Button";
 import InputField from "../../../components/InputField";
 import TopNavigation from "../../../components/TopNavigation";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
-import { useContext, useState } from "react";
-import { Context } from "../../../../context/ContextProvider";
+import { useState } from "react";
+
 
 type roleInput = {
   name: string;
 };
 
 const RoleStore: React.FC = () => {
-  const { register, handleSubmit, control } = useForm<roleInput>();
-  const [errors, setErros] = useState<{}>({});
 
-  const context = useContext(Context);
-  const token = context?.token;
+  const navigate =  useNavigate();
+
+  const { handleSubmit, control } = useForm<roleInput>();
+  const [errors, setErrors] = useState<{ [key:string]: string[] }>({});
+
 
   const onSubmit: SubmitHandler<roleInput> = async(data) => {
    try {
@@ -25,12 +26,17 @@ const RoleStore: React.FC = () => {
         headers:{
             Accept: 'application/json',
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
+          
         }
     })
-    console.log(response)
+     if(response.status == 201){
+
+     alert("Roles Created")
+     navigate('/roles')
+     }
    } catch (error:any) {
-     setErros(error.response)
+    
+     setErrors(error.response.data.errors)
    }
   };
 
@@ -50,16 +56,21 @@ const RoleStore: React.FC = () => {
                 control={control}
                 render={({ field : { onChange}}) => (
                   <InputField
-                  {...register('name')}
+                  
                     onChange={onChange}
                     label="Role Name"
                     className={{
                       label: "text-white text-lg font-normal block",
-                      input: "rounded-md my-1 py-2 font-medium",
+                      input: "rounded-md my-1 py-2 font-medium text-center",
                     }}
                   />
                 )}
               />
+              {
+                errors.name && (
+                  <span className="text-red-700 my-1 block">{errors.name}</span>
+                )
+              }
               <div className="btnRow my-4 flex gap-x-2">
                 <Button
                   type="submit"

@@ -6,6 +6,7 @@ import axios from "axios";
 import Button from "../../../components/Button";
 
 type roles= {
+  id:number
     name:string
 }
 
@@ -15,7 +16,7 @@ const Roleindex:React.FC = () => {
 
     const fetchRoles = async() => {
    
-        const response = await axios.get('api/roles', {
+        const response = await axios.get('api/roles/index', {
             headers:{
                 Accept: "application/json",
                 "Content-Type": "application/json",
@@ -76,10 +77,10 @@ const Roleindex:React.FC = () => {
                     roles.map((role, index) => {
                         return(
                             <tr key={index}    className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <td>{index+1}</td>
-                                <td>{role.name}</td>
-                                <td><Link to="" >Edit</Link></td>
-                                <td> 
+                                <td className="px-6 py-4">{index+1}</td>
+                                <td className="px-6 py-4">{role.name}</td>
+                                <td className="px-6 py-4"><Link to={`/roles/edit/${role.id}`} >Edit</Link></td>
+                                <td className="px-6 py-4"> 
                                     <Button
                           type="submit"
                      

@@ -18,33 +18,68 @@ class RoleController extends Controller
             'roles' => $roles  
         ]);
     }
+
     public function store(Request $request)
-    {
+    {  
         try {
             $validator = validator($request->all(), [
-               'name' => 'required'
+               'name' => 'required|string'
             ]);
 
             if($validator->fails())
             {
-               response()->json([
-                    'status' => true,
-                    'meesage' => $validator
-               ]);
+              return response()->json([
+
+                    'errors' => $validator->errors()
+               ], 422);
             }
 
          $roles  =  Role::create([
               'name' => $request->name
             ]);
 
-            response()->json([
+         return  response()->json([
               'status' => true,
               'message' => 'Roles Created Successfully',
               'roles' => $roles
-            ]);
+            ], 201);
 
       } catch (\Throwable $th) {
         Log::error($th->getMessage());
       }
+    }
+
+    public function edit($id)
+    {
+       $roleEdit = Role::findOrFail($id);
+
+       return response()->json([
+            'status' => true,
+            'roles_edit' => $roleEdit
+       ], 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+
+    }
+
+    public function delete($id)
+    {
+       try {
+        $roles = Role::findOrfail();
+
+        if($roles)
+        {
+          $roles->delete();
+        }
+
+        return response()->json([
+             'status' => true,
+             'message' => 'Roles Deleted'
+        ], 200);
+       } catch (\Throwable $th) {
+        Log::error($th->getMessage());
+       }
     }
 }
