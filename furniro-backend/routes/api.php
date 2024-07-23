@@ -2,14 +2,13 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProductCategoryController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('user', function (Request $request) {
-        return $request->user();
-    });
+  
     Route::get('profile', [UserController::class, 'index']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('backendlogout', [AuthController::class, 'backendLogout']);
@@ -26,6 +25,13 @@ Route::get('product-categories/edit/{id}', [ProductCategoryController::class, 'e
 Route::put('product-categories/update/{id}', [ProductCategoryController::class, 'update']);
 Route::delete('product-categies/{id}', [ProductCategoryController::class, 'destroy']);
 
+
+/***************** Roles *************************/ 
+Route::prefix('roles')->group( function(){
+    Route::get('index', [RoleController::class, 'index']);
+    Route::post('store', [RoleController::class, 'store']);
+    Route::get('edit/{id}', [RoleController::class, 'edit']);
+});
 
 
 

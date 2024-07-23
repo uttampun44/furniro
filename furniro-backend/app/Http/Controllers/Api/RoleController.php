@@ -3,63 +3,83 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $roles = Role::all();
+
+        return response()->json([
+            'status' => true,
+            'roles' => $roles  
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
-    {
-        //
+    {  
+        try {
+            $validator = validator($request->all(), [
+               'name' => 'required|string'
+            ]);
+
+            if($validator->fails())
+            {
+              return response()->json([
+
+                    'errors' => $validator->errors()
+               ], 422);
+            }
+
+         $roles  =  Role::create([
+              'name' => $request->name
+            ]);
+
+         return  response()->json([
+              'status' => true,
+              'message' => 'Roles Created Successfully',
+              'roles' => $roles
+            ], 201);
+
+      } catch (\Throwable $th) {
+        Log::error($th->getMessage());
+      }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+       $roleEdit = Role::findOrFail($id);
+
+       return response()->json([
+            'status' => true,
+            'roles_edit' => $roleEdit
+       ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, $id)
     {
-        //
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function delete($id)
     {
-        //
-    }
+       try {
+        $roles = Role::findOrfail();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        if($roles)
+        {
+          $roles->delete();
+        }
+
+        return response()->json([
+             'status' => true,
+             'message' => 'Roles Deleted'
+        ], 200);
+       } catch (\Throwable $th) {
+        Log::error($th->getMessage());
+       }
     }
 }

@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import BackendSidebar from "../../components/BackendSidebar";
+import BackendSidebar from "../../../components/BackendSidebar";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Button from "../../components/Button";
+import Button from "../../../components/Button";
 
 type productCateogryList = {
   id: number;
@@ -65,7 +65,7 @@ const ProductCategories: React.FC = () => {
         <div className="product_categories pl-10 pr-4 py-12 my-20 bg-gray-700 ml-48 mr-8">
           <div className="add_product_category">
             <Link
-              to="/product-categories/add"
+              to="/roles/add"
               className="bg-blue-500 text-white p-2 my-2 rounded-md"
             >
               Add Product Category
