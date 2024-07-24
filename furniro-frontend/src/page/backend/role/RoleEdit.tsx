@@ -25,12 +25,13 @@ const RoleEdit: React.FC = () => {
 
   const onSubmit: SubmitHandler<roleEdit> = async (data) => {
     try {
-      const response = await axios.post("/api/roles/store", data, {
+      const response = await axios.put(`/api/roles/update/${id}`, data, {
         headers: {
           Accept: "application/json",
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log(response)
       if (response.status == 200) {
         alert("Roles updated");
         navigate("/roles");
@@ -44,7 +45,7 @@ const RoleEdit: React.FC = () => {
     const response = await axios.get(`/api/roles/edit/${id}`);
 
     if (response.status == 200) {
-      setValue("name", response.data.roles_edit.name);
+      setValue("name", response.data.roles_edit.role_name);
     }
   };
   useEffect(() => {
@@ -77,9 +78,9 @@ const RoleEdit: React.FC = () => {
                   />
                 )}
               />
-              {errors.name && (
+              {/* {errors.name && (
                 <span className="text-red-700 my-1 block">{errors.name}</span>
-              )}
+              )} */}
               <div className="btnRow my-4 flex gap-x-2">
                 <Button
                   type="submit"

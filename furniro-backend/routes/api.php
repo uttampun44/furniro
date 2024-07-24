@@ -31,6 +31,7 @@ Route::prefix('roles')->group( function(){
     Route::get('index', [RoleController::class, 'index']);
     Route::post('store', [RoleController::class, 'store']);
     Route::get('edit/{id}', [RoleController::class, 'edit']);
+    Route::put('update/{id}', [RoleController::class, 'update']);
 });
 
 

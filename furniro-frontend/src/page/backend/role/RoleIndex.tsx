@@ -7,7 +7,7 @@ import Button from "../../../components/Button";
 
 type roles= {
   id:number
-    name:string
+    role_name:string
 }
 
 const Roleindex:React.FC = () => {
@@ -78,7 +78,7 @@ const Roleindex:React.FC = () => {
                         return(
                             <tr key={index}    className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                 <td className="px-6 py-4">{index+1}</td>
-                                <td className="px-6 py-4">{role.name}</td>
+                                <td className="px-6 py-4">{role.role_name}</td>
                                 <td className="px-6 py-4"><Link to={`/roles/edit/${role.id}`} >Edit</Link></td>
                                 <td className="px-6 py-4"> 
                                     <Button

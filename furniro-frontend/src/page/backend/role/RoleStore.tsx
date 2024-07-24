@@ -9,7 +9,7 @@ import { useState } from "react";
 
 
 type roleInput = {
-  name: string;
+  role_name: string;
 };
 
 const RoleStore: React.FC = () => {
@@ -52,7 +52,7 @@ const RoleStore: React.FC = () => {
           <div className="sm:rounded-lg my-2">
             <form method="POST" onSubmit={handleSubmit(onSubmit)}>
               <Controller
-                name="name"
+                name="role_name"
                 control={control}
                 render={({ field : { onChange}}) => (
                   <InputField
@@ -67,7 +67,7 @@ const RoleStore: React.FC = () => {
                 )}
               />
               {
-                errors.name && (
+                errors.role_name && (
                   <span className="text-red-700 my-1 block">{errors.name}</span>
                 )
               }
