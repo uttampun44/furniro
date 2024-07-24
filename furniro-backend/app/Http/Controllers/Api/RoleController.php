@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RoleController extends Controller
 {
@@ -23,7 +25,7 @@ class RoleController extends Controller
     {  
         try {
             $validator = validator($request->all(), [
-               'name' => 'required|string'
+               'role_name' => 'required|string'
             ]);
 
             if($validator->fails())
@@ -35,7 +37,9 @@ class RoleController extends Controller
             }
 
          $roles  =  Role::create([
-              'name' => $request->name
+              'role_name' => $request->role_name,
+              'role_slug' => Str::slug($request->role_name)
+              
             ]);
 
          return  response()->json([
@@ -46,6 +50,11 @@ class RoleController extends Controller
 
       } catch (\Throwable $th) {
         Log::error($th->getMessage());
+
+        return response()->json([
+                'status' => false,
+                'message' => "can't create"
+        ], 500);
       }
     }
 
@@ -61,6 +70,42 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
+
+      try {
+       
+         $rolesUpdate = Role::findOrFail($id);
+
+         $validator = Validator::make($request->all(), [
+
+            'role_name' => 'required|string|max:255'
+         ]);
+
+         if($validator->fails())
+         {
+            return response()->json([
+                   'message' => $validator->errors()
+            ], 422);
+         }
+
+         $rolesUpdate->role_name =  $request->role_name;
+         $rolesUpdate->role_slug = Str::slug($request->role_slug);
+
+         $rolesUpdate->save();
+
+         return response()->json([
+              'status' => true,
+              'message' => "Roles Update successfully"
+         ], 200);
+
+      } catch (\Throwable $th) {
+         Log::error($th->getMessage());
+
+         return response()->json([
+                 'status' => false,
+                 'message' =>  "can't update"
+         ], 500);
+      }
+      
 
     }
 
