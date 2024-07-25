@@ -32,6 +32,7 @@ Route::prefix('roles')->group( function(){
     Route::post('store', [RoleController::class, 'store']);
     Route::get('edit/{id}', [RoleController::class, 'edit']);
     Route::put('update/{id}', [RoleController::class, 'update']);
+    Route::delete('delete/{id}', [RoleController::class, 'delete']);
 });
 
 

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class RoleController extends Controller
@@ -73,22 +72,11 @@ class RoleController extends Controller
 
       try {
        
-         $rolesUpdate = Role::findOrFail($id);
+         $rolesUpdate = Role::find($id);
 
-         $validator = Validator::make($request->all(), [
-
-            'role_name' => 'required|string|max:255'
-         ]);
-
-         if($validator->fails())
-         {
-            return response()->json([
-                   'message' => $validator->errors()
-            ], 422);
-         }
-
+         
          $rolesUpdate->role_name =  $request->role_name;
-         $rolesUpdate->role_slug = Str::slug($request->role_slug);
+         $rolesUpdate->role_slug = Str::slug($request->role_name);
 
          $rolesUpdate->save();
 
@@ -112,7 +100,7 @@ class RoleController extends Controller
     public function delete($id)
     {
        try {
-        $roles = Role::findOrfail();
+        $roles = Role::findOrfail($id);
 
         if($roles)
         {

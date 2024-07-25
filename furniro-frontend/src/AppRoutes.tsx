@@ -19,6 +19,8 @@ import ProductCategoryEdit from "./page/backend/productcategory/ProductCategoryE
 import Roleindex from "./page/backend/role/RoleIndex";
 import Rolestore from "./page/backend/role/RoleStore";
 import RoleEdit from "./page/backend/role/RoleEdit";
+import PermissionIndex from "./page/backend/permission/PermissionIndex";
+import PermissionAdd from "./page/backend/permission/PermissionStore";
 
 
 const AppRoutes = () => {
@@ -52,7 +54,9 @@ const AppRoutes = () => {
       <Route path="/roles/add" element={<Rolestore />}></Route>
       <Route path="/roles/edit/:id" element={<RoleEdit />}></Route>
 
-      
+      {/* permission */}
+      <Route path="/permission" element={<PermissionIndex />}></Route>
+      <Route path="/permission/add" element={<PermissionAdd />}></Route>
       <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
