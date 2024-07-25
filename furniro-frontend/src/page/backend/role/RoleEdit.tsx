@@ -8,7 +8,7 @@ import InputField from "../../../components/InputField";
 import axios from "axios";
 
 type roleEdit = {
-  name: string;
+  role_name: string;
 };
 
 const RoleEdit: React.FC = () => {
@@ -17,7 +17,7 @@ const RoleEdit: React.FC = () => {
 
   const { handleSubmit, control, setValue } = useForm<roleEdit>({
     defaultValues: {
-      name: "",
+      role_name: "",
     },
   });
 
@@ -28,7 +28,7 @@ const RoleEdit: React.FC = () => {
       const response = await axios.put(`/api/roles/update/${id}`, data, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
       console.log(response)
@@ -39,13 +39,13 @@ const RoleEdit: React.FC = () => {
     } catch (error: any) {
       setErrors(error.response.data.errors);
     }
-  };
+  }
 
   const fetRolesEdit = async () => {
     const response = await axios.get(`/api/roles/edit/${id}`);
 
     if (response.status == 200) {
-      setValue("name", response.data.roles_edit.role_name);
+      setValue("role_name", response.data.roles_edit.role_name);
     }
   };
   useEffect(() => {
@@ -64,7 +64,7 @@ const RoleEdit: React.FC = () => {
           <div className="sm:rounded-lg my-2">
             <form method="POST" onSubmit={handleSubmit(onSubmit)}>
               <Controller
-                name="name"
+                name="role_name"
                 control={control}
                 render={({ field }) => (
                   <InputField

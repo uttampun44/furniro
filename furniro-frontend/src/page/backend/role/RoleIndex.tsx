@@ -1,25 +1,31 @@
 import { Link } from "react-router-dom";
 import BackendSidebar from "../../../components/BackendSidebar"
 import TopNavigation from "../../../components/TopNavigation"
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Button from "../../../components/Button";
+import { Context } from "../../../../context/ContextProvider";
 
 type roles= {
   id:number
-    role_name:string
+  role_name:string
 }
 
 const Roleindex:React.FC = () => {
 
+  const context = useContext(Context)
+  const token = context?.token;
+  
     const [roles, setRoles] = useState<roles []>([])
 
+    
     const fetchRoles = async() => {
    
         const response = await axios.get('api/roles/index', {
             headers:{
                 Accept: "application/json",
                 "Content-Type": "application/json",
+                Authorization: `${token}`
             }
         })
 
@@ -28,7 +34,29 @@ const Roleindex:React.FC = () => {
         }
 
     }
+  
+    const deleteRole = async(e: React.MouseEvent<HTMLButtonElement>, id:number) => {
+      e.preventDefault()
 
+      try {
+        
+      const response = await axios.delete(`/api/roles/delete/${id}`, {
+        headers:{
+          'Accept' : 'application/json',
+          "Content-Type": "application/json",
+        }
+      })
+    
+      console.log(response)
+      if(response.status == 200)
+        {
+          setRoles((previousRole) => previousRole.filter((role) => role.id != role.id))
+          alert("Role Deleted Successfully")
+        }
+      } catch (error) {
+        console.log(`Throw new Error, ${error}`)
+      }
+    }
     useEffect(() => {
         fetchRoles()
     }, [])
@@ -86,7 +114,7 @@ const Roleindex:React.FC = () => {
                      
                           value="Delete"
                           className="font-medium text-blue-600 dark:text-blue-500 no-underline"
-                        ></Button></td>
+                       onClick={(e) => deleteRole(e, role.id)} ></Button></td>
                             </tr>
                         )
                     })
