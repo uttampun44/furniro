@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -36,7 +36,11 @@ Route::prefix('roles')->group( function(){
 });
 
 Route::prefix('permission')->group( function(){
-
+  Route::get('index', [PermissionController::class, 'index']);
+  Route::post('store', [PermissionController::class, 'store']);
+  Route::get('edit/{id}', [PermissionController::class, 'edit']);
+  Route::post('edit/{id}', [PermissionController::class, 'update']);
+  Route::delete('delete/{id}', [PermissionController::class, 'destroy']);
 });
 
 

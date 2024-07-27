@@ -58,7 +58,7 @@ const AppRoutes = () => {
       {/* permission */}
       <Route path="/permission" element={<PermissionIndex />}></Route>
       <Route path="/permission/add" element={<PermissionAdd />}></Route>
-      <Route path="/permission/edit" element={<PermissionEdit />}></Route>
+      {/* <Route path="/permission/edit/:id" element={<PermissionEdit />}></Route> */}
       <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

@@ -53,7 +53,7 @@ class PermissionController extends Controller
             Permission::create([
 
                 'permission_name' => $request->permission_name,
-                'permission_slug' => $request->permission_slug
+                'permission_slug' => Str::slug($request->permission_slug)
             ], 201);
 
             return response()->json([
@@ -81,7 +81,7 @@ class PermissionController extends Controller
 
         return response()->json([
             'status' => true,
-            'permissionEdti' => $permissionEdit
+            'permissionEdit' => $permissionEdit
         ], 200);
     }
 
