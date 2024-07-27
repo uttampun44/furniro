@@ -32,10 +32,10 @@ const RoleEdit: React.FC = () => {
         },
       });
       console.log(response)
-      if (response.status == 200) {
+      if (response.status == 200) 
         alert("Roles updated");
         navigate("/roles");
-      }
+      
     } catch (error: any) {
       setErrors(error.response.data.errors);
     }
@@ -44,9 +44,8 @@ const RoleEdit: React.FC = () => {
   const fetRolesEdit = async () => {
     const response = await axios.get(`/api/roles/edit/${id}`);
 
-    if (response.status == 200) {
-      setValue("role_name", response.data.roles_edit.role_name);
-    }
+    if (response.status == 200) setValue("role_name", response.data.roles_edit.role_name);
+    
   };
   useEffect(() => {
     fetRolesEdit();
