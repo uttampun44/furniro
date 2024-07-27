@@ -14,24 +14,14 @@ type permission = {
 };
 
 const PermissionIndex: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+
   const [permissions, setPermission] = useState<permission[]>([]);
   const [permissionEdit, setPermissionEdit] = useState<boolean>(false);
-  const { handleSubmit, control } = useForm<permission>({
+  const [permissionvalue, setPermissionValue] = useState<permission | null>(null)
+  const { handleSubmit, control, reset } = useForm<permission>({
     defaultValues: { permission_name: "" },
   });
 
-  const onSubmit: SubmitHandler<permission> = async (data) => {
-    console.log(data);
-    try {
-      const response = await axios.put(`/api/permission/edit/${id}`, data, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (error) {}
-  };
 
   const fetchPermission = async () => {
     try {
@@ -68,14 +58,38 @@ const PermissionIndex: React.FC = () => {
           )
         );
       alert("Permission Delete");
+      fetchPermission()
     } catch (error) {
       console.log(error);
     }
   };
 
-  const permissionEditModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onSubmit: SubmitHandler<permission> = async (data) => {
+    console.log(data);
+    try {
+       await axios.put(`/api/permission/edit/${permissions}`, data, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {}
+  };
+
+  const fetchPermissionEdit = async(id:number) =>{
+   try {
+    const response = await axios.get(`/api/permission/edit/${id}`)
+    if(response.status == 200) 
+      reset({ permission_name: response.data.permission_name });
+      setPermissionValue(response.data.permissionEdit.permission_name)
+   } catch (error) {
+    console.log(error)
+   }
+  }
+  const permissionEditModal = (e: React.MouseEvent<HTMLButtonElement>, id:number) => {
     e.preventDefault();
     setPermissionEdit(!permissionEdit);
+    fetchPermissionEdit(id);
   };
 
   const closeModal = (e: React.MouseEvent<HTMLSpanElement>) => {
@@ -83,8 +97,10 @@ const PermissionIndex: React.FC = () => {
   };
   useEffect(() => {
     fetchPermission();
+   
   }, []);
 
+ 
   return (
     <>
       <TopNavigation />
@@ -135,7 +151,7 @@ const PermissionIndex: React.FC = () => {
                         <Button
                           type="submit"
                           value="Edit"
-                          onClick={(e) => permissionEditModal(e)}
+                          onClick={(e) => permissionEditModal(e, permission.id)}
                         ></Button>
                       </td>
                       <td>
@@ -177,8 +193,9 @@ const PermissionIndex: React.FC = () => {
                         control={control}
                         render={({ field }) => (
                           <InputField
-                            value={field.value}
+                            value={permissionvalue?.permission_name}
                             onChange={field.onChange}
+                            
                             label="Permission Name"
                             className={{
                               label: "text-white text-lg font-normal block",

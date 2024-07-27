@@ -21,7 +21,7 @@ import Rolestore from "./page/backend/role/RoleStore";
 import RoleEdit from "./page/backend/role/RoleEdit";
 import PermissionIndex from "./page/backend/permission/PermissionIndex";
 import PermissionAdd from "./page/backend/permission/PermissionStore";
-import PermissionEdit from "./page/backend/permission/PermissionEdit";
+
 
 
 const AppRoutes = () => {
