@@ -47,11 +47,12 @@ const Roleindex:React.FC = () => {
         }
       })
     
-      console.log(response)
+   
       if(response.status == 200)
         {
           setRoles((previousRole) => previousRole.filter((role) => role.id != role.id))
           alert("Role Deleted Successfully")
+          fetchRoles();
         }
       } catch (error) {
         console.log(`Throw new Error, ${error}`)

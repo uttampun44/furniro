@@ -45,7 +45,7 @@ const ProductCategories: React.FC = () => {
         setProductCategory((previousCategory) =>
           previousCategory.filter((category) => category.id !== category.id)
         );
-
+        fetchProductCategory()
         navigate('/product-categories');
       }
     } catch (error) {
@@ -65,7 +65,7 @@ const ProductCategories: React.FC = () => {
         <div className="product_categories pl-10 pr-4 py-12 my-20 bg-gray-700 ml-48 mr-8">
           <div className="add_product_category">
             <Link
-              to="/roles/add"
+              to="/product-categories/add"
               className="bg-blue-500 text-white p-2 my-2 rounded-md"
             >
               Add Product Category
