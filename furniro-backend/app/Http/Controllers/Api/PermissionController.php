@@ -41,7 +41,6 @@ class PermissionController extends Controller
 
             $validate = Validator::make($request->all(), [
                 'permission_name' => 'required',
-                'permission_slug' => 'required'
             ]);
 
             if ($validate->fails()) {
@@ -53,7 +52,7 @@ class PermissionController extends Controller
             Permission::create([
 
                 'permission_name' => $request->permission_name,
-                'permission_slug' => Str::slug($request->permission_slug)
+                'permission_slug' => Str::slug($request->permission_name)
             ], 201);
 
             return response()->json([
@@ -77,7 +76,7 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission, $id)
     {
-        $permissionEdit = Permission::findOrFail($id);
+        $permissionEdit = Permission::where('id', $id)->first();
 
         return response()->json([
             'status' => true,

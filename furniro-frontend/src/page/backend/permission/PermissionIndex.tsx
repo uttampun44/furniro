@@ -17,8 +17,7 @@ const PermissionIndex: React.FC = () => {
 
   const [permissions, setPermission] = useState<permission[]>([]);
   const [permissionEdit, setPermissionEdit] = useState<boolean>(false);
-  const [permissionvalue, setPermissionValue] = useState<permission | null>(null)
-  const { handleSubmit, control, reset } = useForm<permission>({
+  const { handleSubmit, control, reset, setValue } = useForm<permission>({
     defaultValues: { permission_name: "" },
   });
 
@@ -80,8 +79,9 @@ const PermissionIndex: React.FC = () => {
    try {
     const response = await axios.get(`/api/permission/edit/${id}`)
     if(response.status == 200) 
+   
       reset({ permission_name: response.data.permission_name });
-      setPermissionValue(response.data.permissionEdit.permission_name)
+      setValue("permission_name",response.data.permissionEdit.permission_name)
    } catch (error) {
     console.log(error)
    }
@@ -193,7 +193,7 @@ const PermissionIndex: React.FC = () => {
                         control={control}
                         render={({ field }) => (
                           <InputField
-                            value={permissionvalue?.permission_name}
+                            value={field.value}
                             onChange={field.onChange}
                             
                             label="Permission Name"
