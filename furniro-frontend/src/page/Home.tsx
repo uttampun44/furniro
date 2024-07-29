@@ -20,10 +20,8 @@ function Home() {
       },
     });
 
-    if (data.status == 200) {
+    if (data.status === 200) setProduct(data.data.product_category);
     
-      setProduct(data.data.product_category);
-    }
   };
 
   useEffect(() => {

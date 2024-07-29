@@ -29,7 +29,7 @@ const RoleStore: React.FC = () => {
           
         }
     })
-     if(response.status == 201){
+     if(response.status === 201){
 
      alert("Roles Created")
      navigate('/roles')

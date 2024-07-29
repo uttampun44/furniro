@@ -39,7 +39,7 @@ Route::prefix('permission')->group( function(){
   Route::get('index', [PermissionController::class, 'index']);
   Route::post('store', [PermissionController::class, 'store']);
   Route::get('edit/{id}', [PermissionController::class, 'edit']);
-  Route::post('edit/{id}', [PermissionController::class, 'update']);
+  Route::put('edit/{id}', [PermissionController::class, 'update']);
   Route::delete('delete/{id}', [PermissionController::class, 'destroy']);
 });
 

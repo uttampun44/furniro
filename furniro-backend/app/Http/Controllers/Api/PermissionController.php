@@ -87,17 +87,29 @@ class PermissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Permission $permission, $id)
+    public function update(Request $request, $id)
     {
 
         try {
-    
-            Permission::where('id', $id)->update([
-                'permission_name' => $request->permission_name,
-                'permission_slug' => Str::slug($request->permission_name)
+
+            $permissionUpdate = Permission::findOrFail($id);
+
+            $permissionUpdate->permission_name = $request->permission_name;
+            $permissionUpdate->permission_slug = Str::slug($request->permission_name);
+
+            $permissionUpdate->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Update Successfully'
             ], 200);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
+
+            return response()->json([
+                'status' => false,
+                'message' => "Can't update successfully"
+            ], 500);
         }
     }
 

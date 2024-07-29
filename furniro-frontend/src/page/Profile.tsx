@@ -53,10 +53,8 @@ const Profile: React.FC = () => {
           },
         });
 
-        if (resopnse.status == 200) {
+        if (resopnse.status === 200)  SetProfile(resopnse.data.user_profile[0]);
         
-          SetProfile(resopnse.data.user_profile[0]);
-        }
       } catch (error) {}
     };
     fetchUser();
