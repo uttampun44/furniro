@@ -17,11 +17,12 @@ const PermissionIndex: React.FC = () => {
 
   const [permissions, setPermission] = useState<permission[]>([]);
   const [permissionEdit, setPermissionEdit] = useState<boolean>(false);
+  const [errors, setErrors] = useState<string>('')
   const { handleSubmit, control, reset, setValue } = useForm<permission>({
     defaultValues: { permission_name: "" },
   });
 
-
+// fetching permission data from backend laravel
   const fetchPermission = async () => {
     try {
       const response = await axios.get("/api/permission/index", {
@@ -36,6 +37,7 @@ const PermissionIndex: React.FC = () => {
     }
   };
 
+  // delete function to delete permission
   const permissionDelete = async (
     e: React.MouseEvent<HTMLButtonElement>,
     id: number
@@ -50,7 +52,7 @@ const PermissionIndex: React.FC = () => {
         },
       });
 
-      if (response.status == 200)
+      if (response.status == 200){
         setPermission((previousPermission) =>
           previousPermission.filter(
             (permission) => permission.id != permission.id
@@ -58,32 +60,42 @@ const PermissionIndex: React.FC = () => {
         );
       alert("Permission Delete");
       fetchPermission()
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
+  // update method of permission
   const onSubmit: SubmitHandler<permission> = async (data) => {
-    console.log(data);
+   
     try {
-       await axios.put(`/api/permission/edit/${permissions}`, data, {
+       await axios.put(`/api/permission/edit/${data.id}`,data, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
       });
-    } catch (error) {}
+
+      fetchPermission()
+     
+    } catch (error:any) {
+      console.log(error)
+     
+    }
   };
 
+  // fetching edit method from backend laravel 
   const fetchPermissionEdit = async(id:number) =>{
    try {
     const response = await axios.get(`/api/permission/edit/${id}`)
-    if(response.status == 200) 
+    if(response.status == 200){
    
-      reset({ permission_name: response.data.permission_name });
+      reset({ id: response.data.permissionEdit.id, permission_name: response.data.permission_name });
       setValue("permission_name",response.data.permissionEdit.permission_name)
-   } catch (error) {
-    console.log(error)
+    }
+   } catch (error:any) {
+      throw new error
    }
   }
   const permissionEditModal = (e: React.MouseEvent<HTMLButtonElement>, id:number) => {
@@ -206,18 +218,13 @@ const PermissionIndex: React.FC = () => {
                         )}
                       />
 
-                      <div className="btnRow my-4 flex gap-x-2">
+                      <div className="btnRow my-4">
                         <Button
                           type="submit"
                           value="Update Role"
                           className="bg-blue-800 text-white p-2 w-36  text-center rounded-md cursor-pointer"
                         />
-                        <Link
-                          to="/permission"
-                          className="bg-blue-800 text-white p-2 rounded-md cursor-pointer w-36 text-center "
-                        >
-                          Cancel
-                        </Link>
+                     
                       </div>
                     </form>
                   </div>

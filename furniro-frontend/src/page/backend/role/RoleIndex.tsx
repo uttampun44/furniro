@@ -29,10 +29,7 @@ const Roleindex:React.FC = () => {
             }
         })
 
-        if(response.status == 200){
-            setRoles(response.data.roles)
-        }
-
+        if(response.status === 200) setRoles(response.data.roles)
     }
   
     const deleteRole = async(e: React.MouseEvent<HTMLButtonElement>, id:number) => {
@@ -48,7 +45,7 @@ const Roleindex:React.FC = () => {
       })
     
    
-      if(response.status == 200)
+      if(response.status === 200)
         {
           setRoles((previousRole) => previousRole.filter((role) => role.id != role.id))
           alert("Role Deleted Successfully")
