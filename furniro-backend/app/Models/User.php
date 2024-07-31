@@ -52,8 +52,5 @@ class User extends Authenticatable
        return $this->belongsTo(UserDetail::class);
     }
 
-    public function userAddress():BelongsTo
-    {
-        return $this->belongsTo(UserAddress::class);
-    }
+   
 }
