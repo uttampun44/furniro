@@ -21,6 +21,8 @@ import Rolestore from "./page/backend/role/RoleStore";
 import RoleEdit from "./page/backend/role/RoleEdit";
 import PermissionIndex from "./page/backend/permission/PermissionIndex";
 import PermissionAdd from "./page/backend/permission/PermissionStore";
+import UserIndex from "./page/backend/user/UserIndex";
+import UserStore from "./page/backend/user/UserStore";
 
 
 
@@ -59,6 +61,10 @@ const AppRoutes = () => {
       <Route path="/permission" element={<PermissionIndex />}></Route>
       <Route path="/permission/add" element={<PermissionAdd />}></Route>
       <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
+      
+      {/* user */}
+      <Route path="/users" element={<UserIndex />}></Route>
+      <Route path="/users/add" element={<UserStore />}></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

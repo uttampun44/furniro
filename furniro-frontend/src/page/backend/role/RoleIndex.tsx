@@ -72,7 +72,7 @@ const Roleindex:React.FC = () => {
               Add Roles
             </Link>
           </div>
-          <div className="product_categories_title my-2">
+          <div className="role_title my-2">
             <h1 className="text-white text-2xl font-bold">
              Roles
             </h1>
