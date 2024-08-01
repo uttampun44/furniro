@@ -14,7 +14,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('backendlogout', [AuthController::class, 'backendLogout']);
 });
 Route::put('update-profile/{id}', [UserController::class, 'updateProfile']);
-Route::post('signup', [AuthController::class, 'signup']);
+Route::post('/backend/signup', [AuthController::class, 'signup']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('backendlogin', [AuthController::class, 'backendLogin']);
 

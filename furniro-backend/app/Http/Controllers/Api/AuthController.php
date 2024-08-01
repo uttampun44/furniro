@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\RoleUser;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -15,14 +17,21 @@ class AuthController extends Controller
 {
     public function signup(Request $request)
     {
+        DB::beginTransaction();
         try {
+
+
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|unique:users,email',
                 'password' => 'required|string|min:8',
                 'date_of_birth' => 'required|date',
-                'phone_details' => 'required|string|max:255',
+                'image' => 'required',
                 'gender' => 'required|string',
+                'address' => 'required|string|max:255',
+                'telephone' => 'required',
+                'mobile' => 'required',
+                'role' => 'required|integer|exists:roles,id'
             ]);
 
             if ($validator->fails()) {
@@ -35,25 +44,44 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
+            $image = null;
+
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads'), $filename);
+                $image = 'uploads/' . $filename;
+            }
+
+
             $user_details = UserDetail::create([
                 'date_of_birth' => $request->date_of_birth,
-                'phone_details' => $request->phone_details,
-                'image' => $request->image,
+                'image' => $image,
                 'gender' => $request->gender,
-                'user_id' => $user->id,
+                'address' => $request->address,
+                'telephone' => $request->telephone,
+                'mobile' => $request->mobile,
             ]);
+
+            $roleUser = RoleUser::create([
+                'role_id' => $request->role,
+                'user_id' => $user->id
+            ]);
+
+            DB::commit();
 
             return response()->json([
                 'success' => true,
                 'message' => 'User registered successfully',
                 'user' => $user,
                 'user_details' => $user_details,
+                'user_role' => $roleUser
             ], 201);
         } catch (\Throwable $th) {
             Log::error('Error creating user: ' . $th->getMessage());
+            DB::rollBack();
             return response()->json(['error' => 'Failed to register user'], 500);
         }
- 
     }
 
     public function login(Request $request)
@@ -67,12 +95,10 @@ class AuthController extends Controller
             return response()->json(['errors' => $credentials->errors()], 422);
         }
 
-        if(Auth::attempt($credentials))
-        {
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            if($user instanceof \App\Models\User)
-            {
+            if ($user instanceof \App\Models\User) {
                 return response()->json([
                     'status' => true,
                     'message' => 'Successfully Logged In',
@@ -81,72 +107,66 @@ class AuthController extends Controller
                     'user_profile' => $user
                 ], 200);
             }
-        }else{
+        } else {
 
             response()->json([
                 'status' => false,
                 'message' => 'Email Or Password not matched',
-                
+
             ], 401);
         }
-        
     }
 
     public function logout(Request $request)
     {
         $user = request()->user();
 
-        if($user)
-        {
+        if ($user) {
             $user->currentAccessToken()->delete();
 
             response()->json([
                 'status' => true,
                 'message' => 'Successfully Logout'
             ], 200);
-        }else{
+        } else {
             response()->json([
                 'status' => true,
                 'message' => 'No user Authenticated'
             ], 401);
         }
-
     }
 
     public function backendLogin(Request $request)
     {
-       try {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        try {
+            $credentials = $request->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required'],
+            ]);
 
-        if(Auth::attempt($credentials))
-        {
-            $user = Auth::user();
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
 
-            if($user instanceof \App\Models\User)
-            {
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Successfully Logged In',
-                    'token' => $user->createToken("Login Token")->plainTextToken,
-                    'token_type' => 'bearer',
-                    'user_profile' => $user
-                ], 200);
+                if ($user instanceof \App\Models\User) {
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Successfully Logged In',
+                        'token' => $user->createToken("Login Token")->plainTextToken,
+                        'token_type' => 'bearer',
+                        'user_profile' => $user
+                    ], 200);
+                }
+            } else {
+
+                response()->json([
+                    'status' => false,
+                    'message' => 'Email Or Password not matched',
+
+                ], 401);
             }
-        }else{
-
-            response()->json([
-                'status' => false,
-                'message' => 'Email Or Password not matched',
-                
-            ], 401);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
         }
-        
-       } catch (\Throwable $th) {
-          Log::error( $th->getMessage());
-       }
     }
 
 
@@ -154,20 +174,18 @@ class AuthController extends Controller
     {
         $user = request()->user();
 
-        if($user)
-        {
+        if ($user) {
             $user->currentAccessToken()->delete();
 
             response()->json([
                 'status' => true,
                 'message' => 'Successfully Logout'
             ], 200);
-        }else{
+        } else {
             response()->json([
                 'status' => true,
                 'message' => 'No user Authenticated'
             ], 401);
         }
-
     }
 }
