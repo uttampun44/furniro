@@ -15,9 +15,6 @@ class UserDetail extends Model
       'image',
       'gender', 
       'address',
-      'city',
-      'postal_code',
-      'district',
       'telephone',
       'mobile'
     ];

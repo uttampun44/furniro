@@ -5,7 +5,7 @@ import TopNavigation from "../../../components/TopNavigation";
 import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import { Link } from "react-router-dom";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 interface Role {
   id: number;
@@ -13,17 +13,17 @@ interface Role {
 }
 
 type userInputs = {
-full_name:string,
-email:string,
-password:string,
-role:string,
-date:string,
-file:File,
-gender:string,
-address:string,
-telephone:number,
-mobile:number
-}
+  full_name: string;
+  email: string;
+  password: string;
+  role: string;
+  date: string;
+  image: File;
+  gender: string;
+  address: string;
+  telephone: number;
+  mobile: number;
+};
 
 const UserStore: React.FC = () => {
   const [roles, setRoles] = useState<Role[]>([]);
@@ -44,9 +44,23 @@ const UserStore: React.FC = () => {
     }
   };
 
-  const {handleSubmit, register} = useForm<userInputs>();
+  const { handleSubmit, control, register } = useForm<userInputs>();
 
-  const onSubmit: SubmitHandler<userInputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<userInputs> = async(data) => {
+    try {
+      
+      const response = await axios.post('/api/backend/signup', data, {
+        headers:{
+          Accept: "application/json", 
+          'Content-type': "multipart/form-data"
+          
+        }
+      })
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  };
 
   useEffect(() => {
     fetchRoles();
@@ -63,111 +77,171 @@ const UserStore: React.FC = () => {
             <form method="POST" onSubmit={handleSubmit(onSubmit)}>
               <div className="formGrid grid grid-cols-2 gap-x-4 gap-y-4">
                 <div className="name">
-                  <InputField
-                    type="text"
-                  name="full_name"
-                    label="Full Name"
-                    className={{
-                      label: "text-white block mb-2",
-                      input: "text-black w-full py-3 rounded-md",
-                    }}
+                  <Controller
+                    name="full_name"
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <InputField
+                        type="text"
+                        onChange={onChange}
+                        label="Full Name"
+                        className={{
+                          label: "text-white block mb-2",
+                          input: "text-black w-full py-3 px-2 rounded-md",
+                        }}
+                      />
+                    )}
                   />
                 </div>
                 <div className="email">
-                  <InputField
-                    type="email"
+                  <Controller
                     name="email"
-                    label="Email"
-                    className={{
-                      label: "text-white block mb-2",
-                      input: "text-black w-full py-3 rounded-md",
-                    }}
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <InputField
+                        type="email"
+                        onChange={onChange}
+                        label="Email"
+                        className={{
+                          label: "text-white block mb-2",
+                          input: "text-black w-full py-3 px-2 rounded-md",
+                        }}
+                      />
+                    )}
                   />
                 </div>
                 <div className="password">
-                  <InputField
-                    type="password"
+                  <Controller
                     name="password"
-                    label="Password"
-                    className={{
-                      label: "text-white block mb-2",
-                      input: "text-black w-full py-3 rounded-md",
-                    }}
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <InputField
+                        type="password"
+                        onChange={onChange}
+                        label="Password"
+                        className={{
+                          label: "text-white block mb-2",
+                          input: "text-black w-full py-3 px-2 rounded-md",
+                        }}
+                      />
+                    )}
                   />
                 </div>
                 <div className="role ">
                   <label className="text-white block mb-2">Role</label>
-                  <select className="text-black w-full py-3 rounded-md" name="role">
+                  <select
+                    className="text-black w-full py-3 px-2 rounded-md"
+                    {...register('role')}
+                  >
                     {roles.map((role, index) => (
-                      <option key={index} value={role.id}>
+                      <option key={index} value={role.role_name}>
                         {role.role_name}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div className="date_of_birth">
-                  <InputField
-                    type="date"
+                  <Controller
                     name="date"
-                    label="Date Of Birth"
-                    className={{
-                      label: "text-white block mb-2",
-                      input: "text-black w-full py-3 rounded-md",
-                    }}
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                     
+                      <InputField
+                        type="date"
+                        onChange={onChange}
+                        label="Date Of Birth"
+                        className={{
+                          label: "text-white block mb-2",
+                          input: "text-black w-full py-3 px-2 rounded-md",
+                        }}
+                      />
+                    )}
                   />
                 </div>
                 <div className="image">
-                  <InputField
+                  <Controller
+                  name="image"
+                  control={control}
+                  render={({field: {onChange}}) => (
+                    <InputField
                     type="file"
-                    name="file"
+                     onChange={onChange}
                     label="Image"
                     className={{
                       label: "text-white block mb-2 ",
                       input:
-                        "text-black w-full py-3 rounded-md  border-2 bg-white",
+                        "text-black w-full py-3 px-2 rounded-md  border-2 bg-white",
                     }}
+                  />
+                  )}
+                
                   />
                 </div>
                 <div className="gender">
                   <label className="text-white block mb-2">Gender</label>
-                  <select className="text-black w-full py-3 rounded-md" name="gender">
+                  <select
+                    className="text-black w-full py-3 px-2 rounded-md"
+                    name="gender"
+                  >
                     <option>Male</option>
                     <option>Female</option>
                   </select>
                 </div>
                 <div className="address">
-                  <InputField
+                 <Controller 
+                  name="address"
+                  control={control}
+                  render={({field : {onChange}}) =>(
+                    <InputField
+                    onChange={onChange}
                     type="text"
-                    name="address"
+                
                     label="Address"
                     className={{
                       label: "text-white block mb-2 ",
-                      input: "text-black w-full py-3 rounded-md",
+                      input: "text-black w-full py-3 px-2 rounded-md",
                     }}
-                  />
+                    />
+                  )}
+                
+                 />
                 </div>
 
                 <div className="telephone">
-                  <InputField
+                  <Controller 
+                  control={control}
+                  name="telephone"
+                  render={({field: {onChange}}) =>(
+                    <InputField
+                    onChange={onChange}
                     type="text"
-                    name="telephone"
                     label="Telephone"
                     className={{
                       label: "text-white block mb-2 ",
-                      input: "text-black w-full py-3 rounded-md",
+                      input: "text-black w-full py-3 px-2 rounded-md",
                     }}
+                  />
+                  )}
+                 
                   />
                 </div>
 
                 <div className="mobile">
-                  <InputField
+                  <Controller
+                  name="mobile"
+                  control={control}
+                  render={({field: {onChange}}) => (
+                    <InputField
                     type="text"
-                    name="mobile"
                     label="mobile"
+                    onChange={onChange}
                     className={{
                       label: "text-white block mb-2 ",
-                      input: "text-black w-full py-3 rounded-md",
+                      input: "text-black w-full py-3 px21 rounded-md",
                     }}
+                  />
+                  )}
+                 
                   />
                 </div>
               </div>

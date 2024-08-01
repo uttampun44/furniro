@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_details', function (Blueprint $table) {
             $table->id();
-            $table->date('date_of_birth');
+            $table->string('date_of_birth');
             $table->longText('image')->nullable();
             $table->string('gender')->nullable();
             $table->string('address');
