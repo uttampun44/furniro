@@ -5,10 +5,24 @@ import TopNavigation from "../../../components/TopNavigation";
 import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import { Link } from "react-router-dom";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 interface Role {
   id: number;
   role_name: string;
+}
+
+type userInputs = {
+full_name:string,
+email:string,
+password:string,
+role:string,
+date:string,
+file:File,
+gender:string,
+address:string,
+telephone:number,
+mobile:number
 }
 
 const UserStore: React.FC = () => {
@@ -30,6 +44,10 @@ const UserStore: React.FC = () => {
     }
   };
 
+  const {handleSubmit, register} = useForm<userInputs>();
+
+  const onSubmit: SubmitHandler<userInputs> = (data) => console.log(data)
+
   useEffect(() => {
     fetchRoles();
   }, []);
@@ -42,12 +60,12 @@ const UserStore: React.FC = () => {
         <div className="user_store_container   pl-20 h-[100vh] max-h-full">
           <div className="userstore pl-10 pr-4 py-12 my-20 bg-gray-700 ml-48 mr-8">
             <h1 className="text-white my-4 font-bold text-xl">Create User</h1>
-            <form>
+            <form method="POST" onSubmit={handleSubmit(onSubmit)}>
               <div className="formGrid grid grid-cols-2 gap-x-4 gap-y-4">
                 <div className="name">
                   <InputField
                     type="text"
-                    name="Full Name"
+                  name="full_name"
                     label="Full Name"
                     className={{
                       label: "text-white block mb-2",
@@ -58,7 +76,7 @@ const UserStore: React.FC = () => {
                 <div className="email">
                   <InputField
                     type="email"
-                    name="Email"
+                    name="email"
                     label="Email"
                     className={{
                       label: "text-white block mb-2",
@@ -69,7 +87,7 @@ const UserStore: React.FC = () => {
                 <div className="password">
                   <InputField
                     type="password"
-                    name="Password"
+                    name="password"
                     label="Password"
                     className={{
                       label: "text-white block mb-2",
@@ -79,7 +97,7 @@ const UserStore: React.FC = () => {
                 </div>
                 <div className="role ">
                   <label className="text-white block mb-2">Role</label>
-                  <select className="text-black w-full py-3 rounded-md">
+                  <select className="text-black w-full py-3 rounded-md" name="role">
                     {roles.map((role, index) => (
                       <option key={index} value={role.id}>
                         {role.role_name}
@@ -112,7 +130,7 @@ const UserStore: React.FC = () => {
                 </div>
                 <div className="gender">
                   <label className="text-white block mb-2">Gender</label>
-                  <select className="text-black w-full py-3 rounded-md">
+                  <select className="text-black w-full py-3 rounded-md" name="gender">
                     <option>Male</option>
                     <option>Female</option>
                   </select>
