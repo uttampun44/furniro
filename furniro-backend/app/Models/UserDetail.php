@@ -16,9 +16,15 @@ class UserDetail extends Model
       'gender', 
       'address',
       'telephone',
-      'mobile'
+      'mobile',
+      'user_id'
     ];
     use HasFactory;
 
+
+    public function user():BelongsTo
+    {
+      return $this->belongsTo(User::class);
+    }
    
 }
