@@ -89,12 +89,10 @@ class AuthController extends Controller
 
     public function backendLogin(Request $request)
     {
-        $users = User::with(['userDetails', 'userRoles'])->find(26);
-        dd($users);
+       
         try {
            
 
-         
             $credentials = $request->validate([
                 'email' => ['required', 'email'],
                 'password' => ['required'],
@@ -104,6 +102,7 @@ class AuthController extends Controller
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
 
+              
                 if ($user instanceof \App\Models\User) {
                     return response()->json([
                         'status' => true,

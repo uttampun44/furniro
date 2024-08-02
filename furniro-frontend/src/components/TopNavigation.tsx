@@ -1,36 +1,23 @@
-import React, {useEffect } from "react";
+import React, {useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+
+type User = {
+  name:string
+}
+
 const TopNavigation: React.FC = () => {
-
-
-    const login = useNavigate();
-
-    const logout = async(event: React.FormEvent) => {
-
-        event.preventDefault()
-        try {
-            const response = await axios.post('/api/logout', {}, {
-                headers: {
-                  'Authorization': `Bearer ${localStorage.getItem('Token')}`
-                }
-              });
-
-      
-             if(response.status == 200)
-                {
-                      localStorage.removeItem("Token");
-                      localStorage.removeItem("User")
-                      window.localStorage.removeItem("isLogin");
-                    login('/login')
-                }
-        } catch (error) {
-            
-        }
-    }
+ 
+ const [user, setUser] = useState<User | null>(null)
 
     useEffect(() =>{
+
+      const userName = localStorage.getItem("User");
+
+      if(!userName) return
+
+      setUser(JSON.parse(userName))
       const token = localStorage.getItem("Token");
       if (token) {
         axios.defaults.headers.common["Authorization"] = `Bearer `;
@@ -54,13 +41,7 @@ const TopNavigation: React.FC = () => {
                     viewBox="0 0 20 20"
                   >
                   
-                    {/* <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    /> */}
+                  
                   </svg>
                 </div>
                 <input
@@ -91,9 +72,9 @@ const TopNavigation: React.FC = () => {
                 </svg>
               </button>
 
-              <form method="POST" onSubmit={logout}>
-                 <button className="bg-gray-800 text-white font-medium text-xl">Logout</button>
-              </form>
+              {/* <form method="POST" onSubmit={logout}> */}
+                 <span className="text-white font-medium text-xl">{user?.name.toLocaleUpperCase()}</span>
+              {/* </form> */}
 
               <button
                 type="button"

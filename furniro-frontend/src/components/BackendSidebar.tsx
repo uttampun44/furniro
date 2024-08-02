@@ -25,6 +25,7 @@ const BackendSidebar: React.FC= () => {
 
         })
         localStorage.removeItem("Token");
+        localStorage.removeItem("User");
         navigate('/furniro-login')
 
     } catch (error) {

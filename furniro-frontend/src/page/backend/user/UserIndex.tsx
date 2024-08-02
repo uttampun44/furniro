@@ -1,8 +1,41 @@
 import { Link } from "react-router-dom";
 import BackendSidebar from "../../../components/BackendSidebar";
 import TopNavigation from "../../../components/TopNavigation";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+interface User{
+  name:string
+  date_of_birth:string
+}
 
 const UserIndex: React.FC = () => {
+
+  const [users, setUser] = useState<User[]>([]);
+
+  
+  const fetchUser = async() =>{
+   try {
+    const response = await axios.get('/api/profile',{
+      headers:{
+        "Accept": 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('Token')}`
+      }
+     })
+
+   
+     if(response.status === 200){
+      console.log(response.data)
+      setUser(users)
+     }
+   } catch (error) {
+    
+   }
+  }
+
+  useEffect(() => {
+     fetchUser()
+  }, [])
   return (
     <>
       <TopNavigation />
@@ -59,7 +92,19 @@ const UserIndex: React.FC = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+
+                  {
+                    users.map((user, index) => (
+                      <tr key={index + 1} >
+                            <td>{index + 1}</td>
+                            <td>{user.date_of_birth}</td>
+                      </tr>
+                    )
+
+                    )
+                  }
+                </tbody>
               </table>
             </div>
           </div>

@@ -17,14 +17,15 @@ class UserController extends Controller
     // user profile routes and details
     public function index()
     {
-        if (Auth::check()) {
-            $user = Auth::user();
+        $user = Auth::user();
 
-            $user_profile = UserDetail::with('user')->where('user_id', $user->id)->get();
-        } else {
+        if (!$user) {
             return response()->json([
                 'error' => 'Unauthorized'
             ], 401);
+           
+        } else {
+            $user_profile = UserDetail::with('user')->get();
         }
         return response()->json([
             'user_profile' => $user_profile,
