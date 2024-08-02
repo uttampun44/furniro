@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function signup(Request $request)
+    public function backendSignup(Request $request)
     {
         DB::beginTransaction();
         try {
@@ -61,7 +61,9 @@ class AuthController extends Controller
                 'address' => $request->address,
                 'telephone' => $request->telephone,
                 'mobile' => $request->mobile,
+                'user_id' => $user->id
             ]);
+            
 
             $roleUser = RoleUser::create([
                 'role_id' => $request->role,
@@ -83,6 +85,67 @@ class AuthController extends Controller
             return response()->json(['error' => 'Failed to register user'], 500);
         }
     }
+
+
+    public function backendLogin(Request $request)
+    {
+        $users = User::with(['userDetails', 'userRoles'])->find(26);
+        dd($users);
+        try {
+           
+
+         
+            $credentials = $request->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required'],
+            ]);
+
+
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+
+                if ($user instanceof \App\Models\User) {
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Successfully Logged In',
+                        'token' => $user->createToken("Login Token")->plainTextToken,
+                        'token_type' => 'bearer',
+                        'user_profile' => $user
+                    ], 200);
+                }
+            } else {
+
+                response()->json([
+                    'status' => false,
+                    'message' => 'Email Or Password not matched',
+
+                ], 401);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
+
+
+    public function backendLogout(Request $request)
+    {
+        $user = request()->user();
+
+        if ($user) {
+            $user->currentAccessToken()->delete();
+
+            response()->json([
+                'status' => true,
+                'message' => 'Successfully Logout'
+            ], 200);
+        } else {
+            response()->json([
+                'status' => true,
+                'message' => 'No user Authenticated'
+            ], 401);
+        }
+    }
+
 
     public function login(Request $request)
     {
@@ -118,59 +181,6 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request)
-    {
-        $user = request()->user();
-
-        if ($user) {
-            $user->currentAccessToken()->delete();
-
-            response()->json([
-                'status' => true,
-                'message' => 'Successfully Logout'
-            ], 200);
-        } else {
-            response()->json([
-                'status' => true,
-                'message' => 'No user Authenticated'
-            ], 401);
-        }
-    }
-
-    public function backendLogin(Request $request)
-    {
-        try {
-            $credentials = $request->validate([
-                'email' => ['required', 'email'],
-                'password' => ['required'],
-            ]);
-
-            if (Auth::attempt($credentials)) {
-                $user = Auth::user();
-
-                if ($user instanceof \App\Models\User) {
-                    return response()->json([
-                        'status' => true,
-                        'message' => 'Successfully Logged In',
-                        'token' => $user->createToken("Login Token")->plainTextToken,
-                        'token_type' => 'bearer',
-                        'user_profile' => $user
-                    ], 200);
-                }
-            } else {
-
-                response()->json([
-                    'status' => false,
-                    'message' => 'Email Or Password not matched',
-
-                ], 401);
-            }
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
-        }
-    }
-
-
-    public function backendLogout(Request $request)
     {
         $user = request()->user();
 
