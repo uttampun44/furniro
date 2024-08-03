@@ -110,7 +110,9 @@ class UserController extends Controller
     public function editUser($id)
 
     {
-        $user = User::with(['userDetails', 'roles'])->findOrFail($id);
+        
+        $user = User::with('roles')->find($id);
+
 
         return response()->json([
                'status' => true,
