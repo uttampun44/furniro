@@ -9,15 +9,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Role extends Model
 {
     protected $table = "roles";
-   protected $fillable = [
-    'role_name',
-    'role_slug'
-   ];
-   
+    protected $fillable = [
+        'role_name',
+        'role_slug'
+    ];
+
     use HasFactory;
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'role_user', 'role_id', 'user_id');
+        return $this->belongsToMany(User::class, 'role_users');
     }
 }
