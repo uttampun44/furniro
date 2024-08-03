@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
+use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    // user profile routes and details
+    // user routes and details backend
     public function index()
     {
         $user = Auth::user();
@@ -31,6 +32,8 @@ class UserController extends Controller
             'user_profile' => $user_profile,
         ]);
     }
+
+    
 
     public function updateProfile(Request $request, $id)
     {
@@ -84,6 +87,7 @@ class UserController extends Controller
         }
     }
 
+    // fetch roles in backend and exclude customer role
     public function fetchRoles()
     {
         $roles = Role::whereNotIn('role_name', ['Customer'])->get();
@@ -99,6 +103,44 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Roles not found',
+            ], 500);
+        }
+    }
+
+    public function editUser($id)
+
+    {
+        $user = User::with(['userDetails', 'roles'])->findOrFail($id);
+
+        return response()->json([
+               'status' => true,
+               'Single User Data' => $user,              
+               'Message' => "Single User Data"
+        ], 200);
+
+    }
+
+// delete user function from backend
+    public function deleteUser($id)
+    {
+        try {
+           $deleteUser = User::findOrFail($id);
+
+        if($deleteUser)
+        {
+            $deleteUser->delete();
+
+            return response()->json([
+               'success' => true,
+               'Message' => 'User Delete Successfully'
+            ], 200);
+        }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+
+            return response()->json([
+                   'status' => false,
+                   'Message' => 'Internal Server Error'
             ], 500);
         }
     }

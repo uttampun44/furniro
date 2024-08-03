@@ -197,4 +197,8 @@ class AuthController extends Controller
             ], 401);
         }
     }
+
+    // user delete backend
+
+   
 }

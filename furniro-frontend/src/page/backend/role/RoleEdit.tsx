@@ -32,7 +32,7 @@ const RoleEdit: React.FC = () => {
         },
       });
       console.log(response)
-      if (response.status == 200) {
+      if (response.status === 200) {
         alert("Roles updated");
         navigate("/roles");
       }

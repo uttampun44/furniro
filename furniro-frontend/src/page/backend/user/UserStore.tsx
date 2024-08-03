@@ -4,7 +4,7 @@ import InputField from "../../../components/InputField";
 import TopNavigation from "../../../components/TopNavigation";
 import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 interface Role {
@@ -28,6 +28,8 @@ type userInputs = {
 const UserStore: React.FC = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [validationErrors, setValidationErrors] = useState<userInputs>()
+
+  const navigate = useNavigate();
 
   const fetchRoles = async () => {
     try {
@@ -57,9 +59,13 @@ const UserStore: React.FC = () => {
           
         }
       })
-      console.log(response.data)
+       if(response.data === 200)
+        {
+          alert("User Created Successfully")
+          navigate('/users')
+        }
     } catch (error:any) {
-console.log(error.response.data.errors)
+
       setValidationErrors(error.response.data.errors)
     }
   };
@@ -156,7 +162,7 @@ console.log(error.response.data.errors)
                      
                       onChange={onChange}
                     >
-                        <option  disabled>Choose a role ...</option>
+                        <option  >Choose a role ...</option>
                       {roles.map((role, index) => (
                         <option key={index} value={role.id}>
                           {role.role_name}
@@ -230,7 +236,7 @@ console.log(error.response.data.errors)
                     <select
                     className="text-black w-full py-3 px-2 rounded-md"
                     onChange={onChange} >
-                    <option value="DEFAULT" disabled>Choose a gender ...</option>
+                    <option value="DEFAULT">Choose a gender ...</option>
                     <option value="Male" >Male</option>
                     <option value="Female">Female</option>
                   </select>
@@ -306,7 +312,7 @@ console.log(error.response.data.errors)
                     onChange={onChange}
                     className={{
                       label: "text-white block mb-2 ",
-                      input: "text-black w-full py-3 px21 rounded-md",
+                      input: "text-black w-full py-3 px-2 rounded-md",
                     }}
                   />
                   )}

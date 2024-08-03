@@ -23,6 +23,7 @@ import PermissionIndex from "./page/backend/permission/PermissionIndex";
 import PermissionAdd from "./page/backend/permission/PermissionStore";
 import UserIndex from "./page/backend/user/UserIndex";
 import UserStore from "./page/backend/user/UserStore";
+import UserEdit from "./page/backend/user/UserEdit";
 
 
 
@@ -65,6 +66,7 @@ const AppRoutes = () => {
       {/* user */}
       <Route path="/users" element={<UserIndex />}></Route>
       <Route path="/users/add" element={<UserStore />}></Route>
+      <Route path="/users/edit/:id" element={<UserEdit />}></Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

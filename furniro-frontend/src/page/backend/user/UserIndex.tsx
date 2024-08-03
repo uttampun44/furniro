@@ -3,39 +3,67 @@ import BackendSidebar from "../../../components/BackendSidebar";
 import TopNavigation from "../../../components/TopNavigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-interface User{
-  name:string
-  date_of_birth:string
+interface User {
+  id:number,
+  name: string;
+}
+
+interface userProfile {
+  user: User;
+  email: string;
+  date_of_birth: string;
+  image: File;
+  gender: string;
+  address: string;
+  telephone: string;
+  mobile: string;
 }
 
 const UserIndex: React.FC = () => {
+  // const port = import.meta.env.
+  const [users, setUser] = useState<userProfile[]>([]);
 
-  const [users, setUser] = useState<User[]>([]);
+  // fetching users data
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get("/api/profile", {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("Token")}`,
+        },
+      });
 
-  
-  const fetchUser = async() =>{
-   try {
-    const response = await axios.get('/api/profile',{
-      headers:{
-        "Accept": 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('Token')}`
+      // console.log(response.data);
+      if (response.status === 200) {
+        setUser(response.data.user_profile);
       }
-     })
+    } catch (error) {}
+  };
 
-   
-     if(response.status === 200){
-      // console.log(response.data)
-      setUser(users)
-     }
-   } catch (error) {
+  const deleteUser = async (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
+  
+ 
+    const response = await axios.delete(`/api/user/delete/${id}`, {
+      headers: {
+        'Accept' : 'application/json',
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
+    });
     
-   }
-  }
+    if (response.data === 200) {
+      setUser((previousUsers) => previousUsers.filter((user) => user.user.id !== user.user.id));
+      alert("User Delete Successfully");
+      fetchUser();
+    }
+  };
 
   useEffect(() => {
-     fetchUser()
-  }, [])
+    fetchUser();
+  }, []);
   return (
     <>
       <TopNavigation />
@@ -93,17 +121,40 @@ const UserIndex: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-
-                  {
-                    users.map((user, index) => (
-                      <tr key={index + 1} >
-                            <td>{index + 1}</td>
-                            <td>{user.date_of_birth}</td>
-                      </tr>
-                    )
-
-                    )
-                  }
+                  {users.map((user, index) => (
+                    <tr key={index + 1} >
+                 
+                      <td className="px-6 py-4">{index + 1}</td>
+                      <td className="px-6 py-4">{user.user.name}</td>
+                      <td className="px-6 py-4">{user.date_of_birth}</td>
+                      <td className="px-6 py-4">
+                        {" "}
+                        {user.image && (
+                          <img
+                            src={`http://localhost:8000/${user.image}`}
+                            className="w-20 h-auto"
+                            alt="User"
+                          />
+                        )}
+                      </td>
+                      <td className="px-6 py-4">{user.gender}</td>
+                      <td className="px-6 py-4">{user.address}</td>
+                      <td className="px-6 py-4">{user.telephone}</td>
+                      <td className="px-6 py-4">{user.mobile}</td>
+                      <td className="px-6 py-4">
+                        <Link to={`/users/edit/${user.user.id}`}>
+                          <EditNoteIcon style={{ cursor: "pointer" }} />
+                        </Link>
+                      </td>
+                      <td className="px-6 py-4">
+                        <button onClick={(e) => deleteUser(e, user.user.id)}>
+                          <DeleteIcon
+                            style={{ color: "red", cursor: "pointer" }}
+                          />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
