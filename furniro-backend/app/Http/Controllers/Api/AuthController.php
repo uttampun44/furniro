@@ -25,13 +25,13 @@ class AuthController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|unique:users,email',
                 'password' => 'required|string|min:8',
-                'date_of_birth' => 'required|date',
+                'date_of_birth' => 'required|string',
                 'image' => 'required',
                 'gender' => 'required|string',
                 'address' => 'required|string|max:255',
                 'telephone' => 'required',
                 'mobile' => 'required',
-                'role' => 'required|integer|exists:roles,id'
+                'role' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -89,12 +89,10 @@ class AuthController extends Controller
 
     public function backendLogin(Request $request)
     {
-        $users = User::with(['userDetails', 'userRoles'])->find(26);
-        dd($users);
+       
         try {
            
 
-         
             $credentials = $request->validate([
                 'email' => ['required', 'email'],
                 'password' => ['required'],
@@ -104,6 +102,7 @@ class AuthController extends Controller
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
 
+              
                 if ($user instanceof \App\Models\User) {
                     return response()->json([
                         'status' => true,
@@ -198,4 +197,8 @@ class AuthController extends Controller
             ], 401);
         }
     }
+
+    // user delete backend
+
+   
 }

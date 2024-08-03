@@ -13,6 +13,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('backendlogout', [AuthController::class, 'backendLogout']);
 });
+
 Route::put('update-profile/{id}', [UserController::class, 'updateProfile']);
 Route::post('/backend/signup', [AuthController::class, 'backendSignup']);
 Route::post('login', [AuthController::class, 'login']);
@@ -45,6 +46,9 @@ Route::prefix('permission')->group( function(){
 
 Route::prefix('user')->group(function(){
   Route::get('user-roles', [UserController::class, 'fetchRoles']);
+  Route::post('user-store', [AuthController::class, 'backendSignup']);
+  Route::get('edit/{id}', [UserController::class, 'editUser']);
+  Route::delete('delete/{id}', [UserController::class, 'deleteUser']);
 });
 
 
