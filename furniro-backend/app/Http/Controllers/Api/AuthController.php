@@ -25,13 +25,13 @@ class AuthController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|unique:users,email',
                 'password' => 'required|string|min:8',
-                'date_of_birth' => 'required|date',
+                'date_of_birth' => 'required|string',
                 'image' => 'required',
                 'gender' => 'required|string',
                 'address' => 'required|string|max:255',
                 'telephone' => 'required',
                 'mobile' => 'required',
-                'role' => 'required|integer|exists:roles,id'
+                'role' => 'required'
             ]);
 
             if ($validator->fails()) {

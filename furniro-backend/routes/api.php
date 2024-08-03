@@ -45,6 +45,7 @@ Route::prefix('permission')->group( function(){
 
 Route::prefix('user')->group(function(){
   Route::get('user-roles', [UserController::class, 'fetchRoles']);
+  Route::post('user-store', [AuthController::class, 'backendSignup']);
 });
 
 

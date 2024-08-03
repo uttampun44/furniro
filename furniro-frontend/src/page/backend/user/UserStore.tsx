@@ -13,11 +13,11 @@ interface Role {
 }
 
 type userInputs = {
-  full_name: string;
+  name: string;
   email: string;
   password: string;
-  role: string;
-  date: string;
+  role: number;
+  date_of_birth: string;
   image: File;
   gender: string;
   address: string;
@@ -27,6 +27,7 @@ type userInputs = {
 
 const UserStore: React.FC = () => {
   const [roles, setRoles] = useState<Role[]>([]);
+  const [validationErrors, setValidationErrors] = useState<userInputs>()
 
   const fetchRoles = async () => {
     try {
@@ -44,12 +45,12 @@ const UserStore: React.FC = () => {
     }
   };
 
-  const { handleSubmit, control, register } = useForm<userInputs>();
+  const { handleSubmit, control} = useForm<userInputs>();
 
   const onSubmit: SubmitHandler<userInputs> = async(data) => {
     try {
       
-      const response = await axios.post('/api/backend/signup', data, {
+      const response = await axios.post('/api/user/user-store', data, {
         headers:{
           Accept: "application/json", 
           'Content-type': "multipart/form-data"
@@ -57,8 +58,9 @@ const UserStore: React.FC = () => {
         }
       })
       console.log(response.data)
-    } catch (error) {
-      console.log(error)
+    } catch (error:any) {
+console.log(error.response.data.errors)
+      setValidationErrors(error.response.data.errors)
     }
   };
 
@@ -78,7 +80,7 @@ const UserStore: React.FC = () => {
               <div className="formGrid grid grid-cols-2 gap-x-4 gap-y-4">
                 <div className="name">
                   <Controller
-                    name="full_name"
+                    name="name"
                     control={control}
                     render={({ field: { onChange } }) => (
                       <InputField
@@ -92,6 +94,11 @@ const UserStore: React.FC = () => {
                       />
                     )}
                   />
+                 {
+                    validationErrors?.name && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.name}</span>
+                    )
+                 }
                 </div>
                 <div className="email">
                   <Controller
@@ -109,6 +116,11 @@ const UserStore: React.FC = () => {
                       />
                     )}
                   />
+                  {
+                    validationErrors?.email && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.email}</span>
+                    )
+                  }
                 </div>
                 <div className="password">
                   <Controller
@@ -126,23 +138,43 @@ const UserStore: React.FC = () => {
                       />
                     )}
                   />
+                  {
+                    validationErrors?.password && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.password}</span>
+                    )
+                  }
                 </div>
                 <div className="role ">
-                  <label className="text-white block mb-2">Role</label>
-                  <select
-                    className="text-black w-full py-3 px-2 rounded-md"
-                    {...register('role')}
-                  >
-                    {roles.map((role, index) => (
-                      <option key={index} value={role.role_name}>
-                        {role.role_name}
-                      </option>
-                    ))}
-                  </select>
+                 <Controller 
+                   name="role"
+                   control={control}
+                   render={({field: {onChange}}) => (
+                     <>
+                     <label className="text-white block mb-2">Role</label>
+                    <select
+                      className="text-black w-full py-3 px-2 rounded-md"
+                     
+                      onChange={onChange}
+                    >
+                        <option  disabled>Choose a role ...</option>
+                      {roles.map((role, index) => (
+                        <option key={index} value={role.id}>
+                          {role.role_name}
+                        </option>
+                      ))}
+                    </select>
+                   </>
+                )}
+                 />
+                  {
+                    validationErrors?.role && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.role}</span>
+                    )
+                  }
                 </div>
                 <div className="date_of_birth">
                   <Controller
-                    name="date"
+                    name="date_of_birth"
                     control={control}
                     render={({ field: { onChange } }) => (
                      
@@ -157,6 +189,11 @@ const UserStore: React.FC = () => {
                       />
                     )}
                   />
+                  {
+                    validationErrors?.date_of_birth && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.date_of_birth}</span>
+                    )
+                  }
                 </div>
                 <div className="image">
                   <Controller
@@ -165,7 +202,7 @@ const UserStore: React.FC = () => {
                   render={({field: {onChange}}) => (
                     <InputField
                     type="file"
-                     onChange={onChange}
+                    onChange={e => onChange(e.target.files?.[0])}
                     label="Image"
                     className={{
                       label: "text-white block mb-2 ",
@@ -176,16 +213,38 @@ const UserStore: React.FC = () => {
                   )}
                 
                   />
+                  {
+                    validationErrors?.image && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors?.image.type}</span>
+                    )
+                  }
                 </div>
                 <div className="gender">
-                  <label className="text-white block mb-2">Gender</label>
-                  <select
+                 
+                  <Controller
+                  name="gender"
+                  control={control}
+                  render={({field: {onChange} }) => (
+                    <>
+                     <label className="text-white block mb-2">Gender</label>
+                    <select
                     className="text-black w-full py-3 px-2 rounded-md"
-                    name="gender"
-                  >
-                    <option>Male</option>
-                    <option>Female</option>
+                    onChange={onChange} >
+                    <option value="DEFAULT" disabled>Choose a gender ...</option>
+                    <option value="Male" >Male</option>
+                    <option value="Female">Female</option>
                   </select>
+
+                  </>
+                  )}
+                 
+                  />
+
+                  {
+                    validationErrors?.gender && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors?.gender}</span>
+                    )
+                  }
                 </div>
                 <div className="address">
                  <Controller 
@@ -205,6 +264,11 @@ const UserStore: React.FC = () => {
                   )}
                 
                  />
+                  {
+                    validationErrors?.address && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors?.address}</span>
+                    )
+                  }
                 </div>
 
                 <div className="telephone">
@@ -224,6 +288,11 @@ const UserStore: React.FC = () => {
                   )}
                  
                   />
+                   {
+                    validationErrors?.telephone && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors?.telephone}</span>
+                    )
+                  }
                 </div>
 
                 <div className="mobile">
@@ -243,6 +312,11 @@ const UserStore: React.FC = () => {
                   )}
                  
                   />
+                   {
+                    validationErrors?.mobile && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors?.mobile}</span>
+                    )
+                  }
                 </div>
               </div>
 
