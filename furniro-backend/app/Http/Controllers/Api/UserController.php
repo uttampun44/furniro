@@ -111,12 +111,12 @@ class UserController extends Controller
 
     {
         
-        $user = User::with('roles')->find($id);
+        $user = User::with(['roles', 'userDetails'])->find($id);
 
-
+        
         return response()->json([
                'status' => true,
-               'Single User Data' => $user,              
+               'single_user_data' => $user,              
                'Message' => "Single User Data"
         ], 200);
 
