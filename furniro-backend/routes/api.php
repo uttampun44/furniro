@@ -34,7 +34,7 @@ Route::prefix('roles')->group( function(){
     Route::get('edit/{id}', [RoleController::class, 'edit']);
     Route::put('update/{id}', [RoleController::class, 'update']);
     Route::delete('delete/{id}', [RoleController::class, 'delete']);
-});
+})->middleware('permission:roles');
 
 Route::prefix('permission')->group( function(){
   Route::get('index', [PermissionController::class, 'index']);
