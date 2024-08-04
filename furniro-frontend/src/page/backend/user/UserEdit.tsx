@@ -5,7 +5,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import TopNavigation from "../../../components/TopNavigation"
 import BackendSidebar from "../../../components/BackendSidebar"
 import axios from "axios"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 
 interface Role {
@@ -13,46 +13,52 @@ interface Role {
     role_name: string;
   }
   
-  type userInputs = {
-    name: string;
-    email: string;
+interface User{
+name:string,
+email:string
+}  
+interface userDetails  {
+    user:User,
     password: string;
-    role: number;
     date_of_birth: string;
     image: File;
     gender: string;
     address: string;
     telephone: number;
     mobile: number;
+    role:Role
   };
 
   
 const UserEdit:React.FC = () =>{
     
-    const {id:string} = useParams<{id:string}>()
+    const {id} = useParams<{id:string}>()
 
-    const {control, handleSubmit} = useForm<userInputs>()
+    const [userValue, setUserValue] = useState<userDetails | null>(null);
+
+    console.log(userValue)
+
+    const {control, handleSubmit} = useForm<userDetails>()
     
-    const onSubmit:SubmitHandler<userInputs> = async(data) => {
+    const onSubmit:SubmitHandler<userDetails> = async(data) => {
         console.log(data)
     }
 
     const fetchSingleUser = async() =>{
-        const response = await axios.get('/api/user/edit', {
+        const response = await axios.get(`/api/user/edit/${id}`, {
             headers:{
                 "Accept" : 'application/json'
             }
         })
 
-        if(response.status === 200){
+        // console.log(response.data.single_user_data)
 
-        }
-
+        if(response.status === 200) setUserValue(response.data.single_user_data)
     }
 
     useEffect(() =>{
      fetchSingleUser()
-    }, [])
+    }, [id, setUserValue])
 
     return(
         <>
@@ -68,10 +74,12 @@ const UserEdit:React.FC = () =>{
                   <Controller
                     name="name"
                     control={control}
-                    render={({ field: { onChange } }) => (
+                    // defaultValue={userValue?.user.name}
+                    render={({ field}) => (
                       <InputField
                         type="text"
-                        onChange={onChange}
+                        value={field.value}
+                        onChange={field.onChange}
                         label="Full Name"
                         className={{
                           label: "text-white block mb-2",
@@ -104,10 +112,11 @@ const UserEdit:React.FC = () =>{
                   <Controller
                     name="password"
                     control={control}
-                    render={({ field: { onChange } }) => (
+                    render={({ field}) => (
                       <InputField
                         type="password"
-                        onChange={onChange}
+                        value={field.value}
+                        onChange={field.onChange}
                         label="Password"
                         className={{
                           label: "text-white block mb-2",
