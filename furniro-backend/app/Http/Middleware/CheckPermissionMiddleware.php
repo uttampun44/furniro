@@ -17,9 +17,9 @@ class CheckPermissionMiddleware
     public function handle(Request $request, Closure $next, $permissions): Response
     {
 
-        $user = Auth::user();
+      
 
-        if(!$user || $user->hasPermissions($permissions))
+        if(!hasPermissions($permissions))
         {
             return response()->json([
                  'Message' => 'You are not authorized'

@@ -64,19 +64,7 @@ class User extends Authenticatable
 
     }
 
-    public function hasPermissions($permission):bool
-    {
-
-        foreach ($this->roles as $role) {
-            if($role->permissions->contains('permission_name', $permission))
-            {
-                return true;
-            }else{
-                return false;
-            }
-        }
-
-    }
+   
     
     
 }
