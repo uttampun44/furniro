@@ -1,7 +1,7 @@
 import Logo from "../../assets/images/logo.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useContext} from "react";
+import { useContext, useEffect} from "react";
 import { Context } from "../../../context/ContextProvider";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -13,6 +13,8 @@ const BackendLogin: React.FC = () => {
   const users = useNavigate();
 
   const context = useContext(Context);
+
+  const setPermission = context?.setPermission;
 
   const {register, handleSubmit, formState: {errors}} = useForm<LoginInputs>()
 
@@ -31,12 +33,38 @@ const BackendLogin: React.FC = () => {
       localStorage.setItem("Token", response.data.token);
       context?.setToken(response.data.token);
       context?.setUser(JSON.stringify(response.data.user_profile))
+
+      await permissionFetch(response.data.token)
       users('/furniro/dashboard')
     }else{
       users('/backend-login')
     }
 
   }
+
+  const permissionFetch = async(token:string) =>{
+    try {
+      const response = await axios.get('/api/user-permission', {
+        headers:{
+          'Accept' : 'application/json',
+          'Authorization' : `Bearer ${token}`
+        }
+      })
+      console.log(response.data)
+      if(response.status === 200)
+        {
+         console.log(response.data)
+        }
+    } catch (error) {
+      
+    }
+  }
+
+  useEffect(() =>{
+   if(context?.token){
+    permissionFetch(context.token)
+   }
+  }, [])
 
   return (
     <>

@@ -7,8 +7,10 @@ type ContextProviderProps = {
 type ContextValueType = {
    user?:string | null
    token:string | null,
+   permission:string[],
    setToken:React.Dispatch<React.SetStateAction<string | null>>
    setUser:React.Dispatch<React.SetStateAction<string | null>>
+   setPermission:React.Dispatch<React.SetStateAction<string []>>
 }
 
 
@@ -23,6 +25,8 @@ const ContextProvider = ({children}:ContextProviderProps) =>{
   const [user, setUser] =  useState<string | null>(() =>{
  return localStorage.getItem("User")
   });
+
+  const [permission, setPermission] = useState<string []>([])
 
     useEffect(() => {
       try {
@@ -48,7 +52,7 @@ const ContextProvider = ({children}:ContextProviderProps) =>{
 
  
   return(
-     <Context.Provider value={{user, token, setToken, setUser}}>
+     <Context.Provider value={{user, token, setToken, setUser, permission, setPermission}}>
         {children}
      </Context.Provider>
   )

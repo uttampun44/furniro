@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Permission;
+use App\Models\PermissionRole;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -59,33 +61,67 @@ class RoleController extends Controller
 
     public function edit($id)
     {
+      $permission = Permission::all();
+
        $roleEdit = Role::findOrFail($id);
 
        return response()->json([
             'status' => true,
-            'roles_edit' => $roleEdit
+            'roles_edit' => $roleEdit,
+            'permission' => $permission,
        ], 200);
     }
 
     public function update(Request $request, $id)
     {
-
+     
       try {
        
-         $rolesUpdate = Role::find($id);
+         $role = Role::find($id);
 
-         
-         $rolesUpdate->role_name =  $request->role_name;
-         $rolesUpdate->role_slug = Str::slug($request->role_name);
 
-         $rolesUpdate->save();
-
+        if (!$role) {
          return response()->json([
-              'status' => true,
-              'message' => "Roles Update successfully"
-         ], 200);
+             'status' => false,
+             'message' => 'Role not found'
+         ], 404);
+          }
 
-      } catch (\Throwable $th) {
+         $permissionIds = $request->input('permissions_id', []);
+
+         foreach ($permissionIds as $permissionId) {
+
+            $permissionRole= PermissionRole::where('permission_id', $permissionId)
+                                              ->where('role_id', $role->id)
+                                              ->first();
+        
+
+
+            if (!$permissionRole) {
+                PermissionRole::create([
+                    'permission_id' => 4,
+                    'role_id' => $role->id
+                ]);
+
+                Log::info("PermissionRole created: ", [
+                  'permission_id' => $permissionId,
+                  'role_id' => $role->id
+              ]);
+            }else{
+               Log::error("Failed to create PermissionRole: ", [
+                  'permission_id' => $permissionId,
+                  'role_id' => $role->id
+              ]);
+            }
+           
+        }
+        return response()->json([
+         'status' => true,
+         'message' => "Permission Created Sucessfully successfully",
+       //   'permission_role' => $permissionRole
+         ], 200);
+      } 
+      catch (\Throwable $th) {
          Log::error($th->getMessage());
 
          return response()->json([

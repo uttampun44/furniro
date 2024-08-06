@@ -8,7 +8,7 @@ type Input = {
     placeholder?:string
     required?:boolean
     value?:string | number
-    type?: 'file' | 'text' | 'email' | 'password' | 'checkbox' | 'date'
+    type?: 'file' | 'text' | 'email' | 'password' | 'checkbox' | 'date' | 'hidden'
     accept?:string
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
