@@ -26,10 +26,9 @@ const PermissionAdd:React.FC = () =>{
             }
         })
 
-        console.log(data)
 
         if(response.status == 200){
-          console.log(response)
+    
         }
       } catch (error) {
         console.log(error, "Not Working")
