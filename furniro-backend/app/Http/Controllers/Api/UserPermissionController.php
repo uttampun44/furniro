@@ -3,30 +3,31 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+
+
 
 class UserPermissionController extends Controller
 {
     public function getPermissions()
     {
        
-        try {
-           
+        if(hasPermissions())
+        {
+            $userRolesAndPermissions = hasPermissions();
         
-            $user = Auth::user();
-        
+            
+            if ($userRolesAndPermissions) {
+                
+                return response()->json([
+                    'status' => 'success',
+                    'roles_and_permissions' => $userRolesAndPermissions
+                ], 200);
+            } elseif ($userRolesAndPermissions === false) {
+                return response()->json(['error' => 'User does not have the required roles'], 403);
+            } else {
+                return response()->json(['error' => 'Not authenticated'], 401);
+            }
 
-            $userPermissions = $user->roles()->pluck('role_name')->toArray();
-
-            dd($userPermissions);
-        
-          
-
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
         }
-
-       
     }
 }

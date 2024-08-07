@@ -8,10 +8,10 @@ type ContextProviderProps = {
 type ContextValueType = {
   user?: string | null;
   token: string | null;
-  permission: string | null;
+  permission: string [];
   setToken: React.Dispatch<React.SetStateAction<string | null>>;
   setUser: React.Dispatch<React.SetStateAction<string | null>>;
-  setPermission: React.Dispatch<React.SetStateAction<string | null>>;
+  setPermission: React.Dispatch<React.SetStateAction<string []>>;
 };
 
 const Context = createContext<ContextValueType | undefined>(undefined);
@@ -24,9 +24,10 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
     return localStorage.getItem("User");
   });
 
-  const [permission, setPermission] = useState<string | null>(null);
+  const [permission, setPermission] = useState<string  []>([]);
 
-  
+console.log(permission);
+
   const permissionFetch = async (token: string) => {
     try {
       const response = await axios.get("/api/user-permission", {
@@ -35,9 +36,9 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
+     
       if (response.status === 200) {
-        setPermission(response.data.permission);
+        setPermission(response.data);
       }
     } catch (error) {}
   };

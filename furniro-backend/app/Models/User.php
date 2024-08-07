@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -58,9 +59,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'role_users');
     }
 
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class, 'permission_roles', 'permission_id', 'role_id');
-    }
+   public function permission():HasManyThrough
+   {
+    return $this->hasManyThrough(Permission::class, Role::class, 'user_id', 'role_id');
+   }
     
 }
