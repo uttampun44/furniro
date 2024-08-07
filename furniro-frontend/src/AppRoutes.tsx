@@ -29,7 +29,7 @@ import UserEdit from "./page/backend/user/UserEdit";
 
 const AppRoutes = () => {
   const context = useContext(Context);
-  const permission = context?.setPermission;
+
 
   return (
     <Routes>

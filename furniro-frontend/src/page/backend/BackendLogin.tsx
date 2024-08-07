@@ -29,12 +29,10 @@ const BackendLogin: React.FC = () => {
   
    if(response.status === 200)
     {
-
       localStorage.setItem("Token", response.data.token);
       context?.setToken(response.data.token);
       context?.setUser(JSON.stringify(response.data.user_profile))
 
-      await permissionFetch(response.data.token)
       users('/furniro/dashboard')
     }else{
       users('/backend-login')
@@ -42,29 +40,7 @@ const BackendLogin: React.FC = () => {
 
   }
 
-  const permissionFetch = async(token:string) =>{
-    try {
-      const response = await axios.get('/api/user-permission', {
-        headers:{
-          'Accept' : 'application/json',
-          'Authorization' : `Bearer ${token}`
-        }
-      })
-      console.log(response.data)
-      if(response.status === 200)
-        {
-         console.log(response.data)
-        }
-    } catch (error) {
-      
-    }
-  }
 
-  useEffect(() =>{
-   if(context?.token){
-    permissionFetch(context.token)
-   }
-  }, [])
 
   return (
     <>

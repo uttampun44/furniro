@@ -15,8 +15,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('backendlogout', [AuthController::class, 'backendLogout']);
 
     Route::get('user-permission', [UserPermissionController::class, 'getPermissions']);
+   
 });
-
 
 
 

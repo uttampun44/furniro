@@ -1,61 +1,84 @@
-import React, { useState, ReactNode, createContext, useEffect } from 'react';
+import axios from "axios";
+import React, { useState, ReactNode, createContext, useEffect } from "react";
 
 type ContextProviderProps = {
-    children?: ReactNode
-}
+  children?: ReactNode;
+};
 
 type ContextValueType = {
-   user?:string | null
-   token:string | null,
-   permission:string[],
-   setToken:React.Dispatch<React.SetStateAction<string | null>>
-   setUser:React.Dispatch<React.SetStateAction<string | null>>
-   setPermission:React.Dispatch<React.SetStateAction<string []>>
-}
-
+  user?: string | null;
+  token: string | null;
+  permission: string | null;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
+  setUser: React.Dispatch<React.SetStateAction<string | null>>;
+  setPermission: React.Dispatch<React.SetStateAction<string | null>>;
+};
 
 const Context = createContext<ContextValueType | undefined>(undefined);
 
-
-const ContextProvider = ({children}:ContextProviderProps) =>{
-
-   const [token, setToken] = useState<string | null>(() => {
-      return localStorage.getItem("Token");
+const ContextProvider = ({ children }: ContextProviderProps) => {
+  const [token, setToken] = useState<string | null>(() => {
+    return localStorage.getItem("Token");
   });
-  const [user, setUser] =  useState<string | null>(() =>{
- return localStorage.getItem("User")
+  const [user, setUser] = useState<string | null>(() => {
+    return localStorage.getItem("User");
   });
 
-  const [permission, setPermission] = useState<string []>([])
+  const [permission, setPermission] = useState<string | null>(null);
 
-    useEffect(() => {
-      try {
-      
-         if (token) {
-          localStorage.setItem("Token", token);
-          setToken(token);
-         }else{
-            localStorage.removeItem("Token")
-         }
+  
+  const permissionFetch = async (token: string) => {
+    try {
+      const response = await axios.get("/api/user-permission", {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+      if (response.status === 200) {
+        setPermission(response.data.permission);
+      }
+    } catch (error) {}
+  };
 
-         if(user){
-            localStorage.setItem("User", user);
-            setUser(user);
-         }else{
-            localStorage.removeItem("User");
-         }
-            
-       } catch (error) {
-         // console.error("Error parsing JSON from localStorage:", error);
-       }
-    }, [token, user])
+  useEffect(() => {
+    try {
+      if (token) {
+        localStorage.setItem("Token", token);
+        setToken(token);
+      } else {
+        localStorage.removeItem("Token");
+      }
 
- 
-  return(
-     <Context.Provider value={{user, token, setToken, setUser, permission, setPermission}}>
-        {children}
-     </Context.Provider>
-  )
-}
-export default ContextProvider
+      if (user) {
+        localStorage.setItem("User", user);
+        setUser(user);
+      } else {
+        localStorage.removeItem("User");
+      }
+    } catch (error) {
+      // console.error("Error parsing JSON from localStorage:", error);
+    }
+  }, [token, user]);
+
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem("Token", token);
+      permissionFetch(token);
+    } else {
+      localStorage.removeItem("Token");
+      permissionFetch("");
+    }
+  }, []);
+
+  return (
+    <Context.Provider
+      value={{ user, token, setToken, setUser, permission, setPermission }}
+    >
+      {children}
+    </Context.Provider>
+  );
+};
+export default ContextProvider;
 export { Context };
