@@ -26,8 +26,7 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
 
   const [permission, setPermission] = useState<string  []>([]);
 
-console.log(permission);
-
+  
   const permissionFetch = async (token: string) => {
     try {
       const response = await axios.get("/api/user-permission", {
