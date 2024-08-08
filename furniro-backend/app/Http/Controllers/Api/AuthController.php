@@ -102,6 +102,14 @@ class AuthController extends Controller
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
 
+                if(!hasPermissions())
+                {
+                  return response()->json(['Message' => 'Permsission not Found'], 403);
+                }
+
+                
+                $userPermissions = hasPermissions();
+               
               
                 if ($user instanceof \App\Models\User) {
                     return response()->json([
@@ -109,7 +117,8 @@ class AuthController extends Controller
                         'message' => 'Successfully Logged In',
                         'token' => $user->createToken("Login Token")->plainTextToken,
                         'token_type' => 'bearer',
-                        'user_profile' => $user
+                        'user_profile' => $user,
+                        'permissions' => $userPermissions
                     ], 200);
                 }
             } else {

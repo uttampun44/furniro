@@ -5,17 +5,13 @@ use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\UserPermissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
   
     Route::get('profile', [UserController::class, 'index']);
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('backendlogout', [AuthController::class, 'backendLogout']);
-
-    Route::get('user-permission', [UserPermissionController::class, 'getPermissions']);
-   
+    Route::post('backendlogout', [AuthController::class, 'backendLogout']);   
 });
 
 

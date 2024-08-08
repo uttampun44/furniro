@@ -24,12 +24,24 @@ import PermissionAdd from "./page/backend/permission/PermissionStore";
 import UserIndex from "./page/backend/user/UserIndex";
 import UserStore from "./page/backend/user/UserStore";
 import UserEdit from "./page/backend/user/UserEdit";
-
+import usePermission from '../customHooks/usePermission'
 
 
 const AppRoutes = () => {
   const context = useContext(Context);
 
+  const {permissions,} = usePermission()
+
+  const user = context?.user;
+
+
+   user?.roles.map((permission) => permission.permissions.filter((name) => name.permission_name))
+
+  const hasPermission = (permission:string) => permission?.includes(permission)
+
+  
+const hasRoles = user?.roles.some((role) => role.role_name == "Super Admin" || role.role_name == "Admin")
+  
 
   return (
     <Routes>
@@ -60,9 +72,20 @@ const AppRoutes = () => {
       <Route path="/roles/edit/:id" element={<RoleEdit />}></Route>
 
       {/* permission */}
+
       <Route path="/permission" element={<PermissionIndex />}></Route>
       <Route path="/permission/add" element={<PermissionAdd />}></Route>
-      <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
+
+      
+       {
+        hasRoles ? (
+          <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
+        ):
+          hasPermission("view_dashboard") && (
+            <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
+          )
+        
+      }
       
       {/* user */}
       <Route path="/users" element={<UserIndex />}></Route>
