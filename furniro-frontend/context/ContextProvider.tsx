@@ -1,17 +1,36 @@
-import axios from "axios";
 import React, { useState, ReactNode, createContext, useEffect } from "react";
 
 type ContextProviderProps = {
   children?: ReactNode;
 };
 
+interface Permission {
+  permission: string[];
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  roles: {
+    id: number;
+    role_name: string;
+    role_slug: string;
+    permissions: {
+      id: number;
+      permission_name: string;
+      permission_slug: string;
+    }[];
+  }[];
+}
+
 type ContextValueType = {
-  user?: string | null;
+  user?: User | null;
   token: string | null;
-  permission: string [];
+  permissions: Permission;
   setToken: React.Dispatch<React.SetStateAction<string | null>>;
-  setUser: React.Dispatch<React.SetStateAction<string | null>>;
-  setPermission: React.Dispatch<React.SetStateAction<string []>>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  setPermission: React.Dispatch<React.SetStateAction<Permission>>;
 };
 
 const Context = createContext<ContextValueType | undefined>(undefined);
@@ -20,65 +39,40 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
   const [token, setToken] = useState<string | null>(() => {
     return localStorage.getItem("Token");
   });
-  const [user, setUser] = useState<string | null>(() => {
-    return localStorage.getItem("User");
+
+  const [user, setUser] = useState<User | null>(() => {
+    const userString = localStorage.getItem("User");
+    return userString ? JSON.parse(userString) : null;
   });
 
-  const [permission, setPermission] = useState<string  []>([]);
-
-  
-  const permissionFetch = async (token: string) => {
-    try {
-      const response = await axios.get("/api/user-permission", {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-     
-      if (response.status === 200) {
-        setPermission(response.data);
-      }
-    } catch (error) {}
-  };
+  const [permissions, setPermission] = useState<Permission>({ permission: [] });
 
   useEffect(() => {
     try {
       if (token) {
         localStorage.setItem("Token", token);
-        setToken(token);
       } else {
         localStorage.removeItem("Token");
       }
 
       if (user) {
-        localStorage.setItem("User", user);
-        setUser(user);
+        localStorage.setItem("User", JSON.stringify(user));
       } else {
         localStorage.removeItem("User");
       }
     } catch (error) {
-      // console.error("Error parsing JSON from localStorage:", error);
+      console.error("Error handling local storage:", error);
     }
   }, [token, user]);
 
-  useEffect(() => {
-    if (token) {
-      localStorage.setItem("Token", token);
-      permissionFetch(token);
-    } else {
-      localStorage.removeItem("Token");
-      permissionFetch("");
-    }
-  }, []);
-
   return (
     <Context.Provider
-      value={{ user, token, setToken, setUser, permission, setPermission }}
+      value={{ user, token, setToken, setUser, permissions, setPermission }}
     >
       {children}
     </Context.Provider>
   );
 };
+
 export default ContextProvider;
 export { Context };

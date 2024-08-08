@@ -1,9 +1,11 @@
 import Logo from "../../assets/images/logo.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect} from "react";
+import { useContext} from "react";
 import { Context } from "../../../context/ContextProvider";
 import { SubmitHandler, useForm } from "react-hook-form";
+// import usePermission from '../../../src'
+
 
 type LoginInputs = {
   email: string;
@@ -14,7 +16,7 @@ const BackendLogin: React.FC = () => {
 
   const context = useContext(Context);
 
-  const setPermission = context?.permission;
+
 
   const {register, handleSubmit, formState: {errors}} = useForm<LoginInputs>()
 
@@ -31,7 +33,7 @@ const BackendLogin: React.FC = () => {
     {
       localStorage.setItem("Token", response.data.token);
       context?.setToken(response.data.token);
-      context?.setUser(JSON.stringify(response.data.user_profile))
+      context?.setUser(response.data.user_profile)
 
       users('/furniro/dashboard')
     }else{

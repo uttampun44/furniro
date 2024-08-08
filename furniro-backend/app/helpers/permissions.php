@@ -11,6 +11,8 @@ if (!function_exists('hasPermissions')) {
    {
 
       try {
+
+        
          $user = Auth::user();
 
 
@@ -36,7 +38,7 @@ if (!function_exists('hasPermissions')) {
             return $permissions;
          } else {
 
-            return json_decode($permissions);
+            return $permissions;
          }
       } catch (\Throwable $th) {
          Log::error($th->getMessage());

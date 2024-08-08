@@ -28,6 +28,7 @@ const BackendSidebar: React.FC= () => {
         })
         localStorage.removeItem("Token");
         localStorage.removeItem("User");
+        localStorage.removeItem("permission")
         navigate('/furniro-login')
 
     } catch (error) {
