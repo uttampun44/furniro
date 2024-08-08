@@ -14,7 +14,7 @@ const BackendLogin: React.FC = () => {
 
   const context = useContext(Context);
 
-  const setPermission = context?.setPermission;
+  const setPermission = context?.permission;
 
   const {register, handleSubmit, formState: {errors}} = useForm<LoginInputs>()
 

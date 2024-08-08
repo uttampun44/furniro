@@ -1,13 +1,11 @@
 import axios from "axios";
-import {useContext, useState } from "react";
+import {useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { Context } from "../../context/ContextProvider";
+
 
 const BackendSidebar: React.FC= () => {
-
-  const context = useContext(Context);
-  const permission = context?.permission;
+ 
   
   const navigate = useNavigate()
 
