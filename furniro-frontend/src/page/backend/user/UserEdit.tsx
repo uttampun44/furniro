@@ -1,67 +1,68 @@
-import { Link, useParams } from "react-router-dom"
-import Button from "../../../components/Button"
-import InputField from "../../../components/InputField"
-import { Controller, SubmitHandler, useForm } from "react-hook-form"
-import TopNavigation from "../../../components/TopNavigation"
-import BackendSidebar from "../../../components/BackendSidebar"
-import axios from "axios"
-import { useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom";
+import Button from "../../../components/Button";
+import InputField from "../../../components/InputField";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import TopNavigation from "../../../components/TopNavigation";
+import BackendSidebar from "../../../components/BackendSidebar";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
+interface UserDetails {
+  address: string;
+  date_of_birth: string;
+  gender: string;
+  mobile: string;
+  telephone: string;
+}
 
-interface Role {
-    id: number;
-    role_name: string;
-  }
-  
-interface User{
-name:string,
-email:string
-}  
-interface userDetails  {
-    user:User,
-    password: string;
-    date_of_birth: string;
-    image: File;
-    gender: string;
-    address: string;
-    telephone: number;
-    mobile: number;
-    role:Role
+interface User {
+  name: string;
+  email: string;
+}
+interface userDetails {
+  user: User;
+  roles: [
+    {
+      role_name: string;
+      role_slug: string;
+    }
+  ];
+
+  user_details: UserDetails;
+}
+
+const UserEdit: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+
+  const [userValue, setUserValue] = useState<userDetails | null>(null);
+
+  // console.log(userValue?.roles)
+  console.log(userValue);
+
+  const { control, handleSubmit } = useForm<userDetails>();
+
+  const onSubmit: SubmitHandler<userDetails> = async (data) => {
+    console.log(data);
   };
 
-  
-const UserEdit:React.FC = () =>{
-    
-    const {id} = useParams<{id:string}>()
+  const fetchSingleUser = async () => {
+    const response = await axios.get(`/api/user/edit/${id}`, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
-    const [userValue, setUserValue] = useState<userDetails | null>(null);
+    // console.log(response.data.single_user_data)
 
-    console.log(userValue)
+    if (response.status === 200) setUserValue(response.data.single_user_data);
+  };
 
-    const {control, handleSubmit} = useForm<userDetails>()
-    
-    const onSubmit:SubmitHandler<userDetails> = async(data) => {
-        console.log(data)
-    }
+  useEffect(() => {
+    fetchSingleUser();
+  }, [id, setUserValue]);
 
-    const fetchSingleUser = async() =>{
-        const response = await axios.get(`/api/user/edit/${id}`, {
-            headers:{
-                "Accept" : 'application/json'
-            }
-        })
-
-        // console.log(response.data.single_user_data)
-
-        if(response.status === 200) setUserValue(response.data.single_user_data)
-    }
-
-    useEffect(() =>{
-     fetchSingleUser()
-    }, [id, setUserValue])
-
-    return(
-        <>
+  return (
+    <>
       <TopNavigation />
       <BackendSidebar />
       <div className="userStoreContainer">
@@ -75,7 +76,7 @@ const UserEdit:React.FC = () =>{
                     name="name"
                     control={control}
                     // defaultValue={userValue?.user.name}
-                    render={({ field}) => (
+                    render={({ field }) => (
                       <InputField
                         type="text"
                         value={field.value}
@@ -88,7 +89,6 @@ const UserEdit:React.FC = () =>{
                       />
                     )}
                   />
-                
                 </div>
                 <div className="email">
                   <Controller
@@ -106,60 +106,39 @@ const UserEdit:React.FC = () =>{
                       />
                     )}
                   />
-                  
                 </div>
-                <div className="password">
-                  <Controller
-                    name="password"
-                    control={control}
-                    render={({ field}) => (
-                      <InputField
-                        type="password"
-                        value={field.value}
-                        onChange={field.onChange}
-                        label="Password"
-                        className={{
-                          label: "text-white block mb-2",
-                          input: "text-black w-full py-3 px-2 rounded-md",
-                        }}
-                      />
-                    )}
-                  />
-                 
-                </div>
+
                 <div className="role ">
-                 <Controller 
-                   name="role"
-                   control={control}
-                   render={({field: {onChange}}) => (
-                     <>
-                     <label className="text-white block mb-2">Role</label>
-                    <select
-                      className="text-black w-full py-3 px-2 rounded-md"
-                     
-                      onChange={onChange}
-                    >
-                        <option  disabled>Choose a role ...</option>
-                      {/* {roles.map((role, index) => (
-                        <option key={index} value={role.id}>
-                          {role.role_name}
-                        </option>
-                      ))} */}
-                    </select>
-                   </>
-                )}
-                 />
-                 
+                  {userValue?.roles.map((role, index) => (
+                    <Controller
+                      name="role"
+                      control={control}
+                      render={({ field: { onChange } }) => (
+                        <>
+                          <label className="text-white block mb-2">Role</label>
+                          <select
+                            className="text-black w-full py-3 px-2 rounded-md"
+                            onChange={onChange}
+
+                            key={index}
+                          >
+                            <option>Choose a role ...</option>
+                            <option>{role.role_name}</option>
+                          </select>
+                        </>
+                      )}
+                    />
+                  ))}
                 </div>
                 <div className="date_of_birth">
                   <Controller
                     name="date_of_birth"
                     control={control}
                     render={({ field: { onChange } }) => (
-                     
                       <InputField
                         type="date"
                         onChange={onChange}
+                        value={userValue?.user_details.date_of_birth}
                         label="Date Of Birth"
                         className={{
                           label: "text-white block mb-2",
@@ -168,109 +147,106 @@ const UserEdit:React.FC = () =>{
                       />
                     )}
                   />
-                 
                 </div>
                 <div className="image">
                   <Controller
-                  name="image"
-                  control={control}
-                  render={({field: {onChange}}) => (
-                    <InputField
-                    type="file"
-                    onChange={e => onChange(e.target.files?.[0])}
-                    label="Image"
-                    className={{
-                      label: "text-white block mb-2 ",
-                      input:
-                        "text-black w-full py-3 px-2 rounded-md  border-2 bg-white",
-                    }}
+                    name="image"
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <InputField
+                        type="file"
+                        onChange={(e) => onChange(e.target.files?.[0])}
+                        label="Image"
+                        className={{
+                          label: "text-white block mb-2 ",
+                          input:
+                            "text-black w-full py-3 px-2 rounded-md  border-2 bg-white",
+                        }}
+                      />
+                    )}
                   />
-                  )}
-                
-                  />
-                 
                 </div>
                 <div className="gender">
-                 
                   <Controller
-                  name="gender"
-                  control={control}
-                  render={({field: {onChange} }) => (
-                    <>
-                     <label className="text-white block mb-2">Gender</label>
-                    <select
-                    className="text-black w-full py-3 px-2 rounded-md"
-                    onChange={onChange} >
-                    <option value="DEFAULT" disabled>Choose a gender ...</option>
-                    <option value="Male" >Male</option>
-                    <option value="Female">Female</option>
-                  </select>
-
-                  </>
-                  )}
-                 
+                    name="gender"
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <>
+                        <label className="text-white block mb-2">Gender</label>
+                        <select
+                          className="text-black w-full py-3 px-2 rounded-md"
+                          onChange={onChange}
+                          value={
+                            userValue?.user_details.gender === "male"
+                              ? "Male"
+                              : "Female"
+                          }
+                        >
+                          <option value="DEFAULT" disabled>
+                            Choose a gender ...
+                          </option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      </>
+                    )}
                   />
-
                 </div>
                 <div className="address">
-                 <Controller 
-                  name="address"
-                  control={control}
-                  render={({field : {onChange}}) =>(
-                    <InputField
-                    onChange={onChange}
-                    type="text"
-                
-                    label="Address"
-                    className={{
-                      label: "text-white block mb-2 ",
-                      input: "text-black w-full py-3 px-2 rounded-md",
-                    }}
-                    />
-                  )}
-                
-                 />
-                 
+                  <Controller
+                    name="address"
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <InputField
+                        value={userValue?.user_details.address}
+                        onChange={onChange}
+                        type="text"
+                        label="Address"
+                        className={{
+                          label: "text-white block mb-2 ",
+                          input: "text-black w-full py-3 px-2 rounded-md",
+                        }}
+                      />
+                    )}
+                  />
                 </div>
 
                 <div className="telephone">
-                  <Controller 
-                  control={control}
-                  name="telephone"
-                  render={({field: {onChange}}) =>(
-                    <InputField
-                    onChange={onChange}
-                    type="text"
-                    label="Telephone"
-                    className={{
-                      label: "text-white block mb-2 ",
-                      input: "text-black w-full py-3 px-2 rounded-md",
-                    }}
+                  <Controller
+                    control={control}
+                    name="telephone"
+                    render={({ field: { onChange } }) => (
+                      <InputField
+                        onChange={onChange}
+                        type="text"
+                        label="Telephone"
+                        value={userValue?.user_details.telephone}
+                        className={{
+                          label: "text-white block mb-2 ",
+                          input: "text-black w-full py-3 px-2 rounded-md",
+                        }}
+                      />
+                    )}
                   />
-                  )}
-                 
-                  />
-                  
                 </div>
 
                 <div className="mobile">
                   <Controller
-                  name="mobile"
-                  control={control}
-                  render={({field: {onChange}}) => (
-                    <InputField
-                    type="text"
-                    label="mobile"
-                    onChange={onChange}
-                    className={{
-                      label: "text-white block mb-2 ",
-                      input: "text-black w-full py-3 px21 rounded-md",
-                    }}
+                    name="mobile"
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <InputField
+                        type="text"
+                        label="mobile"
+                        onChange={onChange}
+                        value={userValue?.user_details.mobile}
+                        className={{
+                          label: "text-white block mb-2 ",
+                          input: "text-black w-full py-3 px-2 rounded-md",
+                        }}
+                      />
+                    )}
                   />
-                  )}
-                 
-                  />
-                 
                 </div>
               </div>
 
@@ -292,7 +268,7 @@ const UserEdit:React.FC = () =>{
         </div>
       </div>
     </>
-    )
-}
+  );
+};
 
-export default UserEdit
+export default UserEdit;
