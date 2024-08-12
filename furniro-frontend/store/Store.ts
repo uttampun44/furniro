@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { shoppingAction } from "../feature/Feature";
+import shoppingReducer from '../feature/Feature'
 
 export const store =  configureStore({
-    
+    reducer: shoppingReducer
 })

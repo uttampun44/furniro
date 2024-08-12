@@ -1,24 +1,37 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 
 
-const initialState = {
-    shopping : [{id:"1", text:"Hello world"}]
+interface Shopping{
+id:string,
+text:string
 }
 
-export const shoppingAction = createSlice({
+interface ShoppingState{
+    shoppings: Shopping[]
+}
+
+// intial state of state
+const initialState: ShoppingState = {
+    shoppings : [{id:"1", text:"Hello world"}]
+}
+
+//  functions of add to cart state and actions addToCart and removeCart
+export const shoppingSlice = createSlice({
 
     name: 'shopping',
     initialState,
     reducers:{
-        addToCart: (state, action) =>{
-           const shopping = {id: nanoid(), tex}
-           state.shopping.push(shopping)
+        addToCart: (state, action: PayloadAction<string>) =>{
+           const shoppings = {id: nanoid(), text:action.payload}
+           state.shoppings.push(shoppings)
         },
-        removeCart: (state, action) =>{
-           state.shopping = state.shopping.filter((key) => key.id ! action.payload)
+        removeCart: (state, action: PayloadAction<string>) =>{
+           state.shoppings = state.shoppings.filter((key) => key.id !== action.payload)
         }
     }
 })
 
-export const {addToCart, removeCart} = shoppingAction.actions
- 
+export const {addToCart, removeCart} = shoppingSlice.actions
+
+//  exporting shopping slice reducer
+export default shoppingSlice.reducer
