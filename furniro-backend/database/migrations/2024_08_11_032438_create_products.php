@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('SKU');
             $table->decimal('price');
+            $table->longText('image')->nullable();
             $table->foreignId('category_id')->constrained('product_categories')
             ->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('discount_id')->constrained('product_discounts')

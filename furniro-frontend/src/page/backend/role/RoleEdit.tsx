@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import InputField from "../../../components/InputField";
 import axios from "axios";
 
-type roleEdit = {
+interface role {
+  id:number,
   role_name: string;
 };
 
@@ -20,7 +21,7 @@ const RoleEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const { handleSubmit, control, setValue } = useForm<roleEdit>({
+  const { handleSubmit, control } = useForm<role>({
     defaultValues: {
       role_name: "",
     },
@@ -28,7 +29,12 @@ const RoleEdit: React.FC = () => {
 
   const [permissions, setPermission] = useState<Permission[]>([]);
 
-  const onSubmit: SubmitHandler<roleEdit> = async (data) => {
+  const [role, setRole] = useState<role | null>(null)
+
+
+  
+
+  const onSubmit: SubmitHandler<role> = async (data) => {
     try {
       const response = await axios.put(`/api/roles/update/${id}`, data, {
         headers: {
@@ -49,14 +55,16 @@ const RoleEdit: React.FC = () => {
   const fetRolesEdit = async () => {
     const response = await axios.get(`/api/roles/edit/${id}`);
 
+ console.log(response.data.roles_edit)
     if (response.status === 200) {
-      setValue("role_name", response.data.roles_edit.role_name);
+    
       setPermission(response.data.permission);
+      setRole(response.data)
     }
   };
   useEffect(() => {
     fetRolesEdit();
-  }, [id, setValue]);
+  }, [id]);
 
   return (
     <>
@@ -90,12 +98,12 @@ const RoleEdit: React.FC = () => {
               ))}
 
               <Controller
-                name="role_id"
+                name="id"
                 control={control}
                 render={({ field }) => (
                   <InputField
                     type="hidden"
-                    value={field.value}
+                    value={role?.id}
                     onChange={field.onChange}
                     className={{
                       label: "text-white text-lg font-normal block",
