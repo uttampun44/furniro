@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+
+
+    //  creating user from backend
     public function backendSignup(Request $request)
     {
         DB::beginTransaction();
@@ -87,6 +90,7 @@ class AuthController extends Controller
     }
 
 
+    // dashboard login of users
     public function backendLogin(Request $request)
     {
        
@@ -135,6 +139,7 @@ class AuthController extends Controller
     }
 
 
+    //  dashboard logout of users
     public function backendLogout(Request $request)
     {
         $user = request()->user();
@@ -155,6 +160,7 @@ class AuthController extends Controller
     }
 
 
+    //  dashboard login of users
     public function login(Request $request)
     {
         $credentials = Validator::make($request->all(), [

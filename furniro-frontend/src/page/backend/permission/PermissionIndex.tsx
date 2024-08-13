@@ -17,7 +17,7 @@ const PermissionIndex: React.FC = () => {
 
   const [permissions, setPermission] = useState<permission[]>([]);
   const [permissionEdit, setPermissionEdit] = useState<boolean>(false);
-  const [errors, setErrors] = useState<string>('')
+
   const { handleSubmit, control, reset, setValue } = useForm<permission>({
     defaultValues: { permission_name: "" },
   });

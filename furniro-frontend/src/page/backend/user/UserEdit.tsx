@@ -10,19 +10,19 @@ import { useEffect, useState } from "react";
 interface UserDetails {
   address: string;
   date_of_birth: string;
+  image:string,
   gender: string;
   mobile: string;
   telephone: string;
 }
 
-interface User {
-  name: string;
-  email: string;
-}
+
 interface userDetails {
-  user: User;
+  name:string,
+  email:string,
   roles: [
     {
+      id:number
       role_name: string;
       role_slug: string;
     }
@@ -36,10 +36,29 @@ const UserEdit: React.FC = () => {
 
   const [userValue, setUserValue] = useState<userDetails | null>(null);
 
-  // console.log(userValue?.roles)
-  console.log(userValue);
 
-  const { control, handleSubmit } = useForm<userDetails>();
+  const { control, handleSubmit } = useForm<userDetails>({
+    defaultValues:{
+      "user_details": {
+        address: "",
+        telephone: "",
+        mobile: "",
+        image: "",
+        gender: "",
+        date_of_birth: ""
+      },
+      "roles" :[
+        {
+          role_name: "",
+          role_slug: ""
+        }
+      ],
+      name: "",
+      email: ""
+
+      }
+    }
+  );
 
   const onSubmit: SubmitHandler<userDetails> = async (data) => {
     console.log(data);
@@ -52,9 +71,12 @@ const UserEdit: React.FC = () => {
       },
     });
 
-    // console.log(response.data.single_user_data)
 
-    if (response.status === 200) setUserValue(response.data.single_user_data);
+    if (response.status === 200){
+        setUserValue(response.data.single_user_data);
+        
+      }
+
   };
 
   useEffect(() => {
@@ -74,12 +96,13 @@ const UserEdit: React.FC = () => {
                 <div className="name">
                   <Controller
                     name="name"
+                    defaultValue=""
                     control={control}
-                    // defaultValue={userValue?.user.name}
+                  
                     render={({ field }) => (
                       <InputField
                         type="text"
-                        value={field.value}
+                        value={userValue?.name}
                         onChange={field.onChange}
                         label="Full Name"
                         className={{
@@ -93,11 +116,13 @@ const UserEdit: React.FC = () => {
                 <div className="email">
                   <Controller
                     name="email"
+                    defaultValue=""
                     control={control}
                     render={({ field: { onChange } }) => (
                       <InputField
                         type="email"
                         onChange={onChange}
+                        value={userValue?.email}
                         label="Email"
                         className={{
                           label: "text-white block mb-2",
@@ -111,7 +136,9 @@ const UserEdit: React.FC = () => {
                 <div className="role ">
                   {userValue?.roles.map((role, index) => (
                     <Controller
-                      name="role"
+                    key={role.id}
+                      name="roles"
+                      
                       control={control}
                       render={({ field: { onChange } }) => (
                         <>
@@ -119,8 +146,8 @@ const UserEdit: React.FC = () => {
                           <select
                             className="text-black w-full py-3 px-2 rounded-md"
                             onChange={onChange}
-
-                            key={index}
+                        defaultValue=""
+                          
                           >
                             <option>Choose a role ...</option>
                             <option>{role.role_name}</option>
@@ -132,13 +159,17 @@ const UserEdit: React.FC = () => {
                 </div>
                 <div className="date_of_birth">
                   <Controller
-                    name="date_of_birth"
+                   name="user_details.date_of_birth"
                     control={control}
-                    render={({ field: { onChange } }) => (
+                    defaultValue=""
+                    render={({ field}) => (
+
+                      
                       <InputField
                         type="date"
-                        onChange={onChange}
-                        value={userValue?.user_details.date_of_birth}
+                        onChange={field.onChange}
+                        
+                        value={userValue?.user_details.date_of_birth || ''}
                         label="Date Of Birth"
                         className={{
                           label: "text-white block mb-2",
@@ -150,8 +181,9 @@ const UserEdit: React.FC = () => {
                 </div>
                 <div className="image">
                   <Controller
-                    name="image"
+                    name="user_details.image"
                     control={control}
+                    defaultValue=""
                     render={({ field: { onChange } }) => (
                       <InputField
                         type="file"
@@ -165,11 +197,19 @@ const UserEdit: React.FC = () => {
                       />
                     )}
                   />
+                 {
+                   userValue?.user_details.image && (
+                    <img src={`http://localhost:8000/${userValue?.user_details.image}`} className="w-20 h-20 object-contain" />
+                   )
+                 }
                 </div>
+
+              
                 <div className="gender">
                   <Controller
-                    name="gender"
+                    name="user_details.gender"
                     control={control}
+                    defaultValue=""
                     render={({ field: { onChange } }) => (
                       <>
                         <label className="text-white block mb-2">Gender</label>
@@ -194,8 +234,9 @@ const UserEdit: React.FC = () => {
                 </div>
                 <div className="address">
                   <Controller
-                    name="address"
+                    name="user_details.address"
                     control={control}
+                    defaultValue=""
                     render={({ field: { onChange } }) => (
                       <InputField
                         value={userValue?.user_details.address}
@@ -214,7 +255,8 @@ const UserEdit: React.FC = () => {
                 <div className="telephone">
                   <Controller
                     control={control}
-                    name="telephone"
+                    defaultValue=""
+                    name="user_details.telephone"
                     render={({ field: { onChange } }) => (
                       <InputField
                         onChange={onChange}
@@ -232,7 +274,8 @@ const UserEdit: React.FC = () => {
 
                 <div className="mobile">
                   <Controller
-                    name="mobile"
+                    name="user_details.mobile"
+                    defaultValue=""
                     control={control}
                     render={({ field: { onChange } }) => (
                       <InputField
