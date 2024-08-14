@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -21,7 +22,19 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $productCategory = ProductCategory::all();
+
+        if (!$productCategory) {
+            return response()->json([
+                'status' => false,
+                'message' => 'product category not found',
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => true,
+            'product_category' => $productCategory
+        ]);
     }
 
     /**
