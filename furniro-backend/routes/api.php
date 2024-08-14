@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\ProductCategoryController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -36,7 +37,8 @@ Route::prefix('roles')->group( function(){
     Route::get('edit/{id}', [RoleController::class, 'edit']);
     Route::put('update/{id}', [RoleController::class, 'update']);
     Route::delete('delete/{id}', [RoleController::class, 'delete']);
-})->middleware('permission:roles');
+});
+
 
 Route::prefix('permission')->group( function(){
   Route::get('index', [PermissionController::class, 'index']);
@@ -46,6 +48,7 @@ Route::prefix('permission')->group( function(){
   Route::delete('delete/{id}', [PermissionController::class, 'destroy']);
 });
 
+//  users
 Route::prefix('user')->group(function(){
   Route::get('user-roles', [UserController::class, 'fetchRoles']);
   Route::post('user-store', [AuthController::class, 'backendSignup']);
@@ -54,6 +57,8 @@ Route::prefix('user')->group(function(){
 });
 
 
+// products
+Route::resource('products', ProductController::class);
 
 
 

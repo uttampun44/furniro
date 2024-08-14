@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductDiscount;
+use App\Models\ProductQuantity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -22,7 +25,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $productCategory = ProductCategory::all();
+        $productCategory = ProductCategory::select('name')->get();
 
         if (!$productCategory) {
             return response()->json([
@@ -42,7 +45,57 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
+
+        DB::beginTransaction();
+        try {
+            $validation = validator($request->all(), [
+                'name' => 'required|string',
+                'sku' =>  'required|string',
+                'price' => 'required|string',
+                'image' => 'required|file|image|mimes:jpeg,jpg|max:2048',
+                'category_id' => 'required|number',
+                'discount_price' => 'required|number',
+                'quantity' => 'required|number'
+          ]);
+  
+          if($validation->errors())
+          {
+               return response()->json([
+                 'errors' => $validation
+               ], 422);
+          }
+
+          $productDiscount = ProductDiscount::create([
+              'discount_price' => $request->discount_price,
+              'active' => $request->active,
+          ]);
+
+          $productQuantity = ProductQuantity::create([
+             'quantity' => $request->quantity
+          ]);
+
+          $product = Product::create([
+             'name' => $request->name,
+             'sku' => $request->sku,
+             'price' => $request->price,
+             'image' => $request->image,
+             'category_id' => $request->category_id,
+             'discount_id' => $productDiscount->discount_price,
+             'quantity_id' => $productQuantity->quantity
+          ]);
+
+          return response()->json([
+             'message' => 'Product Create Successfully Created'
+          ], 201);
+        } catch (\Throwable $th) {
+            $th->getMessage();
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Interval Error'  
+            ], 500);
+        }
     }
 
     /**
