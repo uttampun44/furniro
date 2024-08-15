@@ -58,7 +58,11 @@ Route::prefix('user')->group(function(){
 
 
 // products
-Route::resource('products', ProductController::class);
+Route::prefix('products')->group( function(){
+   Route::get('create', [ProductController::class, 'create']);
+   Route::post('store', [ProductController::class, 'store']);
+});
+
 
 
 

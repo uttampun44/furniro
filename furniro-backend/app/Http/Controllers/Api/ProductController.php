@@ -62,9 +62,10 @@ class ProductController extends Controller
           if($validation->errors())
           {
                return response()->json([
-                 'errors' => $validation
+                 'errors' => $validation->errors()
                ], 422);
           }
+
 
           $productDiscount = ProductDiscount::create([
               'discount_price' => $request->discount_price,
