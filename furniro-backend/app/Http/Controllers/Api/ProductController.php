@@ -69,7 +69,7 @@ class ProductController extends Controller
 
           $productDiscount = ProductDiscount::create([
               'discount_price' => $request->discount_price,
-              'active' => $request->active,
+              'status' => $request->active,
           ]);
 
           $productQuantity = ProductQuantity::create([
