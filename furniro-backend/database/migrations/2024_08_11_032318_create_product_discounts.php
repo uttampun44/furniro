@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('product_discounts', function (Blueprint $table) {
             $table->id();
             $table->decimal('discount_price');
-            $table->boolean('active');
+            $table->boolean('status');
             $table->timestamps();
         });
     }
