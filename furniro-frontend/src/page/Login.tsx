@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import Backgroundpic from "../components/Backgroundpic";
+import Backgroundpic from "@components/Backgroundpic";
 import { useContext, useState } from "react";
 import axios from "axios";
 import { Context } from "../../context/ContextProvider";
 import Layout from "../layout/Layout";
-import Button from "../components/Button";
-import InputField from "../components/InputField";
+import Button from "@components/Button";
+import InputField from "@components/InputField";
 
 interface FormLogin {
   email: string;

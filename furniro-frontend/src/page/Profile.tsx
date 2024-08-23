@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import Sidebaruser from "../components/Sidebar";
-import TopNavigation from "../components/TopNavigation";
+import Sidebaruser from "@components/Sidebar";
+import TopNavigation from "@components/TopNavigation";
 import axios from "axios";
 import { Context } from "../../context/ContextProvider";
 

@@ -1,9 +1,9 @@
 import axios from "axios";
-import BackendSidebar from "../../../components/BackendSidebar";
-import InputField from "../../../components/InputField";
-import TopNavigation from "../../../components/TopNavigation";
+import BackendSidebar from "@components/BackendSidebar";
+import InputField from "@components/InputField";
+import TopNavigation from "@components/TopNavigation";
 import { useEffect, useState } from "react";
-import Button from "../../../components/Button";
+import Button from "@components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 

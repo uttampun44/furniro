@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import BackendSidebar from "../../../components/BackendSidebar"
-import TopNavigation from "../../../components/TopNavigation"
+import BackendSidebar from "@components/BackendSidebar"
+import TopNavigation from "@components/TopNavigation"
 
 
 const ProductIndex:React.FC = () =>{
