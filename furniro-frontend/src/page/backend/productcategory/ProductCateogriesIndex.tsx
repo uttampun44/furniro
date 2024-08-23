@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import BackendSidebar from "../../../components/BackendSidebar";
+import BackendSidebar from "@components/BackendSidebar";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Button from "../../../components/Button";
+import Button from "@components/Button";
 
 type productCateogryList = {
   id: number;

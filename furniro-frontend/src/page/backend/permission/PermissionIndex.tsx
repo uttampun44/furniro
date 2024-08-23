@@ -1,11 +1,11 @@
 import { Link} from "react-router-dom";
-import BackendSidebar from "../../../components/BackendSidebar";
-import TopNavigation from "../../../components/TopNavigation";
+import BackendSidebar from "@components/BackendSidebar";
+import TopNavigation from "@components/TopNavigation";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Button from "../../../components/Button";
+import Button from "@components/Button";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import InputField from "../../../components/InputField";
+import InputField from "@components/InputField";
 
 type permission = {
   id: number;

@@ -1,5 +1,5 @@
 import React from "react";
-import Backgroundpic from "../components/Backgroundpic";
+import Backgroundpic from "@components/Backgroundpic";
 import Layout from "../layout/Layout";
 
 const About: React.FC = () => {

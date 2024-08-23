@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from "react";
-import Button from "../../../components/Button";
-import InputField from "../../../components/InputField";
-import BackendSidebar from "../../../components/BackendSidebar";
+import Button from "@components/Button";
+import InputField from "@components/InputField";
+import BackendSidebar from "@components/BackendSidebar";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 

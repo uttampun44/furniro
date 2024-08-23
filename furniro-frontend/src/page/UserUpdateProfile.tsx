@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import TopNavigation from "../components/TopNavigation";
-import Sidebaruser from "../components/Sidebar";
+import TopNavigation from "@components/TopNavigation";
+import Sidebaruser from "@components/Sidebar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import { Context } from "../../context/ContextProvider";

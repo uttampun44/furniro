@@ -1,6 +1,6 @@
 import React from "react"
-import TopNavigation from "../components/TopNavigation"
-import Sidebaruser from "../components/Sidebar"
+import TopNavigation from "@components/TopNavigation"
+import Sidebaruser from "@components/Sidebar"
 
 const Userorder:React.FC = () =>{
     const link =[
