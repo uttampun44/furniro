@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductDiscount;
+use App\Models\ProductDiscountInventory;
 use App\Models\ProductQuantity;
+use Faker\Core\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -45,18 +49,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-       
+     
+        // dd($request);
 
         DB::beginTransaction();
+
         try {
+
             $validation = validator($request->all(), [
                 'name' => 'required|string',
                 'sku' =>  'required|string',
                 'price' => 'required|string',
-                'image' => 'required|file|image|mimes:jpeg,jpg|max:2048',
-                'category_id' => 'required|number',
-                'discount_price' => 'required|number',
-                'quantity' => 'required|number'
+                'product_image' => 'required',
+               
           ]);
   
           if($validation->errors())
@@ -64,33 +69,50 @@ class ProductController extends Controller
                return response()->json([
                  'errors' => $validation->errors()
                ], 422);
+
+               Log::error($validation);
           }
 
+    
+            $imagePath = null;
 
-          $productDiscount = ProductDiscount::create([
-              'discount_price' => $request->discount_price,
-              'status' => $request->active,
-          ]);
-
-          $productQuantity = ProductQuantity::create([
-             'quantity' => $request->quantity
-          ]);
+          if($request->hasFile('product_image'))
+          {
+            $file = $request->file('product_image');
+            
+            $imagePath = $file->store('uploads', 'public'); 
+          }
+ 
 
           $product = Product::create([
              'name' => $request->name,
              'sku' => $request->sku,
              'price' => $request->price,
-             'image' => $request->image,
-             'category_id' => $request->category_id,
-             'discount_id' => $productDiscount->discount_price,
-             'quantity_id' => $productQuantity->quantity
+             'product_image' => $imagePath
+          ]);
+
+
+          $productDiscount = ProductDiscount::create([
+            'discount_price' => $request->discount_price,
+            'status' => $request->active,
+        ]);
+
+        $productQuantity = ProductQuantity::create([
+           'quantity' => $request->quantity
+        ]);
+
+           ProductDiscountInventory::create([
+            'product_categories_id' => $request->input('category_id'),
+            'product_id' => $product->id,
+            'quantity_id' => $productQuantity->id,
+            'discount_id' => $productDiscount->id
           ]);
 
           return response()->json([
              'message' => 'Product Create Successfully Created'
           ], 201);
         } catch (\Throwable $th) {
-            $th->getMessage();
+            Log::error($th->getMessage());
             DB::rollBack();
 
             return response()->json([

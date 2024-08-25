@@ -66,9 +66,9 @@ const ProductStore: React.FC = () => {
                     )
                  } */}
                 </div>
-                <div className="email">
+                <div className="sku">
                   <Controller
-                    name="product_sku"
+                    name="sku"
                     control={control}
                     render={({ field: { onChange } }) => (
                       <InputField
@@ -113,7 +113,7 @@ const ProductStore: React.FC = () => {
 
                 <div className="image">
                   <Controller
-                    name="image"
+                    name="product_image"
                     control={control}
                     render={({ field: { onChange } }) => (
                       <InputField
@@ -137,7 +137,7 @@ const ProductStore: React.FC = () => {
 
                 <div className="productCategory">
                   <Controller
-                    name="product_category"
+                    name="product_category_id"
                     control={control}
                     render={({ field: { onChange } }) => (
                       <>
@@ -167,7 +167,7 @@ const ProductStore: React.FC = () => {
                   } */}
                 </div>
 
-                <div className="date_of_birth">
+                <div className="discount">
                   <Controller
                     name="discount"
                     control={control}
@@ -190,9 +190,9 @@ const ProductStore: React.FC = () => {
                   } */}
                 </div>
 
-                <div className="address">
+                <div className="quantity">
                   <Controller
-                    name="discount"
+                    name="quantity"
                     control={control}
                     render={({ field: { onChange } }) => (
                       <InputField
@@ -215,7 +215,7 @@ const ProductStore: React.FC = () => {
 
                 <div className="productCategory">
                   <Controller
-                    name="product_category"
+                    name="inactive"
                     control={control}
                     render={({ field: { onChange } }) => (
                       <>
