@@ -107,7 +107,8 @@ class ProductController extends Controller
             'quantity_id' => $productQuantity->id,
             'discount_id' => $productDiscount->id
           ]);
-
+         
+          DB::commit();
           return response()->json([
              'message' => 'Product Create Successfully Created'
           ], 201);
