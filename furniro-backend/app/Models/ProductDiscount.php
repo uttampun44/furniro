@@ -10,7 +10,7 @@ class ProductDiscount extends Model
     protected $table = "product_discounts";
     protected $fillable = [
        'discount_price',
-       'active'
+       'status'
     ];
     use HasFactory;
 }
