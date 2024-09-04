@@ -56,31 +56,31 @@ class ProductController extends Controller
 
         try {
 
-            $validation = validator($request->all(), [
-                'name' => 'required|string',
-                'sku' =>  'required|string',
-                'price' => 'required|string',
-                'product_image' => 'required',
+        //     $validation = validator($request->all(), [
+        //         'name' => 'required|string',
+        //         'sku' =>  'required|string',
+        //         'price' => 'required|string',
+        //         'product_image' => 'required',
                
-          ]);
+        //   ]);
   
-          if($validation->errors())
-          {
-               return response()->json([
-                 'errors' => $validation->errors()
-               ], 422);
+        //   if($validation->errors())
+        //   {
+        //        return response()->json([
+        //          'errors' => $validation->errors()
+        //        ], 422);
 
-               Log::error($validation);
-          }
+        //        Log::error($validation);
+        //   }
 
     
             $imagePath = null;
 
           if($request->hasFile('product_image'))
           {
-            $file = $request->file('product_image');
+            $imagePath = $request->file('product_image');
             
-            $imagePath = $file->store('uploads', 'public'); 
+            $imagePath = $imagePath->store('uploads', 'public'); 
           }
  
 
@@ -94,7 +94,7 @@ class ProductController extends Controller
 
           $productDiscount = ProductDiscount::create([
             'discount_price' => $request->discount_price,
-            'status' => $request->active,
+            'status' => $request->status,
         ]);
 
         $productQuantity = ProductQuantity::create([
@@ -102,7 +102,7 @@ class ProductController extends Controller
         ]);
 
            ProductDiscountInventory::create([
-            'product_categories_id' => $request->input('category_id'),
+            'product_categories_id' => 33,
             'product_id' => $product->id,
             'quantity_id' => $productQuantity->id,
             'discount_id' => $productDiscount->id
