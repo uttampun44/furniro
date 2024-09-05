@@ -21,7 +21,22 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::with('quantity')->get();
+
+        // dd($products);
+
+        $products = Product::select('id', 'name', 'sku', 'product_image', 'short_description')
+        ->with([ 'discounts' => function($query) {
+            $query->select( 'discount_price', 'status')
+            ->with(['quantity' => function($q) {
+                $q->select('quantity_id');
+            }]);
+            }
+        ])->get();
+
+    dd($products);
+    
+
     }
 
     /**
@@ -103,23 +118,25 @@ class ProductController extends Controller
         /*  This reduces the number of database queries and can significantly improve performance.
          we can perform this without any loop
         */ 
-        $data = [];
+        $datas = [];
         for ($i = 1; $i <= $quantity; $i++) {
-            $data[] = ['quantity' => $i];
+            $datas[] = ['quantity' => $i];
         }
 
-        ProductQuantity::insert($data);
+        ProductQuantity::insert($datas);
 
 
         $lastInsertedId = ProductQuantity::orderBy('id', 'desc')->value('id');
         
 
-           ProductDiscountInventory::create([
-            'product_categories_id' => 33,
-            'product_id' => $product->id,
-            'quantity_id' => $lastInsertedId,
-            'discount_id' => $productDiscount->id
-          ]);
+        foreach ($datas as  $data) {
+            ProductDiscountInventory::create([
+                'product_categories_id' => 33,
+                'product_id' => $product->id,
+                'quantity_id' => $lastInsertedId,
+                'discount_id' => $productDiscount->id
+              ]);
+        }
          
           DB::commit();
           return response()->json([

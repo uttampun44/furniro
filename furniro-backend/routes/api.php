@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -61,6 +62,7 @@ Route::prefix('user')->group(function(){
 Route::prefix('products')->group( function(){
    Route::get('create', [ProductController::class, 'create']);
    Route::post('store', [ProductController::class, 'store']);
+   Route::get('index', [ProductController::class, 'index']);
 });
 
 
