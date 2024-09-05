@@ -88,7 +88,8 @@ class ProductController extends Controller
              'name' => $request->name,
              'sku' => $request->sku,
              'price' => $request->price,
-             'product_image' => $imagePath
+             'product_image' => $imagePath,
+              'short_description' => $request->short_description
           ]);
 
 
@@ -97,14 +98,26 @@ class ProductController extends Controller
             'status' => $request->status,
         ]);
 
-        $productQuantity = ProductQuantity::create([
-           'quantity' => $request->quantity
-        ]);
+        $quantity = $request->quantity;
+
+        /*  This reduces the number of database queries and can significantly improve performance.
+         we can perform this without any loop
+        */ 
+        $data = [];
+        for ($i = 1; $i <= $quantity; $i++) {
+            $data[] = ['quantity' => $i];
+        }
+
+        ProductQuantity::insert($data);
+
+
+        $lastInsertedId = ProductQuantity::orderBy('id', 'desc')->value('id');
+        
 
            ProductDiscountInventory::create([
             'product_categories_id' => 33,
             'product_id' => $product->id,
-            'quantity_id' => $productQuantity->id,
+            'quantity_id' => $lastInsertedId,
             'discount_id' => $productDiscount->id
           ]);
          
