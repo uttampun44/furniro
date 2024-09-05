@@ -15,6 +15,7 @@ class Product extends Model
         'sku',
         'price',
         'product_image',
+        'short_description'
     ];
     use HasFactory;
 }
