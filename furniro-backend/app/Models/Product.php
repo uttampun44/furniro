@@ -25,12 +25,12 @@ class Product extends Model
     
     public function discounts():BelongsToMany
     {
-        return $this->belongsToMany(ProductDiscount::class, 'product_discount_inventory_categories', 'product_id', 'discount_id');
+        return $this->belongsToMany(ProductDiscount::class, 'product_discount_inventory_categories', 'product_id', 'discount_id')->withPivot('discount_id');
     }
 
 
     public function quantity() :BelongsToMany
     {
-        return $this->belongsToMany(ProductQuantity::class, 'product_discount_inventory_categories', 'product_id', 'quantity_id');
+        return $this->belongsToMany(ProductQuantity::class, 'product_discount_inventory_categories', 'product_id', 'quantity_id')->withPivot('quantity_id');
     }
 }
