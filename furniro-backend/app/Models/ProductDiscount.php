@@ -17,8 +17,12 @@ class ProductDiscount extends Model
     ];
     use HasFactory;
 
+    public function products():BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_discount_inventory_categories',  'discount_id', 'product_id')->withPivot('quantity_id');
+    }
     public function productDiscountInventory(): BelongsToMany
     {
-        return $this->belongsToMany(ProductQuantity::class, 'product_discount_inventory_categories'); 
+        return $this->belongsToMany(ProductQuantity::class, 'product_discount_inventory_categories', 'discount_id', 'quantity_id')->withPivot('product_id'); 
     }
 }

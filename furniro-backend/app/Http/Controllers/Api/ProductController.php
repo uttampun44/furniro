@@ -21,20 +21,20 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('quantity')->get();
+        $products = Product::with('discounts', 'quantity')->get();
 
-        // dd($products);
+        dd($products);
 
-        $products = Product::select('id', 'name', 'sku', 'product_image', 'short_description')
-        ->with([ 'discounts' => function($query) {
-            $query->select( 'discount_price', 'status')
-            ->with(['quantity' => function($q) {
-                $q->select('quantity_id');
-            }]);
-            }
-        ])->get();
+    //     $products = Product::select('id', 'name', 'sku', 'product_image', 'short_description')
+    //     ->with([ 'discounts' => function($query) {
+    //         $query->select( 'discount_price', 'status')
+    //         ->with(['quantity' => function($q) {
+    //             $q->select('quantity_id');
+    //         }]);
+    //         }
+    //     ])->get();
 
-    dd($products);
+    // dd($products);
     
 
     }
