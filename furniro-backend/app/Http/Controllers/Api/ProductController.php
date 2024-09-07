@@ -22,13 +22,14 @@ class ProductController extends Controller
     public function index()
     {
        
-        $products = Product::select('id', 'name', 'sku', 'product_image', 'short_description')
-        ->with([ 'discounts' => function($query) {
-            $query->select( 'discount_price', 'status') 
-            ->selectRaw('count(*) as total') 
-            ->groupBy('product_id', 'discount_price', 'status'); 
-        }
-        ])->get();
+       $products = Product::join('product_discount_inventory_categories', 'products.id', '=', 'product_discount_inventory_categories.product_id')
+       ->join('product_categories', 'product_discount_inventory_categories.product_categories_id', '=', 'product_categories.id')
+       ->join('product_discounts', 'product_discount_inventory_categories.discount_id', '=', 'product_discounts.id')
+       ->join('product_quantities', 'product_discount_inventory_categories.quantity_id', '=', 'product_quantities.id' )
+       ->select('products.*', 'product_categories.*', 'product_discounts.*', 'product_quantities.*')->limit(1)
+       ->get();
+
+      
 
         
         return response()->json([
@@ -111,31 +112,27 @@ class ProductController extends Controller
             'status' => $request->status,
         ]);
 
-        $quantity = $request->quantity;
-
+       
         /*  This reduces the number of database queries and can significantly improve performance.
          we can perform this without any loop
         */ 
-        $datas = [];
-        for ($i = 1; $i <= $quantity; $i++) {
-            $datas[] = ['quantity' => $i];
-        }
-
-        ProductQuantity::insert($datas);
-
-
-        $lastInsertedId = ProductQuantity::orderBy('id', 'desc')->value('id');
+       
+        $productQuantity = ProductQuantity::create([
+           'quantity' => $request->quantity
+        ]);
         
 
-        foreach ($datas as  $data) {
+        for ($i = 1; $i <= $productQuantity->quantity; $i++)  {
             ProductDiscountInventory::create([
                 'product_categories_id' => 33,
                 'product_id' => $product->id,
-                'quantity_id' => $lastInsertedId,
+                'quantity_id' => $productQuantity->id,
                 'discount_id' => $productDiscount->id
               ]);
         }
          
+        // dd($request);
+
           DB::commit();
           return response()->json([
              'message' => 'Product Create Successfully Created'

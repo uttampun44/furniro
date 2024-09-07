@@ -1,39 +1,50 @@
 import { Link } from "react-router-dom";
-import BackendSidebar from "@components/BackendSidebar"
-import TopNavigation from "@components/TopNavigation"
+import BackendSidebar from "@components/BackendSidebar";
+import TopNavigation from "@components/TopNavigation";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
+interface productDetails {
+  id: number;
+  name: string;
+  product_name: string;
+  product_image: string;
+  short_description: string;
+  sku: string;
+  quantity: number;
+  image: string;
+  discount_price: string;
+  price: string;
+  status: number;
+}
 
-const ProductIndex:React.FC = () =>{
+const ProductIndex: React.FC = () => {
+  const [products, setProduct] = useState<productDetails[]>([]);
 
-  const [product, setProduct] = useState();
+  console.log(products);
 
-  const fetchProduct = async() => {
+  const fetchProduct = async () => {
     const response = await axios.get("/api/products/index", {
-      headers:{
+      headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem('Token')}`,
-      }
+        Authorization: `Bearer ${localStorage.getItem("Token")}`,
+      },
     });
 
-    if(response.status == 200) console.log(response.data)
-     
-    }
-  
+    if (response.status == 200) setProduct(response.data.products);
+  };
 
-  useEffect(() =>{
-    fetchProduct()
-  }, [])
+  useEffect(() => {
+    fetchProduct();
+  }, []);
 
-
-  return(
+  return (
     <>
-    <TopNavigation />
-    <BackendSidebar />
+      <TopNavigation />
+      <BackendSidebar />
 
-    <div className="product_container   pl-20 h-[100vh] max-h-full">
+      <div className="product_container   pl-20 h-[100vh] max-h-full">
         <div className="product_list pl-10 pr-4 py-12 my-20 bg-gray-700 ml-48 mr-8">
           <div className="add_product_category">
             <Link
@@ -44,9 +55,7 @@ const ProductIndex:React.FC = () =>{
             </Link>
           </div>
           <div className="product_list my-2">
-            <h1 className="text-white text-2xl font-bold">
-              Product List
-            </h1>
+            <h1 className="text-white text-2xl font-bold">Product List</h1>
           </div>
 
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -57,10 +66,10 @@ const ProductIndex:React.FC = () =>{
                     S.No
                   </th>
                   <th scope="col" className="px-6 py-3">
-                   Product Name
+                    Product Name
                   </th>
                   <th scope="col" className="px-6 py-3">
-                   Sku
+                    Sku
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Category
@@ -69,22 +78,52 @@ const ProductIndex:React.FC = () =>{
                     Discount
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Quantity
+                    Status
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Short
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Edit
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Delete
                   </th>
                 </tr>
               </thead>
-              
-              <tbody>
-                  <tr>
 
+              <tbody>
+                {products.map((product, index) => (
+                  <tr
+                    key={index}
+                    className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                  >
+                    <td className="px-6 py-4">{index + 1}</td>
+                    <td className="px-6 py-4">{product.product_name}</td>
+                    <td className="px-6 py-4">{product.name}</td>
+                    <td className="px-6 py-4">{product.sku}</td>
+
+                    <td className="px-6 py-4">{product.discount_price} </td>
+                    <td className="px-6 py-4">
+                      {product.status === 1
+                        ? "Discount Available"
+                        : "Discount Not Available"}{" "}
+                    </td>
+                    <td className="px-6 py-4">
+  <img src={`http://localhost:8000/storage/${product.product_image}`} alt={product.name} />
+</td>
+
+
+                    <td className="px-6 py-4">{product.short_description}</td>
                   </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ProductIndex
+export default ProductIndex;
