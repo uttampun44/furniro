@@ -33,4 +33,6 @@ class Product extends Model
     {
         return $this->belongsToMany(ProductQuantity::class, 'product_discount_inventory_categories', 'product_id', 'quantity_id')->withPivot('quantity_id');
     }
+
+    
 }
