@@ -1,9 +1,33 @@
 import { Link } from "react-router-dom";
 import BackendSidebar from "@components/BackendSidebar"
 import TopNavigation from "@components/TopNavigation"
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 
 const ProductIndex:React.FC = () =>{
+
+  const [product, setProduct] = useState();
+
+  const fetchProduct = async() => {
+    const response = await axios.get("/api/products/index", {
+      headers:{
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem('Token')}`,
+      }
+    });
+
+    if(response.status == 200) console.log(response.data)
+     
+    }
+  
+
+  useEffect(() =>{
+    fetchProduct()
+  }, [])
+
+
   return(
     <>
     <TopNavigation />
