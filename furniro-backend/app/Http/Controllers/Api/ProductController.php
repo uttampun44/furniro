@@ -43,7 +43,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $productCategory = ProductCategory::select('name')->get();
+        $productCategory = ProductCategory::select('id','name')->get();
 
         if (!$productCategory) {
             return response()->json([
@@ -99,7 +99,7 @@ class ProductController extends Controller
  
 
           $product = Product::create([
-             'name' => $request->name,
+             'name' => $request->product_name,
              'sku' => $request->sku,
              'price' => $request->price,
              'product_image' => $imagePath,
@@ -124,7 +124,7 @@ class ProductController extends Controller
 
         for ($i = 1; $i <= $productQuantity->quantity; $i++)  {
             ProductDiscountInventory::create([
-                'product_categories_id' => 33,
+                'product_categories_id' => $request->input('product_category_id'),
                 'product_id' => $product->id,
                 'quantity_id' => $productQuantity->id,
                 'discount_id' => $productDiscount->id
