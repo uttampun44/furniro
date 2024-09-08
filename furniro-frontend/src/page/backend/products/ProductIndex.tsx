@@ -4,6 +4,10 @@ import TopNavigation from "@components/TopNavigation";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+interface productQauntity {
+  quantity: number;
+}
+
 interface productDetails {
   id: number;
   name: string;
@@ -11,8 +15,6 @@ interface productDetails {
   product_image: string;
   short_description: string;
   sku: string;
-  quantity: number;
-  image: string;
   discount_price: string;
   price: string;
   status: number;
@@ -20,8 +22,7 @@ interface productDetails {
 
 const ProductIndex: React.FC = () => {
   const [products, setProduct] = useState<productDetails[]>([]);
-
-  console.log(products);
+  const [quantity, setQauntity] = useState<productQauntity | number>();
 
   const fetchProduct = async () => {
     const response = await axios.get("/api/products/index", {
@@ -32,7 +33,19 @@ const ProductIndex: React.FC = () => {
       },
     });
 
-    if (response.status == 200) setProduct(response.data.products);
+    if (response.status == 200) {
+      setProduct(response.data.products);
+      setQauntity(response.data.quantity);
+    }
+  };
+
+  const handleProductDelete = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    id: number
+  ) => {
+    e.preventDefault();
+    try {
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -75,13 +88,19 @@ const ProductIndex: React.FC = () => {
                     Category
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Discount
+                    Product Price
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Status
+                    Discount Status
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Short
+                    Image
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Short Descritption
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Available Stock
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Edit
@@ -100,8 +119,8 @@ const ProductIndex: React.FC = () => {
                   >
                     <td className="px-6 py-4">{index + 1}</td>
                     <td className="px-6 py-4">{product.product_name}</td>
-                    <td className="px-6 py-4">{product.name}</td>
                     <td className="px-6 py-4">{product.sku}</td>
+                    <td className="px-6 py-4">{product.name}</td>
 
                     <td className="px-6 py-4">{product.discount_price} </td>
                     <td className="px-6 py-4">
@@ -110,11 +129,26 @@ const ProductIndex: React.FC = () => {
                         : "Discount Not Available"}{" "}
                     </td>
                     <td className="px-6 py-4">
-  <img src={`http://localhost:8000/storage/${product.product_image}`} alt={product.name} />
-</td>
-
+                      <img
+                        src={`http://localhost:8000/storage/${product.product_image}`}
+                        alt={product.name}
+                      />
+                    </td>
 
                     <td className="px-6 py-4">{product.short_description}</td>
+
+                    <td className="px-6 py-4">{quantity?.toString()}</td>
+
+                    <td className="px-6 py-4">
+                      <Link to={`/product/edit/${product.id}`}>Edit</Link>
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={(e) => handleProductDelete(e, product.id)}
+                      >
+                        Delete Product
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

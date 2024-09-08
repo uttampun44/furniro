@@ -27,6 +27,7 @@ import UserEdit from "./page/backend/user/UserEdit";
 import usePermission from '../customHooks/usePermission'
 import ProductIndex from "./page/backend/products/ProductIndex";
 import ProductStore from "./page/backend/products/ProductStore";
+import ProductEdit from "./page/backend/products/ProductEdit";
 
 
 const AppRoutes = () => {
@@ -79,20 +80,15 @@ const hasRoles = user?.roles.some((role) => role.role_name == "Super Admin" || r
       <Route path="/permission/add" element={<PermissionAdd />}></Route>
 
       
-       {
-        hasRoles ? (
-          <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
-        ):
-          hasPermission("view_dashboard") && (
-            <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
-          )
-        
-      }
+
+     <Route path="/furniro/dashboard" element={context?.token ? <Dashboard /> : <Navigate to="/furniro-login" /> }></Route>
+      
 
       {/* *************  products  **************** */}
       
       <Route path="/products/index" element={<ProductIndex />}></Route>
       <Route path="/product/store" element={<ProductStore />}></Route>
+      <Route path="/product/edit/:id" element={<ProductEdit />}></Route>
       
       {/* user */}
       <Route path="/users" element={<UserIndex />}></Route>

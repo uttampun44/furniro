@@ -1,97 +1,38 @@
-import { Link, useNavigate } from "react-router-dom";
-import BackendSidebar from "@components/BackendSidebar";
-import TopNavigation from "@components/TopNavigation";
-import InputField from "@components/InputField";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import BackendSidebar from "@components/BackendSidebar"
 import Button from "@components/Button";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import InputField from "@components/InputField";
+import TopNavigation from "@components/TopNavigation"
+import { Controller, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
-type products = {
+const EditProduct = () =>{
 
-  product_name:string,
-  sku:string,
-  price:string,
-  product_image:string,
-  short_description:string,
-  discount_price:string,
-  status:string,
-  quantity:string,
-  product_categories_id:number
-};
+    const { handleSubmit, control } = useForm();
 
-type productsCategory = {
-  id:number,
-  name: string;
-};
+    
+    return(
+        <>
+            <BackendSidebar />
+            <TopNavigation />
 
-const ProductStore: React.FC = () => {
-
-  const navigate = useNavigate();
-
-  const { handleSubmit, control } = useForm<products>();
-  const [productcategories, setProductcategory] = useState<productsCategory[]>(
-    []
-  );
-
-
-  const onSubmit: SubmitHandler<products> = async (data) => {
-    // console.log(data)
-    try {
-         const response = await axios.post('/api/products/store', data, {
-            headers:{
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data"
-            }
-         })
-
-console.log(data)
-
-         if(response.status === 201){
-             alert("Product Added")
-             navigate("/products/index")
-         }
-    } catch (error) {
-      throw new Error
-    }
-  };
-
-  const fetchProductCategory = async () => {
-    const response = await axios.get("/api/products/create");
-
-    if (response.status === 200)
-      setProductcategory(response.data.product_category);
-  };
-
-  useEffect(() => {
-    fetchProductCategory();
-  }, []);
-  return (
-    <>
-      <TopNavigation />
-      <BackendSidebar />
-      <div className="userStoreContainer">
+            <div className="userStoreContainer">
         <div className="user_store_container   pl-20 h-[100vh] max-h-full">
           <div className="userstore pl-10 pr-4 py-12 my-20 bg-gray-700 ml-48 mr-8">
             <h1 className="text-white my-4 font-bold text-xl">
               Create products
             </h1>
-            <form method="POST" onSubmit={handleSubmit(onSubmit)}>
+            <form method="POST">
               <div className="formGrid grid grid-cols-2 gap-x-4 gap-y-4">
-
-
                 <div className="name">
                   <Controller
-                    name="product_name"
+                    name="name"
                     control={control}
-
                     render={({ field: { onChange } }) => (
                       <InputField
                         type="text"
                         onChange={onChange}
                         label="Product Name"
                         name="product_name"
-                       
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -115,6 +56,30 @@ console.log(data)
                         name="sku"
                         onChange={onChange}
                         label="Product Sku"
+                        className={{
+                          label: "text-white block mb-2",
+                          input: "text-black w-full py-3 px-2 rounded-md",
+                        }}
+                      />
+                    )}
+                  />
+                  {/* {
+                    validationErrors?.email && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.email}</span>
+                    )
+                  } */}
+                </div>
+
+                <div className="short description">
+                  <Controller
+                    name="short_description"
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <InputField
+                        type="text"
+                        onChange={onChange}
+                        label="Product Short Description"
+                        name="short_description"
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -153,8 +118,6 @@ console.log(data)
                   } */}
                 </div>
 
-
-
                 <div className="image">
                   <Controller
                     name="product_image"
@@ -179,39 +142,11 @@ console.log(data)
                     )
                   } */}
                 </div>
-                
-
-                <div className="short description">
-                  <Controller
-                    name="short_description"
-                    control={control}
-                    render={({ field: { onChange } }) => (
-                      <InputField
-                        type="text"
-                        onChange={onChange}
-                        label="Product Short Description"
-                        name="short_description"
-                        className={{
-                          label: "text-white block mb-2",
-                          input: "text-black w-full py-3 px-2 rounded-md",
-                        }}
-                      />
-                    )}
-                  />
-                  {/* {
-                    validationErrors?.email && (
-                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.email}</span>
-                    )
-                  } */}
-                </div>
-
-               
 
                 <div className="productCategory">
                   <Controller
-                    name="product_categories_id"
+                    name="product_category_id"
                     control={control}
-                   
                     render={({ field: { onChange } }) => (
                       <>
                         <label className="text-white block mb-2">
@@ -223,15 +158,13 @@ console.log(data)
                           onChange={onChange}
                           name="product_category_id"
                         >
-                          <option>Select Product Category</option>
-                          {productcategories.map((productcategory, index) => {
+                          {/* {productcategories.map((productcategory, index) => {
                             return (
-
                               <option key={index} value={productcategory.id}>
                                 {productcategory.name}
                               </option>
                             );
-                          })}
+                          })} */}
                         </select>
                       </>
                     )}
@@ -245,14 +178,14 @@ console.log(data)
 
                 <div className="discount">
                   <Controller
-                    name="price"
+                    name="discount"
                     control={control}
                     render={({ field: { onChange } }) => (
                       <InputField
                         type="text"
                         onChange={onChange}
                         label="Discount"
-                        name="price"
+                        name="discount_price"
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -268,7 +201,7 @@ console.log(data)
                 </div>
                 <div className="status">
                   <Controller
-                    name="status"
+                    name="inactive"
                     control={control}
                     render={({ field: { onChange } }) => (
                       <>
@@ -281,8 +214,7 @@ console.log(data)
                           onChange={onChange}
                           name="status"
                         >
-                          <option  >select</option>
-                          <option value="0" >Inactive</option>
+                          <option value="0" selected>Inactive</option>
                           <option value="1">Active</option>
                         </select>
                       </>
@@ -339,8 +271,8 @@ console.log(data)
           </div>
         </div>
       </div>
-    </>
-  );
-};
+        </>
+    )
+}
 
-export default ProductStore;
+export default EditProduct
