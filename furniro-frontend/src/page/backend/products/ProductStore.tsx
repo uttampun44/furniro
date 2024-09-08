@@ -7,9 +7,14 @@ import Button from "@components/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-type products = {};
+type products = {
+
+  product_name:string,
+  product_categories_id:number
+};
 
 type productsCategory = {
+  id:number,
   name: string;
 };
 
@@ -19,8 +24,10 @@ const ProductStore: React.FC = () => {
     []
   );
 
+  console.log(productcategories)
 
-  const onSubmit: SubmitHandler<products> = async (data) => {};
+
+  const onSubmit: SubmitHandler<products> = async (data) => {console.log(data)};
 
   const fetchProductCategory = async () => {
     const response = await axios.get("/api/products/create");
@@ -53,6 +60,7 @@ const ProductStore: React.FC = () => {
                         type="text"
                         onChange={onChange}
                         label="Product Name"
+                        name="product_name"
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -73,6 +81,7 @@ const ProductStore: React.FC = () => {
                     render={({ field: { onChange } }) => (
                       <InputField
                         type="text"
+                        name="sku"
                         onChange={onChange}
                         label="Product Sku"
                         className={{
@@ -88,6 +97,31 @@ const ProductStore: React.FC = () => {
                     )
                   } */}
                 </div>
+
+                <div className="short description">
+                  <Controller
+                    name="short_description"
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <InputField
+                        type="text"
+                        onChange={onChange}
+                        label="Product Short Description"
+                        name="short_description"
+                        className={{
+                          label: "text-white block mb-2",
+                          input: "text-black w-full py-3 px-2 rounded-md",
+                        }}
+                      />
+                    )}
+                  />
+                  {/* {
+                    validationErrors?.email && (
+                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.email}</span>
+                    )
+                  } */}
+                </div>
+
                 <div className="price">
                   <Controller
                     name="price"
@@ -97,6 +131,7 @@ const ProductStore: React.FC = () => {
                         type="text"
                         onChange={onChange}
                         label="Price"
+                        name="price"
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -120,6 +155,7 @@ const ProductStore: React.FC = () => {
                         type="file"
                         onChange={(e) => onChange(e.target.files?.[0])}
                         label="Product Image"
+                        name="product_image"
                         className={{
                           label: "text-white block mb-2 ",
                           input:
@@ -148,10 +184,11 @@ const ProductStore: React.FC = () => {
                         <select
                           className="text-black w-full py-3 px-2 rounded-md"
                           onChange={onChange}
+                          name="product_category_id"
                         >
                           {productcategories.map((productcategory, index) => {
                             return (
-                              <option key={index}>
+                              <option key={index} value={productcategory.id}>
                                 {productcategory.name}
                               </option>
                             );
@@ -176,6 +213,7 @@ const ProductStore: React.FC = () => {
                         type="text"
                         onChange={onChange}
                         label="Discount"
+                        name="discount_price"
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -189,6 +227,33 @@ const ProductStore: React.FC = () => {
                     )
                   } */}
                 </div>
+                <div className="status">
+                  <Controller
+                    name="inactive"
+                    control={control}
+                    render={({ field: { onChange } }) => (
+                      <>
+                        <label className="text-white block mb-2">
+                          Discount Active
+                        </label>
+
+                        <select
+                          className="text-black w-full py-3 px-2 rounded-md"
+                          onChange={onChange}
+                          name="status"
+                        >
+                          <option value="0" selected>Inactive</option>
+                          <option value="1">Active</option>
+                        </select>
+                      </>
+                    )}
+                  />
+                  {/* {
+                     validationErrors?.role && (
+                       <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.role}</span>
+                     )
+                   } */}
+                </div>
 
                 <div className="quantity">
                   <Controller
@@ -199,6 +264,7 @@ const ProductStore: React.FC = () => {
                         onChange={onChange}
                         type="text"
                         label="Quantity"
+                        name="quantity"
                         className={{
                           label: "text-white block mb-2 ",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -213,32 +279,7 @@ const ProductStore: React.FC = () => {
                   } */}
                 </div>
 
-                <div className="productCategory">
-                  <Controller
-                    name="inactive"
-                    control={control}
-                    render={({ field: { onChange } }) => (
-                      <>
-                        <label className="text-white block mb-2">
-                          Discount Active
-                        </label>
-
-                        <select
-                          className="text-black w-full py-3 px-2 rounded-md"
-                          onChange={onChange}
-                        >
-                          <option value="0">Inactive</option>
-                          <option value="1">Active</option>
-                        </select>
-                      </>
-                    )}
-                  />
-                  {/* {
-                     validationErrors?.role && (
-                       <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.role}</span>
-                     )
-                   } */}
-                </div>
+      
               </div>
 
               <div className="btnRow my-4 flex gap-x-2">
