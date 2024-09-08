@@ -25,15 +25,17 @@ class ProductController extends Controller
        $products = Product::join('product_discount_inventory_categories', 'products.id', '=', 'product_discount_inventory_categories.product_id')
        ->join('product_categories', 'product_discount_inventory_categories.product_categories_id', '=', 'product_categories.id')
        ->join('product_discounts', 'product_discount_inventory_categories.discount_id', '=', 'product_discounts.id')
-       ->join('product_quantities', 'product_discount_inventory_categories.quantity_id', '=', 'product_quantities.id' )
-       ->select('products.*', 'product_categories.*', 'product_discounts.*', 'product_quantities.*')->limit(1)
+       ->select('products.*', 'product_categories.*', 'product_discounts.*')->limit(1)
        ->get();
 
-      
+        /*  count of row same product*/    
+       $productCount = Product::join('product_discount_inventory_categories', 'products.id', '=', 'product_discount_inventory_categories.product_id')
+                       ->join('product_quantities', 'product_discount_inventory_categories.quantity_id', '=', 'product_quantities.id')
+                       ->count();
 
-        
         return response()->json([
-            'products' => $products
+            'products' => $products,
+            'quantity' => $productCount
         ], 200);
 
     }
@@ -87,7 +89,7 @@ class ProductController extends Controller
         //        Log::error($validation);
         //   }
 
-    
+   
             $imagePath = null;
 
           if($request->hasFile('product_image'))
@@ -99,7 +101,7 @@ class ProductController extends Controller
  
 
           $product = Product::create([
-             'name' => $request->product_name,
+             'product_name' => $request->product_name,
              'sku' => $request->sku,
              'price' => $request->price,
              'product_image' => $imagePath,
