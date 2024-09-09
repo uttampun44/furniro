@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\FrontProductController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\ProductController;
@@ -65,6 +66,8 @@ Route::prefix('products')->group( function(){
    Route::get('index', [ProductController::class, 'index']);
 });
 
+/****************front page products ******************/;
+Route::get('front/products', [FrontProductController::class, '__invoke']); 
 
 
 

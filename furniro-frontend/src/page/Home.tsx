@@ -3,15 +3,26 @@ import { Link } from "react-router-dom";
 import Layout from "../layout/Layout";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Button from "@components/Button";
 
 type productCateogryList = {
   name: string;
   image: string;
 };
 
+interface products  {
+ product_name:string,
+ price:string,
+ short_description:string,
+ product_image:string,
+
+}
+
 function Home() {
   const [productList, setProduct] = useState<productCateogryList[]>([]);
+  const [products, setProducts] = useState<products[]>([]);
 
+  console.log(products)
   const fetchProductCategory = async () => {
     const data = await axios.get("/api/product-category-list", {
       headers: {
@@ -24,8 +35,19 @@ function Home() {
     
   };
 
+  const fetchProduct = async() =>{
+    const response = await axios.get("/api/front/products", {
+      headers:{
+        Accept:"applcation/json"
+      }
+    })
+
+   if(response.status == 200) setProducts(response.data.products)
+  }
+
   useEffect(() => {
     fetchProductCategory();
+    fetchProduct()
   }, []);
   return (
     <Layout>
@@ -100,6 +122,37 @@ function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      <section>
+      <div className="productSectionContainer mb-8 max-w-[1230px] w-full mx-auto">
+            <div className="title">
+            <h2 className="font-poppins text-center text-2xl font-bold">
+              Our Products
+            </h2>
+
+            <div className="productGrid grid grid-cols-4 gap-4">
+                {
+                  products.map((product, index) => (
+                    <div className="product my-8 bg-gray-200 bg-opacity-50" key={index} >
+                       <div className="productImg">
+                       <img  src={`http://localhost:8000/storage/${product.product_image}`} className="w-full h-auto"/>
+                       </div>
+                      <div className="productDetails grid gap-y-1 px-2 py-3">
+                        <h6>{product.product_name}</h6>
+                       <strong className="block">{product.short_description}</strong>
+                       <strong>{product.price}</strong>
+                      </div>
+
+                    </div>
+                  ))
+                }
+            </div>
+            </div>
+            <div className="buttonExplore">
+              <Button value="Show More"/>
+            </div>
+      </div>
       </section>
     </Layout>
   );
