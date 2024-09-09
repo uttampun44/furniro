@@ -4,25 +4,23 @@ import TopNavigation from "@components/TopNavigation";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-interface productQauntity {
-  quantity: number;
-}
 
 interface productDetails {
   id: number;
   name: string;
+  price: string;
   product_name: string;
   product_image: string;
   short_description: string;
   sku: string;
   discount_price: string;
-  price: string;
   status: number;
+  quantity:number
 }
 
 const ProductIndex: React.FC = () => {
   const [products, setProduct] = useState<productDetails[]>([]);
-  const [quantity, setQauntity] = useState<productQauntity | number>();
+  
 
   const fetchProduct = async () => {
     const response = await axios.get("/api/products/index", {
@@ -34,8 +32,10 @@ const ProductIndex: React.FC = () => {
     });
 
     if (response.status == 200) {
+
+      console.log(response.data)
       setProduct(response.data.products);
-      setQauntity(response.data.quantity);
+    
     }
   };
 
@@ -58,8 +58,8 @@ const ProductIndex: React.FC = () => {
       <BackendSidebar />
 
       <div className="product_container   pl-20 h-[100vh] max-h-full">
-        <div className="product_list pl-10 pr-4 py-12 my-20 bg-gray-700 ml-48 mr-8">
-          <div className="add_product_category">
+        <div className="product_list pl-10 pr-4 py-6 mb-8 bg-gray-700 ml-48 mr-8">
+          <div className="add_product_category flex justify-end">
             <Link
               to="/product/store"
               className="bg-blue-500 text-white p-2 my-2 rounded-md"
@@ -122,29 +122,32 @@ const ProductIndex: React.FC = () => {
                     <td className="px-6 py-4">{product.sku}</td>
                     <td className="px-6 py-4">{product.name}</td>
 
-                    <td className="px-6 py-4">{product.discount_price} </td>
+                    <td className="px-6 py-4">{product.price} </td>
                     <td className="px-6 py-4">
                       {product.status === 1
                         ? "Discount Available"
-                        : "Discount Not Available"}{" "}
+                        : "Discount Not Available"}
                     </td>
                     <td className="px-6 py-4">
                       <img
                         src={`http://localhost:8000/storage/${product.product_image}`}
                         alt={product.name}
+
+                        className="w-16 h-16 object-contain"
                       />
                     </td>
 
                     <td className="px-6 py-4">{product.short_description}</td>
 
-                    <td className="px-6 py-4">{quantity?.toString()}</td>
+                    <td className="px-6 py-4 text-center">{product.quantity}</td>
 
                     <td className="px-6 py-4">
-                      <Link to={`/product/edit/${product.id}`}>Edit</Link>
+                      <Link to={`/product/edit/${product.id}`} className="text-blue-700">Edit</Link>
                     </td>
                     <td className="px-6 py-4">
                       <button
                         onClick={(e) => handleProductDelete(e, product.id)}
+                        className="text-red-700"
                       >
                         Delete Product
                       </button>

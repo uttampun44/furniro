@@ -25,17 +25,16 @@ class ProductController extends Controller
        $products = Product::join('product_discount_inventory_categories', 'products.id', '=', 'product_discount_inventory_categories.product_id')
        ->join('product_categories', 'product_discount_inventory_categories.product_categories_id', '=', 'product_categories.id')
        ->join('product_discounts', 'product_discount_inventory_categories.discount_id', '=', 'product_discounts.id')
-       ->select('products.*', 'product_categories.*', 'product_discounts.*')->limit(1)
+       ->join('product_quantities', 'product_discount_inventory_categories.quantity_id', '=', 'product_quantities.id')
+       ->select('products.id', 'products.product_name', 'products.sku', 'products.price', 'products.short_description', 'products.product_image', 'product_categories.name', 'product_discounts.discount_price', 'product_discounts.status', 'product_quantities.quantity')
+       ->groupBy('products.id', 'products.product_name', 'products.sku', 'products.price', 'products.short_description', 'products.product_image', 'product_categories.name', 'product_discounts.discount_price', 'product_discounts.status',  'product_quantities.quantity')->limit(8)
        ->get();
 
         /*  count of row same product*/    
-       $productCount = Product::join('product_discount_inventory_categories', 'products.id', '=', 'product_discount_inventory_categories.product_id')
-                       ->join('product_quantities', 'product_discount_inventory_categories.quantity_id', '=', 'product_quantities.id')
-                       ->count();
-
+      
         return response()->json([
             'products' => $products,
-            'quantity' => $productCount
+          
         ], 200);
 
     }
@@ -66,30 +65,11 @@ class ProductController extends Controller
     public function store(Request $request)
     {
      
-        // dd($request);
-
         DB::beginTransaction();
 
         try {
 
-        //     $validation = validator($request->all(), [
-        //         'name' => 'required|string',
-        //         'sku' =>  'required|string',
-        //         'price' => 'required|string',
-        //         'product_image' => 'required',
-               
-        //   ]);
-  
-        //   if($validation->errors())
-        //   {
-        //        return response()->json([
-        //          'errors' => $validation->errors()
-        //        ], 422);
-
-        //        Log::error($validation);
-        //   }
-
-   
+       
             $imagePath = null;
 
           if($request->hasFile('product_image'))
@@ -126,15 +106,13 @@ class ProductController extends Controller
 
         for ($i = 1; $i <= $productQuantity->quantity; $i++)  {
             ProductDiscountInventory::create([
-                'product_categories_id' => $request->input('product_category_id'),
+                'product_categories_id' => $request->input('product_categories_id'),
                 'product_id' => $product->id,
                 'quantity_id' => $productQuantity->id,
                 'discount_id' => $productDiscount->id
               ]);
         }
-         
-        // dd($request);
-
+      
           DB::commit();
           return response()->json([
              'message' => 'Product Create Successfully Created'

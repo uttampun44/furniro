@@ -30,13 +30,11 @@ const ProductStore: React.FC = () => {
   const navigate = useNavigate();
 
   const { handleSubmit, control } = useForm<products>();
-  const [productcategories, setProductcategory] = useState<productsCategory[]>(
-    []
-  );
-
+  const [productcategories, setProductcategory] = useState<productsCategory[]>([]);
+  
 
   const onSubmit: SubmitHandler<products> = async (data) => {
-    // console.log(data)
+    console.log(data)
     try {
          const response = await axios.post('/api/products/store', data, {
             headers:{
@@ -45,14 +43,15 @@ const ProductStore: React.FC = () => {
             }
          })
 
-console.log(data)
+           
+        
 
          if(response.status === 201){
              alert("Product Added")
              navigate("/products/index")
          }
     } catch (error) {
-      throw new Error
+      console.log(error, "Not Working")
     }
   };
 
@@ -91,7 +90,7 @@ console.log(data)
                         onChange={onChange}
                         label="Product Name"
                         name="product_name"
-                       
+                       required={true}
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -99,11 +98,7 @@ console.log(data)
                       />
                     )}
                   />
-                  {/* {
-                    validationErrors?.name && (
-                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.name}</span>
-                    )
-                 } */}
+                 
                 </div>
                 <div className="sku">
                   <Controller
@@ -115,6 +110,7 @@ console.log(data)
                         name="sku"
                         onChange={onChange}
                         label="Product Sku"
+                        required={true}
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -122,11 +118,7 @@ console.log(data)
                       />
                     )}
                   />
-                  {/* {
-                    validationErrors?.email && (
-                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.email}</span>
-                    )
-                  } */}
+                 
                 </div>
 
                 <div className="price">
@@ -139,6 +131,7 @@ console.log(data)
                         onChange={onChange}
                         label="Price"
                         name="price"
+                        required={true}
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -146,11 +139,7 @@ console.log(data)
                       />
                     )}
                   />
-                  {/* {
-                    validationErrors?.password && (
-                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.password}</span>
-                    )
-                  } */}
+                 
                 </div>
 
 
@@ -165,6 +154,7 @@ console.log(data)
                         onChange={(e) => onChange(e.target.files?.[0])}
                         label="Product Image"
                         name="product_image"
+                        required={true}
                         className={{
                           label: "text-white block mb-2 ",
                           input:
@@ -173,11 +163,7 @@ console.log(data)
                       />
                     )}
                   />
-                  {/* {
-                    validationErrors?.image && (
-                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors?.image.type}</span>
-                    )
-                  } */}
+               
                 </div>
                 
 
@@ -191,6 +177,7 @@ console.log(data)
                         onChange={onChange}
                         label="Product Short Description"
                         name="short_description"
+                        required={true}
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -198,11 +185,7 @@ console.log(data)
                       />
                     )}
                   />
-                  {/* {
-                    validationErrors?.email && (
-                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.email}</span>
-                    )
-                  } */}
+                 
                 </div>
 
                
@@ -221,13 +204,14 @@ console.log(data)
                         <select
                           className="text-black w-full py-3 px-2 rounded-md"
                           onChange={onChange}
-                          name="product_category_id"
+                          name="product_categories_id"
+                          required={true}
                         >
                           <option>Select Product Category</option>
                           {productcategories.map((productcategory, index) => {
                             return (
 
-                              <option key={index} value={productcategory.id}>
+                              <option key={index} value={productcategory.id} >
                                 {productcategory.name}
                               </option>
                             );
@@ -236,23 +220,20 @@ console.log(data)
                       </>
                     )}
                   />
-                  {/* {
-                    validationErrors?.role && (
-                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.role}</span>
-                    )
-                  } */}
+                  
                 </div>
 
                 <div className="discount">
                   <Controller
-                    name="price"
+                    name="discount_price"
                     control={control}
                     render={({ field: { onChange } }) => (
                       <InputField
                         type="text"
                         onChange={onChange}
                         label="Discount"
-                        name="price"
+                        name="discount_price"
+                        required={true}
                         className={{
                           label: "text-white block mb-2",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -260,11 +241,7 @@ console.log(data)
                       />
                     )}
                   />
-                  {/* {
-                    validationErrors?.date_of_birth && (
-                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.date_of_birth}</span>
-                    )
-                  } */}
+                  
                 </div>
                 <div className="status">
                   <Controller
@@ -280,6 +257,7 @@ console.log(data)
                           className="text-black w-full py-3 px-2 rounded-md"
                           onChange={onChange}
                           name="status"
+                          required={true}
                         >
                           <option  >select</option>
                           <option value="0" >Inactive</option>
@@ -288,11 +266,7 @@ console.log(data)
                       </>
                     )}
                   />
-                  {/* {
-                     validationErrors?.role && (
-                       <span className="text-red-700 text-lg font-medium block my-1">{validationErrors.role}</span>
-                     )
-                   } */}
+                 
                 </div>
 
                 <div className="quantity">
@@ -305,6 +279,7 @@ console.log(data)
                         type="text"
                         label="Quantity"
                         name="quantity"
+                        required={true}
                         className={{
                           label: "text-white block mb-2 ",
                           input: "text-black w-full py-3 px-2 rounded-md",
@@ -312,11 +287,7 @@ console.log(data)
                       />
                     )}
                   />
-                  {/* {
-                    validationErrors?.address && (
-                      <span className="text-red-700 text-lg font-medium block my-1">{validationErrors?.address}</span>
-                    )
-                  } */}
+                 
                 </div>
 
       
