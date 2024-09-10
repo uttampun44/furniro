@@ -28,6 +28,7 @@ import usePermission from '../customHooks/usePermission'
 import ProductIndex from "./page/backend/products/ProductIndex";
 import ProductStore from "./page/backend/products/ProductStore";
 import ProductEdit from "./page/backend/products/ProductEdit";
+import SingleProduct from "./page/SingleProduct";
 
 
 const AppRoutes = () => {
@@ -89,6 +90,9 @@ const hasRoles = user?.roles.some((role) => role.role_name == "Super Admin" || r
       <Route path="/products/index" element={<ProductIndex />}></Route>
       <Route path="/product/store" element={<ProductStore />}></Route>
       <Route path="/product/edit/:id" element={<ProductEdit />}></Route>
+
+      {/* single products */}
+      <Route path="/products/single-product" element={<SingleProduct/>}></Route>
       
       {/* user */}
       <Route path="/users" element={<UserIndex />}></Route>
