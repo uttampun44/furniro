@@ -1,13 +1,11 @@
-import { createSlice, nanoid, PayloadAction,createAsyncThunk} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction,createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
+import { RootState } from "./Store";
 
 
-interface Shopping{
-id:string,
-text:string
-}
 
-interface product  {
+export interface Product  {
+    id:number,
     product_name:string,
     price:string,
     short_description:string,
@@ -16,24 +14,24 @@ interface product  {
    }
 
 // products initial state   
-interface ShoppingState{
-    shoppings: Shopping[],
-    product: product[],
+export interface ShoppingState{
+   
+    products: Product[],
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
 }
 
 // intial state of state
 const initialState: ShoppingState = {
-    shoppings : [{id:"1", text:"Hello world"}],
-    product:[],
+   
+    products: [],
     status: 'idle',
     error:null
 }
 
 export const fetchProducts = createAsyncThunk('fetch-products', async() =>{
     const response = await axios.get('/api/front/products')
-    return response.data
+    return response.data.products
 })
 
 
@@ -41,15 +39,19 @@ export const fetchProducts = createAsyncThunk('fetch-products', async() =>{
 export const shoppingSlice = createSlice({
 
    
-    name: 'shopping',
+    name: 'product',
     initialState,
+
+    /* add to cart functionality*/ 
     reducers:{
-        addToCart: (state, action: PayloadAction<string>) => {
-            const shopping = { id: nanoid(), text: action.payload };
-            state.shoppings.push(shopping);
+        addToCart: (state, action: PayloadAction<Product>) => {
+        
+            state.products.push(action.payload);
           },
-          removeCart: (state, action: PayloadAction<string>) => {
-            state.shoppings = state.shoppings.filter((item) => item.id !== action.payload);
+
+          /*remove from cart*/ 
+          removeCart: (state, action: PayloadAction<number>) => {
+            state.products = state.products.filter((item) => item.id !== action.payload);
           },
     },
     
@@ -60,7 +62,7 @@ export const shoppingSlice = createSlice({
           })
           .addCase(fetchProducts.fulfilled, (state, action) => {
             state.status = 'succeeded';
-            state.product.push(...action.payload)
+            state.products = action.payload
           })
           .addCase(fetchProducts.rejected, (state, action) => {
             state.status = 'failed';
@@ -72,5 +74,6 @@ export const shoppingSlice = createSlice({
 
 export const {addToCart, removeCart} = shoppingSlice.actions
 
+export const selectProduct = (state:RootState) => state.product
 //  exporting shopping slice reducer
 export default shoppingSlice.reducer
