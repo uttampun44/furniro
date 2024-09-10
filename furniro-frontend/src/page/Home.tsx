@@ -4,25 +4,24 @@ import Layout from "../layout/Layout";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Button from "@components/Button";
+import { useAppDispatch, useAppSelector } from "../../app/hook";
+import { fetchProducts } from "../../store/Products";
+import Card from "@components/Card";
 
 type productCateogryList = {
   name: string;
   image: string;
 };
 
-interface products  {
- product_name:string,
- price:string,
- short_description:string,
- product_image:string,
-
-}
-
 function Home() {
   const [productList, setProduct] = useState<productCateogryList[]>([]);
-  const [products, setProducts] = useState<products[]>([]);
 
-  console.log(products)
+  const Products = useAppSelector((state) => state.product.products);
+  const idle = useAppSelector((state) => state.product.status);
+
+  /* use dispatch is used for asynchronous action*/
+  const dispatch = useAppDispatch();
+
   const fetchProductCategory = async () => {
     const data = await axios.get("/api/product-category-list", {
       headers: {
@@ -32,23 +31,15 @@ function Home() {
     });
 
     if (data.status === 200) setProduct(data.data.product_category);
-    
   };
-
-  const fetchProduct = async() =>{
-    const response = await axios.get("/api/front/products", {
-      headers:{
-        Accept:"applcation/json"
-      }
-    })
-
-   if(response.status == 200) setProducts(response.data.products)
-  }
 
   useEffect(() => {
     fetchProductCategory();
-    fetchProduct()
-  }, []);
+ 
+    if (idle) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch]);
   return (
     <Layout>
       <section
@@ -110,13 +101,15 @@ function Home() {
                 return (
                   <div key={index}>
                     <div className="img_one mb-6">
-                      <img src={`http://localhost:8000/${product.image}`} alt={product.name} />
+                      <img
+                        src={`http://localhost:8000/${product.image}`}
+                        alt={product.name}
+                      />
                     </div>
                     <h3 className="font-poppins text-2xl font-semibold text-center">
                       {product.name}
                     </h3>
                   </div>
-                
                 );
               })}
             </div>
@@ -125,34 +118,28 @@ function Home() {
       </section>
 
       <section>
-      <div className="productSectionContainer mb-8 max-w-[1230px] w-full mx-auto">
-            <div className="title">
+        <div className="productSectionContainer mb-8 max-w-[1230px] w-full mx-auto">
+          <div className="title">
             <h2 className="font-poppins text-center text-2xl font-bold">
               Our Products
             </h2>
 
             <div className="productGrid grid grid-cols-4 gap-4">
-                {
-                  products.map((product, index) => (
-                    <div className="product my-8 bg-gray-200 bg-opacity-50" key={index} >
-                       <div className="productImg">
-                       <img  src={`http://localhost:8000/storage/${product.product_image}`} className="w-full h-auto"/>
-                       </div>
-                      <div className="productDetails grid gap-y-1 px-2 py-3">
-                        <h6>{product.product_name}</h6>
-                       <strong className="block">{product.short_description}</strong>
-                       <strong>{product.price}</strong>
-                      </div>
-
-                    </div>
-                  ))
-                }
+              {Products.map((product, index) => (
+                <Card
+                  title={product.product_name}
+                  description={product.short_description}
+                  src={`http://localhost:8000/storage/${product.product_image}`}
+                  price={product.price}
+                  key={index}
+                />
+              ))}
             </div>
-            </div>
-            <div className="buttonExplore">
-              <Button value="Show More"/>
-            </div>
-      </div>
+          </div>
+          <div className="buttonExplore">
+            <Button value="Show More" />
+          </div>
+        </div>
       </section>
     </Layout>
   );

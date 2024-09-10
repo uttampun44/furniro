@@ -1,4 +1,3 @@
-import React from "react"
 import BackendSidebar from "@components/BackendSidebar";
 import TopNavigation from "@components/TopNavigation";
 
