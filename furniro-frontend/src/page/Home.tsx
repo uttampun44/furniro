@@ -1,11 +1,11 @@
 import Homebg from "../assets/images/home_bg.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "../layout/Layout";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Button from "@components/Button";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
-import { fetchProducts } from "../../store/Products";
+import {fetchProducts, Product, viewProduct } from "../../store/Products";
 import Card from "@components/Card";
 
 type productCateogryList = {
@@ -16,8 +16,12 @@ type productCateogryList = {
 function Home() {
   const [productList, setProduct] = useState<productCateogryList[]>([]);
 
+  const navigate = useNavigate();
+
   const Products = useAppSelector((state) => state.product.products);
   const idle = useAppSelector((state) => state.product.status);
+
+
 
   /* use dispatch is used for asynchronous action*/
   const dispatch = useAppDispatch();
@@ -32,6 +36,12 @@ function Home() {
 
     if (data.status === 200) setProduct(data.data.product_category);
   };
+
+  const handleProduct = (product:Product) =>{
+         console.log(product)
+      dispatch(viewProduct(product))
+       navigate("/products/single-product")
+  }
 
   useEffect(() => {
     fetchProductCategory();
@@ -124,7 +134,7 @@ function Home() {
               Our Products
             </h2>
 
-            <div className="productGrid grid grid-cols-4 gap-4">
+            <div className="productGrid grid grid-cols-4 gap-4 cursor-pointer">
               {Products.map((product, index) => (
                 <Card
                   title={product.product_name}
@@ -132,6 +142,7 @@ function Home() {
                   src={`http://localhost:8000/storage/${product.product_image}`}
                   price={product.price}
                   key={index}
+                  onClick={() => handleProduct(product)}
                 />
               ))}
             </div>
