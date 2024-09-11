@@ -3,7 +3,8 @@ import BackendSidebar from "@components/BackendSidebar";
 import TopNavigation from "@components/TopNavigation";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 interface productDetails {
   id: number;
@@ -72,6 +73,7 @@ const ProductIndex: React.FC = () => {
           </div>
 
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+            
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -156,6 +158,8 @@ const ProductIndex: React.FC = () => {
                 ))}
               </tbody>
             </table>
+
+
           </div>
         </div>
       </div>

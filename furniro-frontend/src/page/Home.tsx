@@ -7,6 +7,7 @@ import Button from "@components/Button";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
 import {fetchProducts, Product, viewProduct } from "../../store/Products";
 import Card from "@components/Card";
+import SecondBg from "../assets/images/furniro_furniture.jpg"
 
 type productCateogryList = {
   name: string;
@@ -18,8 +19,8 @@ function Home() {
 
   const navigate = useNavigate();
 
-  const Products = useAppSelector((state) => state.product.products);
-  const idle = useAppSelector((state) => state.product.status);
+  const Products = useAppSelector(state => state.product.products);
+  const idle = useAppSelector(state => state.product.status);
 
 
 
@@ -41,6 +42,10 @@ function Home() {
          console.log(product)
       dispatch(viewProduct(product))
        navigate("/products/single-product")
+  }
+
+  const handleProductPage = () =>{
+    navigate("/shop")
   }
 
   useEffect(() => {
@@ -97,7 +102,7 @@ function Home() {
       <section>
         <div className="browse_the_range max-w-[1140px] mx-auto py-16">
           <div className="title_browse text-center">
-            <h2 className="font-poppins text-2xl font-bold">
+            <h2 className="font-poppins text-4xl font-bold">
               Browse The Range
             </h2>
             <p className="font-poppins font-medium text-lg">
@@ -130,7 +135,7 @@ function Home() {
       <section>
         <div className="productSectionContainer mb-8 max-w-[1230px] w-full mx-auto">
           <div className="title">
-            <h2 className="font-poppins text-center text-2xl font-bold">
+            <h2 className="font-poppins text-center text-4xl font-bold">
               Our Products
             </h2>
 
@@ -141,17 +146,35 @@ function Home() {
                   description={product.short_description}
                   src={`http://localhost:8000/storage/${product.product_image}`}
                   price={product.price}
+                  discount_price={product.discount_price}
                   key={index}
                   onClick={() => handleProduct(product)}
                 />
               ))}
             </div>
           </div>
-          <div className="buttonExplore">
-            <Button value="Show More" />
+          <div className="buttonExplore flex justify-center mb-12">
+            <Button value="Show More" className=" border-2  border-[#B88E2F] px-10 py-2 rounded-md" onClick={handleProductPage} />
           </div>
         </div>
       </section>
+
+      <div className="shareFurniture py-14">
+          <div className="title text-center pb-10">
+               <span className="text-text-secondary-color text-xl font-semibold">Share your setup with</span>
+               <h2 className="font-poppins text-center text-4xl font-bold">#Furniro Furniture</h2>
+          </div>
+        </div>
+
+     <section  style={{
+          backgroundImage: `url(${SecondBg})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "100% 100%",
+          backgroundPosition: "center",
+          minHeight: "721px",
+        }} className="mb-20">
+    
+     </section>
     </Layout>
   );
 }
