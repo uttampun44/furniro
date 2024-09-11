@@ -31,6 +31,7 @@ import ProductEdit from "./page/backend/products/ProductEdit";
 import SingleProduct from "./page/SingleProduct";
 
 
+
 const AppRoutes = () => {
   const context = useContext(Context);
 
@@ -93,6 +94,7 @@ const hasRoles = user?.roles.some((role) => role.role_name == "Super Admin" || r
 
       {/* single products */}
       <Route path="/products/single-product" element={<SingleProduct/>}></Route>
+     
       
       {/* user */}
       <Route path="/users" element={<UserIndex />}></Route>
