@@ -58,18 +58,18 @@ const SingleProduct = () => {
                 </div>
                 <hr className="my-12"></hr>
 
-                <div className="share grid gap-y-4">
+                <div className="share flex gap-x-8 items-center gap-y-4">
                   <div className="sku">
                     <span className="text-base font-medium text-gray-400">
                       SKU
                     </span>
-                    : <span></span>
+                    : <span className="text-base font-medium text-gray-400">{products?.sku}</span>
                   </div>
                   <div className="category">
                     <span className="text-base font-medium text-gray-400">
                       Category
                     </span>
-                    : <span></span>
+                    : <span className="text-base font-medium text-gray-400">{products?.name}</span>
                   </div>
                   <div className="share">
                       <span className="text-base font-medium text-gray-400">Share</span> : <span></span> <span><FacebookIcon /></span><span><TwitterIcon /></span>

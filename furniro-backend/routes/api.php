@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\FrontProductController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProductDescriptionController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Models\Product;
@@ -65,6 +66,11 @@ Route::prefix('products')->group( function(){
    Route::post('store', [ProductController::class, 'store']);
    Route::get('index', [ProductController::class, 'index']);
 });
+
+// products additional
+Route::prefix('addition/')->group( function(){
+  Route::post('store', [ProductDescriptionController::class, 'store']);
+})
 
 /****************front page products ******************/;
 Route::get('front/products', [FrontProductController::class, '__invoke']); 

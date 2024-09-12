@@ -7,7 +7,11 @@ import { useNavigate } from "react-router-dom";
 
 function Shop() {
 
-  const products = useAppSelector(state => state.product.products)
+  const product = useAppSelector(state => state.product.products)
+
+  /*showing product two times*/ 
+  const products = [...product, ...product]
+
   const dispatch = useAppDispatch()
   const navigate = useNavigate();
 
@@ -20,7 +24,7 @@ function Shop() {
       <Backgroundpic />
 
       <div className="products px-24 max-w-[1299px] mx-auto w-full py-10">
-
+     
                 <div className="productGrid grid grid-cols-4 gap-4 cursor-pointer">
                 {
                     products.map((product, index) => (
