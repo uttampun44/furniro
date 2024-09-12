@@ -9,11 +9,11 @@ class ProductDescription extends Model
 {
     use HasFactory;
 
-    protected $tables = "product_description";
+    protected $tables = "product_descriptions";
 
     protected $fillable = [
         'description',
-        'additional_images',
+        'addition_images',
         'product_id'
     ];
 }

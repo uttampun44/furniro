@@ -29,6 +29,8 @@ import ProductIndex from "./page/backend/products/ProductIndex";
 import ProductStore from "./page/backend/products/ProductStore";
 import ProductEdit from "./page/backend/products/ProductEdit";
 import SingleProduct from "./page/SingleProduct";
+import ProductDescriptionIndex from "./page/backend/productDescription/ProductDescriptionIndex";
+import ProductDescriptionStore from "./page/backend/productDescription/ProductDescriptionStore"
 
 
 
@@ -95,6 +97,9 @@ const hasRoles = user?.roles.some((role) => role.role_name == "Super Admin" || r
       {/* single products */}
       <Route path="/products/single-product" element={<SingleProduct/>}></Route>
      
+     {/* product additional description */}
+     <Route path="/products/description" element={<ProductDescriptionIndex/>}></Route>
+     <Route path="/products/description/store" element={<ProductDescriptionStore/>}></Route>
       
       {/* user */}
       <Route path="/users" element={<UserIndex />}></Route>

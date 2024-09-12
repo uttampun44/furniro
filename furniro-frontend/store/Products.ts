@@ -5,6 +5,8 @@ import { RootState } from "./Store";
 export interface Product {
   id: number;
   product_name: string;
+  name:string,
+  sku:string,
   price: string;
   short_description: string;
   product_image: string;

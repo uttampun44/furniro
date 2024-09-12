@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProductDescription;
 use App\Models\ProductDiscount;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductDescriptionController extends Controller
 {
@@ -29,7 +31,41 @@ class ProductDescriptionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
+        dd($request);
+      
+        try {
+
+            
+       
+            if($files = $request->file('addition_images')){
+               
+             
+            /*---------------inserting multiple images--------------*/ 
+            foreach ($files as $image) {
+             
+
+              $path =   $image->store('uploads', 'public');
+              
+            }
+              ProductDescription::create([
+                  'description' => $request->description,
+                  'addition_images' => $path,
+                  'product_id' => $request->input('product_id')
+                ]);
+        }
+            return response()->json([
+                  'productDescription' => 'product description created successfully',
+                  'status' => true
+            ], 201);
+
+        } catch (\Throwable $th) {
+           Log::error($th->getMessage());
+           return response()->json([
+             'message' => 'internal server error'
+           ], 500);
+        }
+
     }
 
     /**
