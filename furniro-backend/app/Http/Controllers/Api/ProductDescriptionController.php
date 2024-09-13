@@ -31,26 +31,29 @@ class ProductDescriptionController extends Controller
      */
     public function store(Request $request)
     {
-       
-        dd($request);
-      
+    
         try {
 
             
-       
-            if($files = $request->file('addition_images')){
+               $images = [];
+            if($request->hasFile('addition_images')){
                
+               $files = $request->file('addition_images');
+
              
             /*---------------inserting multiple images--------------*/ 
             foreach ($files as $image) {
              
-
+                // dd($image);
               $path =   $image->store('uploads', 'public');
-              
+
+              $images[] = $path;
+            
             }
+
               ProductDescription::create([
                   'description' => $request->description,
-                  'addition_images' => $path,
+                  'addition_images' => json_encode($images),
                   'product_id' => $request->input('product_id')
                 ]);
         }
