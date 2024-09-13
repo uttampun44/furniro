@@ -69,6 +69,7 @@ Route::prefix('products')->group( function(){
 
 // products additional
 Route::prefix('addition/')->group( function(){
+  Route::get('index', [ProductDescriptionController::class, 'index']);
   Route::post('store', [ProductDescriptionController::class, 'store']);
 })
 

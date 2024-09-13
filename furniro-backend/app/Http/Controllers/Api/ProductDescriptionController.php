@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\ProductDescription;
 use App\Models\ProductDiscount;
 use Illuminate\Http\Request;
@@ -15,7 +16,12 @@ class ProductDescriptionController extends Controller
      */
     public function index()
     {
-        //
+        $productDescription = ProductDescription::select('description', 'addition_images')
+                              ->with('products')->get()->makeHidden(['products']);
+
+        return response()->json([
+                'product_description' => $productDescription 
+        ], 200);
     }
 
     /**

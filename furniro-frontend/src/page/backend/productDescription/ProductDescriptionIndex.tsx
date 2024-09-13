@@ -1,8 +1,37 @@
 import BackendSidebar from "@components/BackendSidebar"
 import TopNavigation from "@components/TopNavigation"
+import axios from "axios"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
+
+interface descriptionProps {
+  id:number
+  description:string,
+  addition_images:string[],
+}
+
 const ProductDescriptionIndex = () =>{
+
+  const [descriptions, setDescription] = useState<descriptionProps []>([]);
+
+  console.log(descriptions)
+
+  const fetchDescription = async() =>{
+      const response = await axios.get("/api/addition/index", {
+        headers:{
+          'Accept': 'application/json',
+
+        }
+      })
+
+      setDescription(response.data.product_description);
+  }
+
+  useEffect(() =>{
+    
+    fetchDescription()
+  }, [])
     return(
         <>
         <TopNavigation />
@@ -53,21 +82,45 @@ const ProductDescriptionIndex = () =>{
 
               <tbody>
                
-                  <tr
-                   
+                 {
+                  descriptions.map((description, index) => (
+                     
+                    
+                    <tr
+                    key={index}
                     className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
-                  >
-                   
-                   
-                    <td className="px-6 py-4">
-                      {/* <button
-                        onClick={(e) => handleProductDelete(e, product.id)}
-                        className="text-red-700"
-                      >
-                        Delete Product
+                    >
+                  
+                  <td className="px-6 py-4">{index + 1}</td>
+                  <td className="px-6 py-4">Product Name</td>
+                  <td className="px-6 py-4">{description.description}</td>
+                
+                  <td className="px-6 py-4">
+                  {/* {
+               
+                  description.addition_images.map((image, index)   => (
+                          <img
+                      
+                            src={`http://localhost:8000/storage/${image[0]}`}
+                            // alt={`Product Image ${imgIndex}`}
+                            className="w-16 h-16 object-contain"
+                          />
+                        ))
+                  
+                  } */}
+                 </td>
+                 <td className="px-6 py-4"><Link to={`/addition/products/${description.id}`}>Edit</Link></td>
+                   <td className="px-6 py-4">
+                     {/* <button
+                       onClick={(e) => handleProductDelete(e, product.id)}
+                       className="text-red-700"
+                       >
+                       Delete Product
                       </button> */}
-                    </td>
-                  </tr>
+                   </td>
+                 </tr>
+                    ))
+                 }
             
               </tbody>
             </table>
