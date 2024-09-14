@@ -31,8 +31,7 @@ const PermissionAdd:React.FC = () =>{
     
         }
       } catch (error) {
-        console.log(error, "Not Working")
-        // setErrors(error.response.data)
+        throw new Error
       }
     }
     

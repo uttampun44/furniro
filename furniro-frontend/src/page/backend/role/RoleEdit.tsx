@@ -42,7 +42,7 @@ const RoleEdit: React.FC = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(data);
+    
       if (response.status === 200) {
         alert("Permission Created");
         navigate("/roles");
@@ -55,7 +55,6 @@ const RoleEdit: React.FC = () => {
   const fetRolesEdit = async () => {
     const response = await axios.get(`/api/roles/edit/${id}`);
 
- console.log(response.data.roles_edit)
     if (response.status === 200) {
     
       setPermission(response.data.permission);

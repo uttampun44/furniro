@@ -17,8 +17,9 @@ class FrontProductController extends Controller
                     ->join('product_categories', 'product_discount_inventory_categories.product_categories_id', '=', 'product_categories.id')            
                     ->join('product_discounts', 'product_discount_inventory_categories.discount_id', '=', 'product_discounts.id')
                     ->join('product_quantities', 'product_discount_inventory_categories.quantity_id', '=', 'product_quantities.id')
-                    ->select('products.product_name',  'products.price', 'products.short_description', 'products.product_image', 'products.sku', 'product_discounts.discount_price', 'product_categories.name')
-                    ->groupBy('products.product_name',  'products.price', 'products.short_description', 'products.product_image', 'products.sku', 'product_discounts.discount_price', 'product_categories.name')
+                    ->join('product_descriptions', 'product_descriptions.product_id', '=', 'products.id')
+                    ->select('products.product_name',  'products.price', 'products.short_description', 'products.product_image', 'products.sku', 'product_discounts.discount_price', 'product_categories.name', 'product_descriptions.description', 'product_descriptions.addition_images')
+                    ->groupBy('products.product_name',  'products.price', 'products.short_description', 'products.product_image', 'products.sku', 'product_discounts.discount_price', 'product_categories.name', 'product_descriptions.description', 'product_descriptions.addition_images')
                     ->get();
 
         return response()->json([

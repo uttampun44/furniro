@@ -11,6 +11,8 @@ export interface Product {
   short_description: string;
   product_image: string;
   discount_price:string,
+  description:string,
+  addition_images:string
 }
 
 // products initial state
@@ -33,7 +35,7 @@ const initialState: ShoppingState = {
 
 export const fetchProducts = createAsyncThunk("fetch-products", async () => {
   const response = await axios.get("/api/front/products");
-  return response.data.products;
+  return response.data.products.map((item:Product) => ({...item, addition_images:JSON.parse(item.addition_images)}));
 });
 
 //  functions of add to cart state and actions addToCart and removeCart

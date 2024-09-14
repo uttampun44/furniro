@@ -1,6 +1,7 @@
 type Input = {
     name?:string
     label?:string,
+    multiple?:boolean,
     className:{
         label?:string
         input?:string

@@ -65,12 +65,15 @@ Route::prefix('products')->group( function(){
    Route::get('create', [ProductController::class, 'create']);
    Route::post('store', [ProductController::class, 'store']);
    Route::get('index', [ProductController::class, 'index']);
+   Route::delete('delete/{id}', [ProductController::class, 'destroy']);
 });
 
 // products additional
 Route::prefix('addition/')->group( function(){
   Route::get('index', [ProductDescriptionController::class, 'index']);
+  Route::get('create', [ProductDescriptionController::class, 'create']);
   Route::post('store', [ProductDescriptionController::class, 'store']);
+  Route::delete('delete/{id}', [ProductDescriptionController::class, 'destroy']);
 })
 
 /****************front page products ******************/;

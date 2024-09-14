@@ -3,12 +3,12 @@ import { useAppSelector } from "../../app/hook";
 import Layout from "../layout/Layout";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import React from "react";
 
 
 const SingleProduct = () => {
   const products = useAppSelector((state) => state.product.selectedProduct);
 
-  console.log("selected products", products);
   return (
     <>
       <Layout>
@@ -84,6 +84,19 @@ const SingleProduct = () => {
               <div className="description px-24 py-12">
                      <div className="descriptionReview flex gap-x-4 justify-center">
                          <button>Description</button> <button>Reviews</button>
+                     </div>
+                     <div className="description max-w-[1024px] w-full mx-auto">
+                        <p className="text-text-secondary-color text-base font-poppins font-medium">{products?.description}</p>
+                     </div>
+                     <div className="imagesProduct flex gap-x-4 justify-center my-4">
+                        {
+                          Array.isArray(products?.addition_images) &&
+                           products?.addition_images.map((image, index) => (
+                            <React.Fragment key={index}>
+                            <img src={`http://localhost:8000/storage/${image}`} alt={`images ${index+1}`}/>
+                            </React.Fragment>
+                           ))
+                        }
                      </div>
               </div>
         </section>

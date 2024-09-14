@@ -3,8 +3,6 @@ import BackendSidebar from "@components/BackendSidebar";
 import TopNavigation from "@components/TopNavigation";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 
 interface productDetails {
   id: number;
@@ -16,12 +14,11 @@ interface productDetails {
   sku: string;
   discount_price: string;
   status: number;
-  quantity:number
+  quantity: number;
 }
 
 const ProductIndex: React.FC = () => {
   const [products, setProduct] = useState<productDetails[]>([]);
-  
 
   const fetchProduct = async () => {
     const response = await axios.get("/api/products/index", {
@@ -32,12 +29,7 @@ const ProductIndex: React.FC = () => {
       },
     });
 
-    if (response.status == 200) {
-
-      console.log(response.data)
-      setProduct(response.data.products);
-    
-    }
+    if (response.status == 200) setProduct(response.data.products);
   };
 
   const handleProductDelete = async (
@@ -46,7 +38,18 @@ const ProductIndex: React.FC = () => {
   ) => {
     e.preventDefault();
     try {
-    } catch (error) {}
+      const response = await axios.delete(`/api/products/delete/${id}`, {
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      if (response.status == 200) {
+        alert("Product Deleted ");
+        fetchProduct();
+      }
+    } catch (error) {
+      throw new Error();
+    }
   };
 
   useEffect(() => {
@@ -73,7 +76,6 @@ const ProductIndex: React.FC = () => {
           </div>
 
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -134,17 +136,23 @@ const ProductIndex: React.FC = () => {
                       <img
                         src={`http://localhost:8000/storage/${product.product_image}`}
                         alt={product.name}
-
                         className="w-16 h-16 object-contain"
                       />
                     </td>
 
                     <td className="px-6 py-4">{product.short_description}</td>
 
-                    <td className="px-6 py-4 text-center">{product.quantity}</td>
+                    <td className="px-6 py-4 text-center">
+                      {product.quantity}
+                    </td>
 
                     <td className="px-6 py-4">
-                      <Link to={`/product/edit/${product.id}`} className="text-blue-700">Edit</Link>
+                      <Link
+                        to={`/product/edit/${product.id}`}
+                        className="text-blue-700"
+                      >
+                        Edit
+                      </Link>
                     </td>
                     <td className="px-6 py-4">
                       <button
@@ -158,8 +166,6 @@ const ProductIndex: React.FC = () => {
                 ))}
               </tbody>
             </table>
-
-
           </div>
         </div>
       </div>

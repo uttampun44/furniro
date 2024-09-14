@@ -33,7 +33,7 @@ const PermissionIndex: React.FC = () => {
 
       if (response.status == 200) setPermission(response.data.permission_index);
     } catch (error) {
-      console.log(error);
+     throw new Error
     }
   };
 
@@ -62,7 +62,7 @@ const PermissionIndex: React.FC = () => {
       fetchPermission()
       }
     } catch (error) {
-      console.log(error);
+     throw new Error
     }
   };
 
@@ -80,8 +80,7 @@ const PermissionIndex: React.FC = () => {
       fetchPermission()
      
     } catch (error:any) {
-      console.log(error)
-     
+      throw new Error
     }
   };
 

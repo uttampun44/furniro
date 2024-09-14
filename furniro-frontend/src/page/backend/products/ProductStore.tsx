@@ -34,7 +34,7 @@ const ProductStore: React.FC = () => {
   
 
   const onSubmit: SubmitHandler<products> = async (data) => {
-    console.log(data)
+ 
     try {
          const response = await axios.post('/api/products/store', data, {
             headers:{
@@ -43,15 +43,12 @@ const ProductStore: React.FC = () => {
             }
          })
 
-           
-        
-
          if(response.status === 201){
              alert("Product Added")
              navigate("/products/index")
          }
     } catch (error) {
-      console.log(error, "Not Working")
+      throw new Error
     }
   };
 

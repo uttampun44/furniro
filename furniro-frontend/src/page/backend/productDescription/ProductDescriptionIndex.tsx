@@ -1,44 +1,74 @@
-import BackendSidebar from "@components/BackendSidebar"
-import TopNavigation from "@components/TopNavigation"
-import axios from "axios"
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import BackendSidebar from "@components/BackendSidebar";
+import Button from "@components/Button";
+import TopNavigation from "@components/TopNavigation";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-
+interface productsProps {
+  id: number;
+  product_name: string;
+}
 interface descriptionProps {
-  id:number
-  description:string,
-  addition_images:string[],
+  id: number;
+  description: string;
+  addition_images: string;
+  products: productsProps;
 }
 
-const ProductDescriptionIndex = () =>{
+const ProductDescriptionIndex = () => {
+  const [descriptions, setDescription] = useState<descriptionProps[]>([]);
 
-  const [descriptions, setDescription] = useState<descriptionProps []>([]);
 
-  console.log(descriptions)
+  const fetchDescription = async () => {
+    const response = await axios.get("/api/addition/index", {
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
-  const fetchDescription = async() =>{
-      const response = await axios.get("/api/addition/index", {
-        headers:{
-          'Accept': 'application/json',
+    if (response.status == 200) {
+      const updateImages = response.data.product_description.map(
+        (item: descriptionProps) => ({
+          ...item,
+          addition_images: JSON.parse(item.addition_images),
+        })
+      );
 
-        }
-      })
+      setDescription(updateImages);
+    }
+  };
 
-      setDescription(response.data.product_description);
-  }
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>,id: number) => {
+    e.preventDefault();
 
-  useEffect(() =>{
-    
-    fetchDescription()
-  }, [])
-    return(
-        <>
-        <TopNavigation />
-        <BackendSidebar />
-        
+    try {
+      const response = await axios.delete(`/api/addition/delete/${id}`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
   
-        <div className="product_descripiton_container   pl-20 h-[100vh] max-h-full">
+      if (response.status == 200) {
+        alert("Product addition deleted");
+        fetchDescription();
+      }
+    } catch (error) {
+      throw new Error();
+    }
+  };
+
+  useEffect(() => {
+    fetchDescription();
+  }, []);
+  return (
+    <>
+      <TopNavigation />
+      <BackendSidebar />
+
+      <div className="product_descripiton_container   pl-20 h-[100vh] max-h-full">
         <div className="product_list pl-10 pr-4 py-6 mb-8 bg-gray-700 ml-48 mr-8">
           <div className="add_product_description flex justify-end">
             <Link
@@ -49,11 +79,12 @@ const ProductDescriptionIndex = () =>{
             </Link>
           </div>
           <div className="product_list my-2">
-            <h1 className="text-white text-2xl font-bold">Product Additional Information</h1>
+            <h1 className="text-white text-2xl font-bold">
+              Product Additional Information
+            </h1>
           </div>
 
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -63,17 +94,13 @@ const ProductDescriptionIndex = () =>{
                   <th scope="col" className="px-6 py-3">
                     Product Name
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-6 py-3 w-[40%]">
                     Description
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Addition Image
                   </th>
-                  
-                  
-                  <th scope="col" className="px-6 py-3">
-                    Edit
-                  </th>
+
                   <th scope="col" className="px-6 py-3">
                     Delete
                   </th>
@@ -81,56 +108,48 @@ const ProductDescriptionIndex = () =>{
               </thead>
 
               <tbody>
-               
-                 {
-                  descriptions.map((description, index) => (
-                     
-                    
-                    <tr
+                {descriptions.map((description, index) => (
+                  <tr
                     key={index}
                     className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
-                    >
-                  
-                  <td className="px-6 py-4">{index + 1}</td>
-                  <td className="px-6 py-4">Product Name</td>
-                  <td className="px-6 py-4">{description.description}</td>
-                
-                  <td className="px-6 py-4">
-                  {/* {
-               
-                  description.addition_images.map((image, index)   => (
-                          <img
-                      
-                            src={`http://localhost:8000/storage/${image[0]}`}
-                            // alt={`Product Image ${imgIndex}`}
-                            className="w-16 h-16 object-contain"
-                          />
-                        ))
-                  
-                  } */}
-                 </td>
-                 <td className="px-6 py-4"><Link to={`/addition/products/${description.id}`}>Edit</Link></td>
-                   <td className="px-6 py-4">
-                     {/* <button
-                       onClick={(e) => handleProductDelete(e, product.id)}
-                       className="text-red-700"
-                       >
-                       Delete Product
-                      </button> */}
-                   </td>
-                 </tr>
-                    ))
-                 }
-            
+                  >
+                    <td className="px-6 py-4">{index + 1}</td>
+                    <td className="px-6 py-4">
+                      {description.products.product_name}
+                    </td>
+                    <td className="px-6 py-4">{description.description}</td>
+
+                    <td className="px-6 py-4 flex gap-x-4">
+                      {
+                        /**********checking the images is it in array format or not before mapping the array*/
+                        Array.isArray(description.addition_images) &&
+                          description.addition_images.length > 0 &&
+                          description.addition_images.map((image, index) => (
+                            <img
+                              src={`http://localhost:8000/storage/${image}`}
+                              alt={`Product Image ${index}`}
+                              className="w-16 h-16 object-contain"
+                              key={index}
+                            />
+                          ))
+                      }
+                    </td>
+                    <td className="px-6 py-4">
+                      <Button
+                        type="submit"
+                        value="Delete"
+                        className="font-medium text-blue-600 dark:text-blue-500 no-underline"
+                        onClick={(e) => handleDelete(e, description.id)}
+                      />
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
-
-
           </div>
         </div>
       </div>
-       
-        </>
-    )
-}
-export default ProductDescriptionIndex
+    </>
+  );
+};
+export default ProductDescriptionIndex;
