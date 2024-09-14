@@ -52,7 +52,7 @@ const Roleindex:React.FC = () => {
           fetchRoles();
         }
       } catch (error) {
-        console.log(`Throw new Error, ${error}`)
+        throw new Error
       }
     }
     useEffect(() => {

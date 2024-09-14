@@ -134,7 +134,7 @@ const UserEdit: React.FC = () => {
                 </div>
 
                 <div className="role ">
-                  {userValue?.roles.map((role, index) => (
+                  {userValue?.roles.map((role) => (
                     <Controller
                     key={role.id}
                       name="roles"

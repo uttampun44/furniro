@@ -15,6 +15,7 @@ const InputField: React.FC<Input> = (props) => {
         value={props.value}
         name={props.name}
         onChange={props.onChange}
+        multiple={props.multiple}
       />
     </>
   );

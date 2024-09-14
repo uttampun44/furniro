@@ -36,28 +36,32 @@ const UserIndex: React.FC = () => {
         },
       });
 
-      // console.log(response.data);
+
       if (response.status === 200) {
         setUser(response.data.user_profile);
       }
     } catch (error) {}
   };
 
-  const deleteUser = async (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
-  
- 
-    const response = await axios.delete(`/api/user/delete/${id}`, {
-      headers: {
-        'Accept' : 'application/json',
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("Token")}`,
-      },
-    });
-    
-    if (response.data === 200) {
-      setUser((previousUsers) => previousUsers.filter((user) => user.user.id !== user.user.id));
-      alert("User Delete Successfully");
-      fetchUser();
+  const handleDeleteUser = async (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
+   
+    try {
+      e.preventDefault()
+      const response = await axios.delete(`/api/user/delete/${id}`, {
+        headers: {
+          'Accept' : 'application/json',
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("Token")}`,
+        },
+      });
+      
+      if (response.data === 200) {
+        setUser((previousUsers) => previousUsers.filter((user) => user.user.id !== user.user.id));
+        alert("User Delete Successfully");
+        fetchUser();
+      }
+    } catch (error) {
+      throw new Error
     }
   };
 
@@ -147,7 +151,7 @@ const UserIndex: React.FC = () => {
                         </Link>
                       </td>
                       <td className="px-6 py-4">
-                        <button onClick={(e) => deleteUser(e, user.user.id)}>
+                        <button onClick={(e) => handleDeleteUser(e, user.user.id)}>
                           <DeleteIcon
                             style={{ color: "red", cursor: "pointer" }}
                           />
