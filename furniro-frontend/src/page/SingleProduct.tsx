@@ -7,13 +7,19 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Card from "@components/Card";
+import { useDispatch } from "react-redux";
+import { Product, decrement, decrementProduct, increment, incrementProduct } from "../../store/Products";
+
 
 const SingleProduct = () => {
-  const products = useAppSelector((state) => state.product.selectedProduct);
+  const products = useAppSelector(state => state.product.selectedProduct);
 
   const relatedProdcts = useAppSelector(state => state.product.products);
 
-  console.log(relatedProdcts)
+  const quantities = useAppSelector(state => state.product.cartQuantities)
+
+  console.log(quantities)
+  const dispatch = useDispatch();
 
   const responsive = {
     superLargeDesktop: {
@@ -34,6 +40,22 @@ const SingleProduct = () => {
       items: 1
     }
   };
+
+  const handleDecrement = (e: React.MouseEvent<HTMLButtonElement>) =>{
+
+    if(products){
+      dispatch(decrement(quantities))
+    }
+    console.log((quantities))
+    
+  }
+
+  const handleIncrement = (e: React.MouseEvent<HTMLButtonElement>) =>{
+    if(products){
+      dispatch(increment(quantities))
+    }
+    console.log(incrementProduct(quantities))
+  }
   return (
     <>
       <Layout>
@@ -67,11 +89,13 @@ const SingleProduct = () => {
                     <Button
                       value="-"
                       className="text-lg font-bold text-gray-400"
+                      onClick={handleDecrement}
                     />
-                    <span className="text-lg font-bold text-gray-400">0</span>{" "}
+                    <span className="text-lg font-bold text-gray-400">{quantities}</span>
                     <Button
                       value="+"
                       className="text-lg font-bold text-gray-400"
+                      onClick={handleIncrement}
                     />
                   </div>
                   <div className="addTocartBtn border-2 flex items-center rounded-md w-32">
@@ -108,7 +132,8 @@ const SingleProduct = () => {
         <section className="border-b-2">
               <div className="description px-24 py-12">
                      <div className="descriptionReview flex gap-x-4 justify-center">
-                         <button>Description</button> <button>Reviews</button>
+                       <Button value="Description" className="text-text-secondary-color text-lg font-medium" />
+                       <Button value="Customer Reviews" className="text-text-secondary-color text-lg font-medium" />
                      </div>
                      <div className="description max-w-[1024px] w-full mx-auto">
                         <p className="text-text-secondary-color text-base font-poppins font-medium">{products?.description}</p>
