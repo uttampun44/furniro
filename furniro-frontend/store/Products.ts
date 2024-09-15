@@ -20,6 +20,7 @@ export interface ShoppingState {
   products: Product[];
   cart: Product[];
   selectedProduct: Product | null
+  cartQuantities: number,
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -29,6 +30,7 @@ const initialState: ShoppingState = {
   products: [],
   cart: [],
   selectedProduct: null,
+  cartQuantities: 0,
   status: "idle",
   error: null,
 };
@@ -51,6 +53,21 @@ export const shoppingSlice = createSlice({
       state.selectedProduct = action.payload;
     },
 
+    increment: (state) => {
+      state.cartQuantities += 1
+    },
+    decrement: (state) => {
+      if(state.cartQuantities < 1) return 
+      state.cartQuantities -= 1
+    },
+    incrementProduct: (state, action: PayloadAction<number>) => {
+      state.cartQuantities += action.payload
+    },
+
+    decrementProduct: (state, action: PayloadAction<number>) => {
+    
+       state.cartQuantities -= action.payload
+    },
     /* add to cart item*/ 
     addToCart: (state, action: PayloadAction<Product>) => {
       state.cart.push(action.payload);
@@ -79,7 +96,7 @@ export const shoppingSlice = createSlice({
   },
 });
 
-export const { addToCart, removeCart, viewProduct } = shoppingSlice.actions;
+export const { addToCart, removeCart, viewProduct, incrementProduct, decrementProduct, increment,decrement } = shoppingSlice.actions;
 
 export const selectProduct = (state: RootState) => state.product;
 //  exporting shopping slice reducer
