@@ -4,6 +4,7 @@ interface cardProps  {
    description:string,
    price:string,
    discount_price:string
+   className:string,
    onClick?: (event: React.MouseEvent<HTMLDivElement>) => void
 }
 export default cardProps
