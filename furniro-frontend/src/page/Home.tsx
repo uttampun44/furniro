@@ -148,6 +148,7 @@ function Home() {
                   price={product.price}
                   discount_price={product.discount_price}
                   key={index}
+                  className="w-full h-auto"
                   onClick={() => handleProduct(product)}
                 />
               ))}

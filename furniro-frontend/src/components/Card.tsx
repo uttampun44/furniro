@@ -1,11 +1,11 @@
 import cardProps from "../types/Card";
 
-const Card: React.FC<cardProps> = ({ src, title, description, price, discount_price, onClick }) => {
+const Card: React.FC<cardProps> = ({ src, title, description, price, discount_price, className, onClick }) => {
   return (
     <>
       <div className="card my-8 bg-gray-200 bg-opacity-50">
         <div className="productImg" onClick={onClick}>
-          <img src={src} className="w-full h-auto"/>
+          <img src={src} className={className}/>
         </div>
         <div className="productDetails grid gap-y-1 px-3 py-5">
           <h6 className="text-lg font-bold font-poppins">{title}</h6>

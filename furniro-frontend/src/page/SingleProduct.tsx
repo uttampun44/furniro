@@ -4,11 +4,36 @@ import Layout from "../layout/Layout";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import React from "react";
-
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import Card from "@components/Card";
 
 const SingleProduct = () => {
   const products = useAppSelector((state) => state.product.selectedProduct);
 
+  const relatedProdcts = useAppSelector(state => state.product.products);
+
+  console.log(relatedProdcts)
+
+  const responsive = {
+    superLargeDesktop: {
+   
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 4
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 3
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1
+    }
+  };
   return (
     <>
       <Layout>
@@ -105,6 +130,26 @@ const SingleProduct = () => {
         <div className="relatedProducts pt-14 pb-24">
                <div className="relatedProducts">
                    <h2 className="font-poppins text-center text-4xl font-bold">Related Products</h2>
+               </div>
+
+               <div className="realtedProducts my-12 max-w-[1208px] w-full mx-auto">
+                   <Carousel
+                    responsive={responsive}
+                    infinite={true}
+                    >
+                       {relatedProdcts.slice(0, 7).map((product, index) => (
+                <Card
+                  title={product.product_name}
+                  description={product.short_description}
+                  src={`http://localhost:8000/storage/${product.product_image}`}
+                  price={product.price}
+                  discount_price={product.discount_price}
+                  key={index}
+                  className="w-full"
+                 
+                />
+              ))}
+                   </Carousel>
                </div>
             </div>
         </section>
