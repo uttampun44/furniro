@@ -20,7 +20,7 @@ export interface ShoppingState {
   products: Product[];
   cart: Product[];
   selectedProduct: Product | null
-  cartQuantities: number,
+  cartQuantities: Record<number, {quantity:number}>,
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -30,7 +30,7 @@ const initialState: ShoppingState = {
   products: [],
   cart: [],
   selectedProduct: null,
-  cartQuantities: 0,
+  cartQuantities: {},
   status: "idle",
   error: null,
 };
@@ -52,25 +52,35 @@ export const shoppingSlice = createSlice({
     viewProduct: (state, action: PayloadAction<Product>) => {
       state.selectedProduct = action.payload;
     },
-
-    increment: (state) => {
-      state.cartQuantities += 1
-    },
-    decrement: (state) => {
-      if(state.cartQuantities < 1) return 
-      state.cartQuantities -= 1
-    },
+/* product increment*/ 
     incrementProduct: (state, action: PayloadAction<number>) => {
-      state.cartQuantities += action.payload
+      const id = action.payload;
+
+      if(state.cartQuantities[id]){
+         state.cartQuantities[id].quantity += 1
+      }else {
+        state.cartQuantities[id] = { quantity: 1 };
+      }
     },
 
+    /*product decremenet quantity*/ 
     decrementProduct: (state, action: PayloadAction<number>) => {
-    
-       state.cartQuantities -= action.payload
+      
+      const id = action.payload;
+
+      if(state.cartQuantities[id].quantity < 1) return
+       state.cartQuantities[id].quantity -= 1
     },
     /* add to cart item*/ 
     addToCart: (state, action: PayloadAction<Product>) => {
+
+      const product = action.payload;
       state.cart.push(action.payload);
+      if (state.cartQuantities[product.id]) {
+        state.cartQuantities[product.id].quantity += 1;
+      } else {
+        state.cartQuantities[product.id] = { quantity: 1 };
+      }
     },
 
     /*remove from cart*/
@@ -96,7 +106,7 @@ export const shoppingSlice = createSlice({
   },
 });
 
-export const { addToCart, removeCart, viewProduct, incrementProduct, decrementProduct, increment,decrement } = shoppingSlice.actions;
+export const { addToCart, removeCart, viewProduct, incrementProduct, decrementProduct } = shoppingSlice.actions;
 
 export const selectProduct = (state: RootState) => state.product;
 //  exporting shopping slice reducer

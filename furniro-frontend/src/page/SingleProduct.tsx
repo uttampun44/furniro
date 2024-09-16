@@ -8,7 +8,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Card from "@components/Card";
 import { useDispatch } from "react-redux";
-import { Product, decrement, decrementProduct, increment, incrementProduct } from "../../store/Products";
+import { decrementProduct, incrementProduct } from "../../store/Products";
 
 
 const SingleProduct = () => {
@@ -18,7 +18,9 @@ const SingleProduct = () => {
 
   const quantities = useAppSelector(state => state.product.cartQuantities)
 
-  console.log(quantities)
+  const currentQuantities = quantities[products?.id]?.quantity || 0;
+
+  console.log(currentQuantities);
   const dispatch = useDispatch();
 
   const responsive = {
@@ -44,7 +46,7 @@ const SingleProduct = () => {
   const handleDecrement = (e: React.MouseEvent<HTMLButtonElement>) =>{
 
     if(products){
-      dispatch(decrement(quantities))
+      dispatch(decrementProduct(products.id))
     }
     console.log((quantities))
     
@@ -52,9 +54,11 @@ const SingleProduct = () => {
 
   const handleIncrement = (e: React.MouseEvent<HTMLButtonElement>) =>{
     if(products){
-      dispatch(increment(quantities))
+
+      console.log(products)
+      dispatch(incrementProduct(products.id))
+      console.log(incrementProduct(products.id))
     }
-    console.log(incrementProduct(quantities))
   }
   return (
     <>
@@ -91,7 +95,7 @@ const SingleProduct = () => {
                       className="text-lg font-bold text-gray-400"
                       onClick={handleDecrement}
                     />
-                    <span className="text-lg font-bold text-gray-400">{quantities}</span>
+                    <span className="text-lg font-bold text-gray-400">{currentQuantities}</span>
                     <Button
                       value="+"
                       className="text-lg font-bold text-gray-400"
