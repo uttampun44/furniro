@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Button from "@components/Button";
 import { useAppDispatch, useAppSelector } from "../../app/hook";
-import {fetchProducts, Product, viewProduct } from "../../store/Products";
+import {fetchProducts, Product, selectedProduct } from "../../store/Products";
 import Card from "@components/Card";
 import SecondBg from "../assets/images/furniro_furniture.jpg"
 
@@ -39,8 +39,8 @@ function Home() {
   };
 
   const handleProduct = (product:Product) =>{
-     
-      dispatch(viewProduct(product))
+     console.log(product.id)
+      dispatch(selectedProduct(product))
        navigate("/products/single-product")
   }
 

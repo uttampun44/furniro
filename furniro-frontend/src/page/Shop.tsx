@@ -2,7 +2,7 @@ import Backgroundpic from "@components/Backgroundpic";
 import Layout from "../layout/Layout";
 import { useAppDispatch, useAppSelector } from "../../app/hook"
 import Card from "@components/Card"
-import { viewProduct } from "../../store/Products";
+import { selectedProduct } from "../../store/Products";
 import { useNavigate } from "react-router-dom";
 
 function Shop() {
@@ -16,7 +16,7 @@ function Shop() {
   const navigate = useNavigate();
 
   const handleProduct = (product:any) =>{
-    dispatch(viewProduct(product))
+    dispatch(selectedProduct(product))
     navigate("/products/single-product")
   }
   return (
@@ -36,6 +36,7 @@ function Shop() {
                         discount_price={product.discount_price}
                         key={index}
                        onClick={() => handleProduct(product)}
+                       className=""
                       />
                     ))
                 }
