@@ -18,9 +18,9 @@ export interface Product {
 // products initial state
 export interface ShoppingState {
   products: Product[];
-  cart: Product[];
+  cart:any [];
+  cartQuantity:number,
   selectedProduct: Product | null
-  cartQuantities: Record<number, {quantity:number}>,
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -29,8 +29,8 @@ export interface ShoppingState {
 const initialState: ShoppingState = {
   products: [],
   cart: [],
+  cartQuantity:0,
   selectedProduct: null,
-  cartQuantities: {},
   status: "idle",
   error: null,
 };
@@ -49,38 +49,37 @@ export const shoppingSlice = createSlice({
   reducers: {
 
     /* view to single product*/  
-    viewProduct: (state, action: PayloadAction<Product>) => {
+     selectedProduct: (state, action: PayloadAction<Product>) => {
       state.selectedProduct = action.payload;
     },
 /* product increment*/ 
     incrementProduct: (state, action: PayloadAction<number>) => {
-      const id = action.payload;
-
-      if(state.cartQuantities[id]){
-         state.cartQuantities[id].quantity += 1
-      }else {
-        state.cartQuantities[id] = { quantity: 1 };
+    
+      const products = state.cart.findIndex(product => product.id === action.payload)
+      if (products) {
+        state.cart[products].cartQuantity += 1;
       }
     },
 
     /*product decremenet quantity*/ 
     decrementProduct: (state, action: PayloadAction<number>) => {
       
-      const id = action.payload;
-
-      if(state.cartQuantities[id].quantity < 1) return
-       state.cartQuantities[id].quantity -= 1
+      const product = state.cart.find(product => product.id === action.payload);
+      if (product && product.quantity > 0) {
+        product.quantity -= 1;
+      }
     },
     /* add to cart item*/ 
     addToCart: (state, action: PayloadAction<Product>) => {
 
-      const product = action.payload;
-      state.cart.push(action.payload);
-      if (state.cartQuantities[product.id]) {
-        state.cartQuantities[product.id].quantity += 1;
-      } else {
-        state.cartQuantities[product.id] = { quantity: 1 };
-      }
+       const product = action.payload
+      const existingProduct = state.cart.find(item => item.id === product?.id);
+    
+      if (existingProduct) {
+        state.cart[existingProduct] += 1;
+      }else{
+        state.cart.push(product);
+      } 
     },
 
     /*remove from cart*/
@@ -106,7 +105,7 @@ export const shoppingSlice = createSlice({
   },
 });
 
-export const { addToCart, removeCart, viewProduct, incrementProduct, decrementProduct } = shoppingSlice.actions;
+export const { addToCart, removeCart, selectedProduct, incrementProduct, decrementProduct } = shoppingSlice.actions;
 
 export const selectProduct = (state: RootState) => state.product;
 //  exporting shopping slice reducer

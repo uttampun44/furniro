@@ -8,19 +8,20 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Card from "@components/Card";
 import { useDispatch } from "react-redux";
-import { decrementProduct, incrementProduct } from "../../store/Products";
+import { addToCart, decrementProduct, incrementProduct } from "../../store/Products";
 
 
 const SingleProduct = () => {
   const products = useAppSelector(state => state.product.selectedProduct);
 
+  console.log(products?.id)
   const relatedProdcts = useAppSelector(state => state.product.products);
 
-  const quantities = useAppSelector(state => state.product.cartQuantities)
+  const quantities = useAppSelector(state => state.product.cartQuantity)
 
-  const currentQuantities = quantities[products?.id]?.quantity || 0;
+  console.log(quantities)
 
-  console.log(currentQuantities);
+
   const dispatch = useDispatch();
 
   const responsive = {
@@ -54,12 +55,16 @@ const SingleProduct = () => {
 
   const handleIncrement = (e: React.MouseEvent<HTMLButtonElement>) =>{
     if(products){
-
-      console.log(products)
+      console.log('Dispatching increment with ID:', products);
       dispatch(incrementProduct(products.id))
       console.log(incrementProduct(products.id))
     }
   }
+
+  const handleAddToCart = () =>{
+    dispatch(addToCart(products?.id))
+  }
+  
   return (
     <>
       <Layout>
@@ -95,7 +100,7 @@ const SingleProduct = () => {
                       className="text-lg font-bold text-gray-400"
                       onClick={handleDecrement}
                     />
-                    <span className="text-lg font-bold text-gray-400">{currentQuantities}</span>
+                    <span className="text-lg font-bold text-gray-400">{quantities}</span>
                     <Button
                       value="+"
                       className="text-lg font-bold text-gray-400"
@@ -106,6 +111,7 @@ const SingleProduct = () => {
                     <Button
                       value="Add To Cart"
                       className="text-lg font-medium w-full"
+                      onClick={(e) => handleAddToCart(products?.id)}
                     />
                   </div>
                 </div>
