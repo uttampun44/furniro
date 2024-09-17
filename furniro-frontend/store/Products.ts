@@ -13,13 +13,13 @@ export interface Product {
   discount_price:string,
   description:string,
   addition_images:string
-  quantity:number
 }
 
 // products initial state
 export interface ShoppingState {
   products: Product[];
   cart:any [];
+  cartQuantity:number,
   selectedProduct: Product | null
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
@@ -29,6 +29,7 @@ export interface ShoppingState {
 const initialState: ShoppingState = {
   products: [],
   cart: [],
+  cartQuantity:0,
   selectedProduct: null,
   status: "idle",
   error: null,
@@ -54,9 +55,9 @@ export const shoppingSlice = createSlice({
 /* product increment*/ 
     incrementProduct: (state, action: PayloadAction<number>) => {
     
-      const products = state.cart.find(product => product.id === action.payload)
+      const products = state.cart.findIndex(product => product.id === action.payload)
       if (products) {
-        products.quantity += 1;
+        state.cart[products].cartQuantity += 1;
       }
     },
 
@@ -75,7 +76,7 @@ export const shoppingSlice = createSlice({
       const existingProduct = state.cart.find(item => item.id === product?.id);
     
       if (existingProduct) {
-        product.quantity += 1;
+        state.cart[existingProduct] += 1;
       }else{
         state.cart.push(product);
       } 

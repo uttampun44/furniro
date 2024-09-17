@@ -17,9 +17,10 @@ const SingleProduct = () => {
   console.log(products?.id)
   const relatedProdcts = useAppSelector(state => state.product.products);
 
-  const quantities = useAppSelector(state => state.product.cart)
+  const quantities = useAppSelector(state => state.product.cartQuantity)
 
-  const currentQuantities = quantities.find(quantity => quantity.id == products?.id)?.quantity || 0;
+  console.log(quantities)
+
 
   const dispatch = useDispatch();
 
@@ -99,7 +100,7 @@ const SingleProduct = () => {
                       className="text-lg font-bold text-gray-400"
                       onClick={handleDecrement}
                     />
-                    <span className="text-lg font-bold text-gray-400">{currentQuantities}</span>
+                    <span className="text-lg font-bold text-gray-400">{quantities}</span>
                     <Button
                       value="+"
                       className="text-lg font-bold text-gray-400"
