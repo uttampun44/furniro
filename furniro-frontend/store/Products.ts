@@ -15,11 +15,14 @@ export interface Product {
   addition_images:string
 }
 
+ interface cartItems extends Product{
+   cartQuantity:number
+}
 // products initial state
 export interface ShoppingState {
   products: Product[];
-  cart:any [];
-  cartQuantity:number,
+  cart:cartItems[];
+ 
   selectedProduct: Product | null
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
@@ -29,7 +32,6 @@ export interface ShoppingState {
 const initialState: ShoppingState = {
   products: [],
   cart: [],
-  cartQuantity:0,
   selectedProduct: null,
   status: "idle",
   error: null,
@@ -55,30 +57,31 @@ export const shoppingSlice = createSlice({
 /* product increment*/ 
     incrementProduct: (state, action: PayloadAction<number>) => {
     
-      const products = state.cart.findIndex(product => product.id === action.payload)
-      if (products) {
-        state.cart[products].cartQuantity += 1;
-      }
+      const item = state.cart.find(item => item.id === action.payload);
+
+      if (!item)  return
+        item.cartQuantity += 1;
+      
     },
 
     /*product decremenet quantity*/ 
     decrementProduct: (state, action: PayloadAction<number>) => {
       
-      const product = state.cart.find(product => product.id === action.payload);
-      if (product && product.quantity > 0) {
-        product.quantity -= 1;
-      }
+      const item = state.cart.find(item => item.id === action.payload);
+      if (item && item.cartQuantity > 1) {
+        item.cartQuantity -= 1;
+      } 
     },
     /* add to cart item*/ 
     addToCart: (state, action: PayloadAction<Product>) => {
 
-       const product = action.payload
-      const existingProduct = state.cart.find(item => item.id === product?.id);
+    
+      const existingProduct = state.cart.find(item => item.id === action.payload.id);
     
       if (existingProduct) {
-        state.cart[existingProduct] += 1;
+        existingProduct.cartQuantity += 1;
       }else{
-        state.cart.push(product);
+        state.cart.push({...action.payload, cartQuantity: 1});
       } 
     },
 
