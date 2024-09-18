@@ -11,16 +11,15 @@ import { useDispatch } from "react-redux";
 import { addToCart, decrementProduct, incrementProduct } from "../../store/Products";
 
 
+
 const SingleProduct = () => {
   const products = useAppSelector(state => state.product.selectedProduct);
 
-  console.log(products?.id)
   const relatedProdcts = useAppSelector(state => state.product.products);
 
-  const quantities = useAppSelector(state => state.product.cartQuantity)
+  const cart = useAppSelector(state => state.product.cart)
 
-  console.log(quantities)
-
+  const productQuantity = cart.find(item => item.id === products?.id)?.cartQuantity || 0;
 
   const dispatch = useDispatch();
 
@@ -46,23 +45,22 @@ const SingleProduct = () => {
 
   const handleDecrement = (e: React.MouseEvent<HTMLButtonElement>) =>{
 
-    if(products){
+    if(!products) return
       dispatch(decrementProduct(products.id))
-    }
-    console.log((quantities))
-    
+      console.log(productQuantity)
+   
   }
 
   const handleIncrement = (e: React.MouseEvent<HTMLButtonElement>) =>{
-    if(products){
-      console.log('Dispatching increment with ID:', products);
+    if(!products) return 
+    
       dispatch(incrementProduct(products.id))
-      console.log(incrementProduct(products.id))
-    }
+      console.log(productQuantity)
   }
 
   const handleAddToCart = () =>{
-    dispatch(addToCart(products?.id))
+    if(!products) return
+    dispatch(addToCart(products.id))
   }
   
   return (
@@ -100,7 +98,7 @@ const SingleProduct = () => {
                       className="text-lg font-bold text-gray-400"
                       onClick={handleDecrement}
                     />
-                    <span className="text-lg font-bold text-gray-400">{quantities}</span>
+                    <span className="text-lg font-bold text-gray-400">{productQuantity}</span>
                     <Button
                       value="+"
                       className="text-lg font-bold text-gray-400"
@@ -111,7 +109,7 @@ const SingleProduct = () => {
                     <Button
                       value="Add To Cart"
                       className="text-lg font-medium w-full"
-                      onClick={(e) => handleAddToCart(products?.id)}
+                      onClick={handleAddToCart}
                     />
                   </div>
                 </div>
