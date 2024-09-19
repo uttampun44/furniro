@@ -59,9 +59,12 @@ const SingleProduct = () => {
   }
 
   const handleAddToCart = () =>{
-    if(!products) return
-    dispatch(addToCart(products.id))
+    if(!products)return
+     
+    dispatch(addToCart(products))
+   
   }
+  
   
   return (
     <>
