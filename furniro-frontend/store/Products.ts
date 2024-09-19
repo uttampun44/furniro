@@ -15,14 +15,12 @@ export interface Product {
   addition_images:string
 }
 
- interface cartItems extends Product{
-   cartQuantity:number
-}
+
 // products initial state
 export interface ShoppingState {
   products: Product[];
-  cart:cartItems[];
- 
+  cart: Product[];
+  carQuantity: number,
   selectedProduct: Product | null
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
@@ -32,6 +30,7 @@ export interface ShoppingState {
 const initialState: ShoppingState = {
   products: [],
   cart: [],
+  carQuantity:0,
   selectedProduct: null,
   status: "idle",
   error: null,
@@ -60,7 +59,7 @@ export const shoppingSlice = createSlice({
       const item = state.cart.find(item => item.id === action.payload);
 
       if (!item)  return
-        item.cartQuantity += 1;
+        state.carQuantity += 1
       
     },
 
@@ -68,21 +67,21 @@ export const shoppingSlice = createSlice({
     decrementProduct: (state, action: PayloadAction<number>) => {
       
       const item = state.cart.find(item => item.id === action.payload);
-      if (item && item.cartQuantity > 1) {
-        item.cartQuantity -= 1;
+      if (item && state.carQuantity > 1) {
+        state.carQuantity -= 1;
       } 
     },
     /* add to cart item*/ 
     addToCart: (state, action: PayloadAction<Product>) => {
 
     
-      const existingProduct = state.cart.find(item => item.id === action.payload.id);
-    
-      if (existingProduct) {
-        existingProduct.cartQuantity += 1;
-      }else{
-        state.cart.push({...action.payload, cartQuantity: 1});
-      } 
+      const existingProduct = state.cart.find(item => item.name === action.payload.name);
+     
+      if(!existingProduct){
+        state.cart.push(action.payload);
+      }
+        console.log(state.cart.push(action.payload))
+   
     },
 
     /*remove from cart*/

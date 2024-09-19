@@ -5,10 +5,16 @@ import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Links from '../types/Navlink'
-import React from "react";
-
+import { useAppSelector } from "../../app/hook";
+import SideMenu from "./SideMenu";
 
 const Header:React.FC = () => {
+
+  const cart = useAppSelector(state => state.product.cart);
+
+const cartTotal = cart.length
+
+
   return (
     
       <header>
@@ -44,9 +50,11 @@ const Header:React.FC = () => {
                <FavoriteIcon className="cursor-pointer" />
              </div>
              <div className="cart">
+                 {cart.length > 0 && <span className="text-red-700">{cartTotal}</span>}
                 <ShoppingCartIcon className="cursor-pointer" />
              </div>
           </div>
+            <SideMenu />
         </div>
       </header>
   );
