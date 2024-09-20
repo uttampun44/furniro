@@ -3,12 +3,17 @@ import clostBtn from "../../src/assets/images/Vector.png";
 import { useDispatch } from "react-redux";
 import { removeCart } from "../../store/Products";
 import Button from "./Button";
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const SideMenu = () => {
+  const [side, setSide] = useState<boolean>(false);
   const cart = useAppSelector((state) => state.product.cart);
   const dispatch = useDispatch();
 
   const details = cart.find((item) => item);
+
+  const sideRef = useRef<HTMLDivElement>(null);
 
   const handleRemoveCart = () => {
     console.log("remove");
@@ -17,25 +22,36 @@ const SideMenu = () => {
     dispatch(removeCart(details?.id));
   };
 
-  const handleCloseMenu = () =>{
-    alert("remove")
-  }
+  const handleCloseMenu = () => {
+    console.log("remove");
+    setSide((side) => !side);
+  };
 
   return (
     <div>
       {cart.length > 0 && (
         <div className=" fixed w-full h-full inset-0 bg-gray-700/30 z-50"></div>
       )}
-     
-        <aside className={`fixed h-full bg-white z-50 right-0 top-0 p-5 min-w-60 ${cart.length > 0 ? 'translate-x-0 transition-transform duration-500 ease-in-out' : 'translate-x-[100%] transition-transform duration-300 ease-in-out'}`}>
+
+      <div ref={sideRef}>
+        <aside
+          className={`fixed h-full bg-white z-50 right-0 top-0 p-5 min-w-60 ${
+            cart.length > 0
+              ? "translate-x-0 transition-transform duration-500 ease-in-out"
+              : "translate-x-[100%] transition-transform duration-300 ease-in-out"
+          }`}
+        >
           <div className="sidebarMenu">
             <div className="data relative">
-            <div className="title_close flex justify-between">
-            <strong className="text-2xl font-poppins">Shopping Cart</strong>   <Button 
-            value="X" onClick={handleCloseMenu} 
-            className="absolute right-0 text-xl font-poppins font-semibold"  />
-              <hr className="my-2"></hr>
-            </div>
+              <div className="title_close flex justify-between">
+                <strong className="text-2xl font-poppins">Shopping Cart</strong>{" "}
+                <Button
+                  value="X"
+                  onClick={handleCloseMenu}
+                  className="absolute right-0 text-xl font-poppins font-semibold"
+                />
+                <hr className="my-2"></hr>
+              </div>
               <div className="rowCart flex gap-x-5 my-6">
                 <div className="img w-20 h-20">
                   <img
@@ -51,13 +67,21 @@ const SideMenu = () => {
                   </p>
                 </div>
                 <div className="removeCart">
-                  <img src={clostBtn} onClick={handleRemoveCart} className="cursor-pointer" />
+                  <img
+                    src={clostBtn}
+                    onClick={handleRemoveCart}
+                    className="cursor-pointer"
+                  />
                 </div>
               </div>
             </div>
+
+            <div className="checkoutBtn">
+               <Link to="/checkout"><Button value="Checkout" /></Link>
+            </div>
           </div>
         </aside>
-      
+      </div>
     </div>
   );
 };

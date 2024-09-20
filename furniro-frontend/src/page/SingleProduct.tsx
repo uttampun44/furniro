@@ -9,6 +9,7 @@ import "react-multi-carousel/lib/styles.css";
 import Card from "@components/Card";
 import { useDispatch } from "react-redux";
 import { addToCart, decrementProduct, incrementProduct } from "../../store/Products";
+import SideMenu from "@components/SideMenu";
 
 
 
@@ -69,6 +70,7 @@ const SingleProduct = () => {
   return (
     <>
       <Layout>
+      <SideMenu />
         <section className="border-b-2">
           <div className="singleProductsContainer py-20 px-12">
             <div className="productDescription flex gap-x-12">

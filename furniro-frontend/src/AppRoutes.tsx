@@ -32,6 +32,7 @@ import SingleProduct from "./page/SingleProduct";
 import ProductDescriptionIndex from "./page/backend/productDescription/ProductDescriptionIndex";
 import ProductDescriptionStore from "./page/backend/productDescription/ProductDescriptionStore"
 import { useAppSelector } from "../app/hook";
+import Checkout from "../src/page/Checkout";
 
 
 
@@ -103,6 +104,9 @@ const hasRoles = user?.roles.some((role) => role.role_name == "Super Admin" || r
         <Route path="/products/single-product" element={<SingleProduct/>}></Route>
       ):    <Route path="/" element={<Home />} />
      }
+
+     {/* checkout */}
+     <Route path="/checkout" element={<Checkout />} ></Route>
      
      {/* product additional description */}
      <Route path="/products/description" element={<ProductDescriptionIndex/>}></Route>
