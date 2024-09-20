@@ -54,7 +54,7 @@ const cartTotal = cart.length
                 <ShoppingCartIcon className="cursor-pointer" />
              </div>
           </div>
-            <SideMenu />
+          
         </div>
       </header>
   );
