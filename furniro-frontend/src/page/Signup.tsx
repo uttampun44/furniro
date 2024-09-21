@@ -11,6 +11,7 @@ interface formSignup {
   phone_details: string;
   gender: string;
   password: string;
+  role_user:string
 }
 
 function Signup() {
@@ -23,6 +24,7 @@ function Signup() {
     phone_details: "",
     gender: "",
     password: "",
+    role_user:""
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
@@ -60,6 +62,16 @@ function Signup() {
         <div className="form_content">
           <form className="max-w-sm mx-auto" method="POST" onSubmit={signUp}>
             <div className="mb-5">
+            <input
+                type="hidden"
+                id="role_user"
+                name="role_user"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none block w-full p-2.5 placeholder-gray-400"
+              
+                onChange={signupValue}
+                value={signup.role_user}
+              />
+
               <label
                 htmlFor="fullname"
                 className="block mb-2 text-sm font-medium text-gray-900"

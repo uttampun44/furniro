@@ -7,6 +7,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Links from '../types/Navlink'
 import { useAppSelector } from "../../app/hook";
 import SideMenu from "./SideMenu";
+import { useState } from "react";
+
 
 const Header:React.FC = () => {
 
@@ -14,6 +16,14 @@ const Header:React.FC = () => {
 
 const cartTotal = cart.length
 
+const [showVisibility, setVisibility] = useState<boolean>(false)
+
+const handleShow = (e: React.MouseEvent<HTMLDivElement>) =>{
+  setVisibility(showVisibility => !showVisibility)
+}
+const handleHide = () =>{
+  setVisibility(false)
+}
 
   return (
     
@@ -49,12 +59,15 @@ const cartTotal = cart.length
              <div className="favourite">
                <FavoriteIcon className="cursor-pointer" />
              </div>
-             <div className="cart">
+             <div className="cart" onClick={handleShow}>
                  {cart.length > 0 && <span className="text-red-700">{cartTotal}</span>}
-                <ShoppingCartIcon className="cursor-pointer" />
+                <ShoppingCartIcon className="cursor-pointer"/>
              </div>
           </div>
-          
+          <SideMenu
+            show={showVisibility}
+            onClick={handleHide}
+          />
         </div>
       </header>
   );
