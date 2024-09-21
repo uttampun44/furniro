@@ -13,6 +13,9 @@ export default {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
       },
+      backgroundColor:{
+        'primary': '#FAF3EA'
+      }
     },
    
   },

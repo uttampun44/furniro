@@ -39,7 +39,6 @@ function Home() {
   };
 
   const handleProduct = (product:Product) =>{
-     console.log(product.id)
       dispatch(selectedProduct(product))
        navigate("/products/single-product")
   }
